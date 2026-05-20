@@ -5,18 +5,17 @@ import { BgCalm } from "../components/BgCalm";
 import { HandCursor } from "../components/HandCursor";
 import { LucideIcon } from "../components/LucideIcon";
 import { TypewriterText } from "../components/TypewriterText";
-import { SubtitleBar } from "../components/SubtitleBar";
 import { momentAnim, floatY, breathe, rotXSettle, rotZIn, skewSettle } from "../anim";
 
-// S3: 3600 frames (60s) at 60fps
-// B0  0–600     LIGHT  overview (D / I / T cards)
-// B1  600–840   LIGHT  zoom into D
-// B2  840–1740  LIGHT  D · Define (RoleBuilder + HandCursor)
-// B3  1740–1860 DARK   bridge
-// B4  1860–2700 DARK   I · Interact (SJT + HandCursor click)
-// B5  2700–2820 DARK   capture flash
-// B6  2820–2940 DARK   bridge
-// B7  2940–3600 LIGHT  T · Tailor (TAT playbook)
+// S3: 4800 frames (80s) at 60fps — demo-first cut
+// B0  0–300     LIGHT  overview (D / I / T cards)
+// B1  300–480   LIGHT  zoom into D
+// B2  480–1740  LIGHT  D · Define (RoleBuilder + HandCursor)
+// B3  1740–1920 DARK   bridge
+// B4  1920–3180 DARK   I · Interact (SJT + HandCursor click)
+// B5  3180–3420 DARK   capture flash
+// B6  3420–3600 DARK   bridge
+// B7  3600–4800 LIGHT  T · Tailor (TAT playbook)
 
 // ─── Design system colors ───────────────────────────────────────────────────
 
@@ -425,7 +424,7 @@ const recs: { num: string; text: string; delay: number }[] = [
 
 const B0Overview: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 11, 590, 600);
+  const m = momentAnim(frame, 0, 8, 290, 300);
 
   const eyebrowOp = interpolate(frame, [0, 15], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
@@ -511,7 +510,7 @@ const B1ZoomD: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
-  const m = momentAnim(frame, 0, 11, 230, 240);
+  const m = momentAnim(frame, 0, 8, 170, 180);
 
   return (
     <AbsoluteFill>
@@ -548,7 +547,7 @@ const B2Define: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
-  const m = momentAnim(frame, 0, 11, 890, 900);
+  const m = momentAnim(frame, 0, 8, 1250, 1260);
 
   const hexProg = interpolate(frame, [240, 400], [0, 1], {
     easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp",
@@ -669,7 +668,7 @@ const B2Define: React.FC = () => {
       {/* HandCursor — overlay */}
       <HandCursor
         startFrame={80}
-        duration={720}
+        duration={1040}
         path={[
           { x: 1750, y: 120 },
           { x: 900, y: 410 },
@@ -678,7 +677,7 @@ const B2Define: React.FC = () => {
           { x: 870, y: 770 },
           { x: 870, y: 770 },
         ]}
-        clickAt={[680]}
+        clickAt={[900]}
         size={42}
       />
     </AbsoluteFill>
@@ -691,7 +690,7 @@ const B2Define: React.FC = () => {
 
 const B3Bridge: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 11, 110, 120);
+  const m = momentAnim(frame, 0, 8, 170, 180);
 
   return (
     <AbsoluteFill>
@@ -722,7 +721,7 @@ const B4Interact: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
-  const m = momentAnim(frame, 0, 11, 830, 840);
+  const m = momentAnim(frame, 0, 8, 1250, 1260);
 
   const sjtProgressW = interpolate(frame, [40, 120], [0, 46], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
@@ -873,7 +872,7 @@ const B4Interact: React.FC = () => {
       {/* HandCursor click */}
       <HandCursor
         startFrame={200}
-        duration={580}
+        duration={900}
         path={[
           { x: 1500, y: 200 },
           { x: 1300, y: 500 },
@@ -895,7 +894,7 @@ const B5Capture: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
-  const m = momentAnim(frame, 0, 11, 110, 120);
+  const m = momentAnim(frame, 0, 8, 230, 240);
 
   return (
     <AbsoluteFill>
@@ -929,7 +928,7 @@ const B5Capture: React.FC = () => {
 
 const B6Bridge: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 11, 110, 120);
+  const m = momentAnim(frame, 0, 8, 170, 180);
 
   return (
     <AbsoluteFill>
@@ -960,7 +959,7 @@ const B7Tailor: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
-  const m = momentAnim(frame, 0, 11, 650, 660);
+  const m = momentAnim(frame, 0, 8, 1190, 1200);
 
   const peProg = interpolate(frame, [100, 240], [0, 1], {
     easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp",
@@ -1142,15 +1141,14 @@ const B7Tailor: React.FC = () => {
 export const S3_DIT: React.FC = () => {
   return (
     <AbsoluteFill>
-      <Sequence from={0} durationInFrames={600} layout="none"><B0Overview /></Sequence>
-      <Sequence from={600} durationInFrames={240} layout="none"><B1ZoomD /></Sequence>
-      <Sequence from={840} durationInFrames={900} layout="none"><B2Define /></Sequence>
-      <Sequence from={1740} durationInFrames={120} layout="none"><B3Bridge /></Sequence>
-      <Sequence from={1860} durationInFrames={840} layout="none"><B4Interact /></Sequence>
-      <Sequence from={2700} durationInFrames={120} layout="none"><B5Capture /></Sequence>
-      <Sequence from={2820} durationInFrames={120} layout="none"><B6Bridge /></Sequence>
-      <Sequence from={2940} durationInFrames={660} layout="none"><B7Tailor /></Sequence>
-      <SubtitleBar />
+      <Sequence from={0} durationInFrames={300} layout="none"><B0Overview /></Sequence>
+      <Sequence from={300} durationInFrames={180} layout="none"><B1ZoomD /></Sequence>
+      <Sequence from={480} durationInFrames={1260} layout="none"><B2Define /></Sequence>
+      <Sequence from={1740} durationInFrames={180} layout="none"><B3Bridge /></Sequence>
+      <Sequence from={1920} durationInFrames={1260} layout="none"><B4Interact /></Sequence>
+      <Sequence from={3180} durationInFrames={240} layout="none"><B5Capture /></Sequence>
+      <Sequence from={3420} durationInFrames={180} layout="none"><B6Bridge /></Sequence>
+      <Sequence from={3600} durationInFrames={1200} layout="none"><B7Tailor /></Sequence>
     </AbsoluteFill>
   );
 };

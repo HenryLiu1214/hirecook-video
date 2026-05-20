@@ -1,699 +1,155 @@
 import React from "react";
-import { useCurrentFrame, useVideoConfig, interpolate, Easing, AbsoluteFill, Sequence } from "remotion";
+import { useCurrentFrame, interpolate, Easing, AbsoluteFill, Sequence } from "remotion";
 import { colors, fonts } from "../tokens";
 import { BgCalm } from "../components/BgCalm";
 import { TypewriterText } from "../components/TypewriterText";
-import { SubtitleBar } from "../components/SubtitleBar";
-import { LucideIcon, IconName } from "../components/LucideIcon";
+import { LucideIcon } from "../components/LucideIcon";
 import { momentAnim, breathe, rotXSettle, rotZIn, skewSettle } from "../anim";
 
-// S1 PainPoints — 3900 frames (65s @ 60fps)
-// B1  0    – 360   LIGHT  Audience opener (two sub-beats)
-// B2  360  – 1140  LIGHT  Gut feeling title
-// B3  1140 – 1500  LIGHT  Tag pills
-// B4  1500 – 1740  DARK   Transition "但代價，正在發生。"
-// B5  1740 – 2280  DARK   Stat 1 — clock / 60.3 天 / 招募空窗期
-// B6  2280 – 2820  DARK   Stat 2 — trending-down / 65.4% / 新人快閃率
-// B7  2820 – 3360  DARK   Stat 3 — coins / NT$30萬 / 單次錯配成本
-// B8  3360 – 3600  DARK   Combine — 3 small cards
-// B9  3600 – 3900  DARK   M3 — Visible vs hidden + closing line
+const card = {
+  background: "#FFFFFF",
+  border: "1px solid rgba(8,16,40,0.06)",
+  boxShadow: "0 1px 0 rgba(8,16,40,0.04)",
+  borderRadius: 12,
+} satisfies React.CSSProperties;
 
-const SIGNAL_CYAN = "#00B4D8";
-const SOFT_PURPLE = "#A78BFA";
-
-// ── B1: Audience opener ──────────────────────────────────────────────
-const B1Audience: React.FC = () => {
+const Counter: React.FC<{ value: number; suffix?: string; decimals?: number; start?: number; fontSize?: number; color?: string }> = ({
+  value, suffix = "", decimals = 0, start = 18, fontSize = 220, color = colors.hcFgPrimary,
+}) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const t = frame / fps;
-
-  // First line shows 0–180, fades out 160–180.
-  const firstOp = interpolate(frame, [0, 12, 160, 180], [0, 1, 1, 0], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-  // Second line fades in 170–200, holds to 360.
-  const secondOp = interpolate(frame, [170, 200, 340, 360], [0, 1, 1, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-
-  return (
-    <AbsoluteFill style={{
-      display: "flex", alignItems: "center", justifyContent: "center",
-      perspective: "1400px",
-    }}>
-      {/* First line */}
-      <div style={{
-        position: "absolute",
-        opacity: firstOp,
-        transform: `scale(${breathe(t)}) rotate(${rotZIn(frame, 0, 28, -10)}deg)`,
-      }}>
-        <TypewriterText
-          text="招募現場——"
-          startFrame={0}
-          charStagger={5}
-          fontSize={260}
-          fontWeight={900}
-          letterSpacing="-6px"
-          colorScheme="plum-to-pink"
-        />
+  const n = interpolate(frame, [start, start + 36], [0, value], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const sc = interpolate(frame, [start, start + 12], [0.78, 1], { easing: Easing.out(Easing.back(1.15)), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  if (decimals > 0) {
+    const intPart = Math.floor(n);
+    const decPart = Math.round((n - intPart) * 10);
+    return (
+      <div style={{ transform: `scale(${sc})`, display: "flex", alignItems: "baseline", justifyContent: "center", fontFamily: fonts.mono, color, lineHeight: 0.9, fontVariantNumeric: "tabular-nums" }}>
+        <span style={{ fontSize, fontWeight: 800, letterSpacing: "-0.04em" }}>{intPart}</span>
+        <span style={{ fontSize: fontSize * 0.62, fontWeight: 800, margin: "0 2px" }}>.</span>
+        <span style={{ fontSize: fontSize * 0.72, fontWeight: 800, letterSpacing: "-0.02em" }}>{decPart}</span>
+        <span style={{ fontSize: fontSize * 0.42, fontWeight: 800, marginLeft: 10 }}>{suffix}</span>
       </div>
-      {/* Second line */}
-      <div style={{
-        position: "absolute",
-        opacity: secondOp,
-        transform: `scale(${breathe(t, 1.1, 0.012)}) rotate(${rotZIn(frame, 180, 26, -8)}deg)`,
-      }}>
-        <TypewriterText
-          text="每天都在發生。"
-          startFrame={180}
-          charStagger={5}
-          fontSize={200}
-          fontWeight={900}
-          letterSpacing="-4px"
-          colorScheme="plum-to-pink"
-        />
-      </div>
-    </AbsoluteFill>
-  );
+    );
+  }
+  const text = Math.round(n).toString();
+  return <div style={{ transform: `scale(${sc})`, fontSize, lineHeight: 0.9, fontWeight: 800, letterSpacing: "-0.025em", fontVariantNumeric: "tabular-nums", fontFamily: fonts.mono, color }}>{text}<span style={{ fontSize: fontSize * 0.42, color, marginLeft: 10 }}>{suffix}</span></div>;
 };
 
-// ── B2: Gut feeling title ────────────────────────────────────────────
-const B2GutFeeling: React.FC = () => {
+const Audience: React.FC = () => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const t = frame / fps;
-  const m = momentAnim(frame, 0, 14, 770, 780);
-
-  return (
-    <AbsoluteFill style={{
-      opacity: m.opacity,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      perspective: "1400px",
-    }}>
-      <div style={{
-        transform: `${m.transform} scale(${breathe(t)}) rotate(${rotZIn(frame, 14, 32, -10)}deg) rotateX(${rotXSettle(frame, 14, 36)}deg)`,
-      }}>
-        <TypewriterText
-          text="這個人感覺很適合。"
-          startFrame={14}
-          charStagger={4}
-          fontSize={160}
-          fontWeight={900}
-          letterSpacing="-4px"
-          colorScheme="plum-to-pink"
-        />
-      </div>
-    </AbsoluteFill>
-  );
+  const m = momentAnim(frame, 0, 8, 228, 240);
+  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 24, perspective: "1400px" }}>
+    <div style={{ fontFamily: fonts.mono, color: colors.hcFgMuted, fontSize: 24, letterSpacing: "0.14em", textTransform: "uppercase" }}>for growing SMBs</div>
+    <div style={{ transform: `rotate(${rotZIn(frame, 18, 26, -7)}deg) rotateX(${rotXSettle(frame, 18, 30)}deg)` }}>
+      <TypewriterText text="30–150 人" startFrame={18} charStagger={4} fontSize={230} fontWeight={800} letterSpacing="-0.05em" colorScheme="plum-to-pink" />
+    </div>
+    <div style={{ opacity: interpolate(frame, [110, 122], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), color: colors.hcFgSecondary, fontSize: 52, fontWeight: 600 }}>成長型中小企業的招募現場</div>
+  </AbsoluteFill>;
 };
 
-// ── B3: Tag pills ─────────────────────────────────────────────────────
-const B3TagPills: React.FC = () => {
+const GutFeeling: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 14, 340, 360);
+  const m = momentAnim(frame, 0, 8, 228, 240);
+  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 34, perspective: "1400px" }}>
+    <div style={{ color: colors.hcFgMuted, fontFamily: fonts.mono, fontSize: 24, letterSpacing: "0.14em" }}>THE DECISION OFTEN STARTS WITH</div>
+    <div style={{ transform: `scale(${breathe(frame / 60, 1, 0.006)}) rotate(${rotZIn(frame, 14, 28, -8)}deg) rotateX(${rotXSettle(frame, 14, 34)}deg)` }}>
+      <TypewriterText text="這個人感覺很適合。" startFrame={14} charStagger={4} fontSize={142} fontWeight={800} letterSpacing="-0.04em" colorScheme="plum-to-pink" />
+    </div>
+  </AbsoluteFill>;
+};
 
+const Pills: React.FC = () => {
+  const frame = useCurrentFrame();
+  const m = momentAnim(frame, 0, 8, 228, 240);
   const pills = [
-    { label: "履歷包裝", color: colors.alertOrange },
-    { label: "靜態測驗", color: colors.warningYellow },
-    { label: "主管直覺", color: "#6A8FFF" },
-  ] as const;
-
-  const eyebrowOp = interpolate(frame, [0, 18], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-
-  return (
-    <AbsoluteFill style={{
-      opacity: m.opacity,
-      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 48,
-      perspective: "1400px",
-    }}>
-      <div style={{
-        opacity: eyebrowOp,
-        fontFamily: fonts.display,
-        fontSize: 28,
-        fontWeight: 500,
-        color: colors.hcFgMuted,
-        letterSpacing: "4px",
-        transform: m.transform,
-      }}>
-        我們仰賴的，只有這些——
-      </div>
-      <div style={{ display: "flex", gap: 28, transform: m.transform }}>
-        {pills.map((pill, idx) => {
-          const pillStart = 30 + idx * 16;
-          const op = interpolate(frame, [pillStart, pillStart + 14], [0, 1], {
-            extrapolateLeft: "clamp", extrapolateRight: "clamp",
-          });
-          const sc = interpolate(frame, [pillStart, pillStart + 16], [0.6, 1], {
-            easing: Easing.out(Easing.back(1.4)), extrapolateLeft: "clamp", extrapolateRight: "clamp",
-          });
-          return (
-            <div key={pill.label} style={{
-              opacity: op,
-              transform: `scale(${sc})`,
-              padding: "16px 40px",
-              borderRadius: 9999,
-              border: `1.5px solid ${pill.color}`,
-              background: `${pill.color}18`,
-              fontSize: 38,
-              fontWeight: 700,
-              color: pill.color,
-              fontFamily: fonts.display,
-            }}>{pill.label}</div>
-          );
-        })}
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-// ── B4: Transition ────────────────────────────────────────────────────
-const B4Transition: React.FC = () => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const t = frame / fps;
-  const m = momentAnim(frame, 0, 14, 220, 240);
-
-  return (
-    <AbsoluteFill style={{
-      opacity: m.opacity,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      perspective: "1400px",
-    }}>
-      <div style={{
-        transform: `${m.transform} scale(${breathe(t)}) rotate(${rotZIn(frame, 10, 30, -8)}deg)`,
-      }}>
-        <TypewriterText
-          text="但代價，正在發生。"
-          startFrame={10}
-          charStagger={5}
-          fontSize={200}
-          fontWeight={900}
-          letterSpacing="-4px"
-          colorScheme="white-to-blue"
-        />
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-// ── Animated Counter (used in B5/B6/B7) ──────────────────────────────
-const Counter: React.FC<{
-  value: number;
-  decimals?: number;
-  color: string;
-  delay: number;
-  fontSize?: number;
-}> = ({ value, decimals = 0, color, delay, fontSize = 200 }) => {
-  const frame = useCurrentFrame();
-  const raw = interpolate(frame, [delay, delay + 50], [0, value], {
-    easing: Easing.out(Easing.cubic),
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-  const count = decimals > 0 ? raw.toFixed(decimals) : Math.round(raw).toString();
-  const op = interpolate(frame, [delay, delay + 9], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-  const scaleIn = interpolate(frame, [delay, delay + 14], [0.6, 1], {
-    easing: Easing.out(Easing.back(1.3)),
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-  const rx = rotXSettle(frame, delay, 32);
-  const rz = rotZIn(frame, delay, 28, -8);
-
-  return (
-    <span style={{
-      display: "inline-block",
-      opacity: op,
-      transform: `scale(${scaleIn}) rotateX(${rx}deg) rotate(${rz}deg)`,
-      fontFamily: fonts.mono,
-      fontSize,
-      fontWeight: 900,
-      letterSpacing: "-4px",
-      lineHeight: 1,
-      color,
-    }}>{count}</span>
-  );
-};
-
-// ── Single big stat card (B5/B6) ─────────────────────────────────────
-const BigStatCard: React.FC<{
-  icon: IconName;
-  color: string;
-  eyebrow: string;
-  value: number;
-  decimals?: number;
-  unit: string;
-  subtitle: string;
-}> = ({ icon, color, eyebrow, value, decimals = 1, unit, subtitle }) => {
-  const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 16, 520, 540);
-
-  return (
-    <AbsoluteFill style={{
-      opacity: m.opacity,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      perspective: "1400px",
-    }}>
-      <div style={{
-        transform: m.transform,
-        width: 720,
-        padding: 48,
-        borderRadius: 16,
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        display: "flex", flexDirection: "column", alignItems: "center", gap: 20,
-        boxSizing: "border-box",
-      }}>
-        <LucideIcon name={icon} size={56} color={color} strokeWidth={1.5} />
-        <div style={{
-          fontFamily: fonts.mono,
-          fontSize: 24,
-          fontWeight: 700,
-          letterSpacing: "4px",
-          textTransform: "uppercase",
-          color,
-        }}>{eyebrow}</div>
-        <div style={{
-          display: "flex", alignItems: "baseline", justifyContent: "center", gap: 12,
-        }}>
-          <Counter value={value} decimals={decimals} color={color} delay={30} fontSize={200} />
-          <span style={{
-            fontFamily: fonts.mono,
-            fontSize: 80,
-            fontWeight: 700,
-            color,
-            lineHeight: 1,
-          }}>{unit}</span>
-        </div>
-        <div style={{
-          fontSize: 28,
-          color: colors.dimWhite,
-          fontFamily: fonts.display,
-        }}>{subtitle}</div>
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-// ── B7: Stat 3 — NT$ prefix + 30 + 萬 ─────────────────────────────────
-const B7Stat3: React.FC = () => {
-  const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 16, 520, 540);
-  const color = SOFT_PURPLE;
-
-  return (
-    <AbsoluteFill style={{
-      opacity: m.opacity,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      perspective: "1400px",
-    }}>
-      <div style={{
-        transform: m.transform,
-        width: 720,
-        padding: 48,
-        borderRadius: 16,
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        display: "flex", flexDirection: "column", alignItems: "center", gap: 20,
-        boxSizing: "border-box",
-      }}>
-        <LucideIcon name="coins" size={56} color={color} strokeWidth={1.5} />
-        <div style={{
-          fontFamily: fonts.mono,
-          fontSize: 24,
-          fontWeight: 700,
-          letterSpacing: "4px",
-          textTransform: "uppercase",
-          color,
-        }}>代價高</div>
-        <div style={{
-          display: "flex", alignItems: "baseline", justifyContent: "center", gap: 12,
-        }}>
-          <span style={{
-            fontFamily: fonts.mono,
-            fontSize: 60,
-            fontWeight: 700,
-            color,
-            lineHeight: 1,
-          }}>NT$</span>
-          <Counter value={30} decimals={0} color={color} delay={30} fontSize={200} />
-          <span style={{
-            fontFamily: fonts.mono,
-            fontSize: 80,
-            fontWeight: 700,
-            color,
-            lineHeight: 1,
-          }}>萬</span>
-        </div>
-        <div style={{
-          fontSize: 28,
-          color: colors.dimWhite,
-          fontFamily: fonts.display,
-        }}>單次錯配成本</div>
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-// ── B8: Combine — three smaller cards ────────────────────────────────
-const B8Combine: React.FC = () => {
-  const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 16, 220, 240);
-
-  const cards = [
-    { icon: "clock" as IconName, color: colors.warningYellow, title: "找人難", number: "60.3", unit: "天", subtitle: "招募空窗期" },
-    { icon: "trending-down" as IconName, color: colors.alertOrange, title: "留不住", number: "65.4", unit: "%", subtitle: "新人快閃率" },
-    { icon: "coins" as IconName, color: SOFT_PURPLE, title: "代價高", number: "30", unit: "萬", subtitle: "單次錯配成本", prefix: "NT$" as const },
+    { label: "履歷包裝", color: colors.hcRisk },
+    { label: "靜態測驗", color: colors.hcWatch },
+    { label: "主管直覺", color: colors.hcBlue },
   ];
-
-  const eyebrowOp = interpolate(frame, [0, 18], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-
-  return (
-    <AbsoluteFill style={{
-      opacity: m.opacity,
-      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 40,
-      perspective: "1400px",
-    }}>
-      <div style={{
-        opacity: eyebrowOp,
-        transform: `${m.transform} rotate(${rotZIn(frame, 6, 24, -6)}deg)`,
-      }}>
-        <TypewriterText
-          text="三個數字，一個系統性問題"
-          startFrame={6}
-          charStagger={3}
-          fontSize={32}
-          fontWeight={600}
-          letterSpacing="2px"
-          colorScheme="white-to-blue"
-        />
-      </div>
-      <div style={{ display: "flex", gap: 24, transform: m.transform }}>
-        {cards.map((card, idx) => {
-          const cardStart = 24 + idx * 14;
-          const op = interpolate(frame, [cardStart, cardStart + 14], [0, 1], {
-            extrapolateLeft: "clamp", extrapolateRight: "clamp",
-          });
-          const sc = interpolate(frame, [cardStart, cardStart + 16], [0.8, 1], {
-            easing: Easing.out(Easing.back(1.3)),
-            extrapolateLeft: "clamp", extrapolateRight: "clamp",
-          });
-          const prefix = "prefix" in card ? (card as { prefix: string }).prefix : "";
-          return (
-            <div key={card.title} style={{
-              opacity: op,
-              transform: `scale(${sc})`,
-              width: 380,
-              padding: 32,
-              borderRadius: 16,
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              display: "flex", flexDirection: "column", alignItems: "center", gap: 12,
-              boxSizing: "border-box",
-            }}>
-              <LucideIcon name={card.icon} size={28} color={card.color} strokeWidth={1.5} />
-              <div style={{
-                fontSize: 18,
-                fontWeight: 700,
-                color: card.color,
-                fontFamily: fonts.mono,
-                letterSpacing: "3px",
-                textTransform: "uppercase",
-              }}>{card.title}</div>
-              <div style={{
-                display: "flex", alignItems: "baseline", justifyContent: "center", gap: 4,
-              }}>
-                {prefix && (
-                  <span style={{
-                    fontFamily: fonts.mono,
-                    fontSize: 28,
-                    fontWeight: 700,
-                    color: card.color,
-                    lineHeight: 1,
-                  }}>{prefix}</span>
-                )}
-                <span style={{
-                  fontFamily: fonts.mono,
-                  fontSize: 88,
-                  fontWeight: 900,
-                  letterSpacing: "-3px",
-                  color: card.color,
-                  lineHeight: 1,
-                }}>{card.number}</span>
-                <span style={{
-                  fontFamily: fonts.mono,
-                  fontSize: 32,
-                  fontWeight: 700,
-                  color: card.color,
-                  lineHeight: 1,
-                }}>{card.unit}</span>
-              </div>
-              <div style={{
-                fontSize: 16,
-                color: colors.dimWhite,
-                fontFamily: fonts.display,
-              }}>{card.subtitle}</div>
-            </div>
-          );
-        })}
-      </div>
-    </AbsoluteFill>
-  );
+  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 34 }}>
+    <div style={{ color: colors.hcFgPrimary, fontSize: 86, fontWeight: 750, letterSpacing: "-0.04em" }}>但現場看到的，通常只是——</div>
+    <div style={{ display: "flex", gap: 20 }}>
+      {pills.map((p, i) => {
+        const op = interpolate(frame, [80 + i * 18, 92 + i * 18], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+        const y = interpolate(frame, [80 + i * 18, 96 + i * 18], [24, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+        return <div key={p.label} style={{ opacity: op, transform: `translateY(${y}px) rotate(${rotZIn(frame, 80 + i * 18, 20, i % 2 ? 5 : -5)}deg)`, padding: "18px 34px", borderRadius: 999, border: `1px solid ${p.color}55`, background: "#FFFFFF", color: p.color, fontFamily: fonts.mono, fontWeight: 700, fontSize: 34, letterSpacing: "0.04em" }}>{p.label}</div>;
+      })}
+    </div>
+  </AbsoluteFill>;
 };
 
-// ── B9: Visible vs hidden comparison + closing line ──────────────────
-const B9Compare: React.FC = () => {
+const Transition: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 16, 280, 300);
-
-  const visibleItems = ["履歷學歷", "面試技巧", "性格標籤", "自我陳述"];
-  const hiddenItems = ["壓力反應", "決策邏輯", "溝通偏好", "動態協作", "真實職場適應性"];
-
-  const eyebrowOp = interpolate(frame, [0, 18], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-
-  return (
-    <AbsoluteFill style={{
-      opacity: m.opacity,
-      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 40,
-      perspective: "1400px",
-    }}>
-      <div style={{
-        opacity: eyebrowOp,
-        fontFamily: fonts.mono,
-        fontSize: 28,
-        color: colors.dimWhite,
-        letterSpacing: "3px",
-        transform: m.transform,
-      }}>
-        招募現場看得到的——與看不見的——
-      </div>
-
-      <div style={{
-        transform: m.transform,
-        display: "flex", gap: 24, width: 1240,
-      }}>
-        {/* Left — visible */}
-        <div style={{
-          flex: 1,
-          padding: 36,
-          borderRadius: 16,
-          background: "rgba(255,255,255,0.03)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          display: "flex", flexDirection: "column", gap: 18,
-          boxSizing: "border-box",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <LucideIcon name="eye" size={32} color={colors.dimWhite} strokeWidth={1.5} />
-            <div style={{
-              fontSize: 24,
-              fontFamily: fonts.mono,
-              fontWeight: 700,
-              letterSpacing: "3px",
-              color: colors.dimWhite,
-            }}>可見</div>
-          </div>
-          {visibleItems.map((item, i) => {
-            const start = 24 + i * 8;
-            const op = interpolate(frame, [start, start + 12], [0, 1], {
-              extrapolateLeft: "clamp", extrapolateRight: "clamp",
-            });
-            const tx = interpolate(frame, [start, start + 14], [-12, 0], {
-              easing: Easing.out(Easing.cubic),
-              extrapolateLeft: "clamp", extrapolateRight: "clamp",
-            });
-            return (
-              <div key={item} style={{
-                opacity: op,
-                transform: `translateX(${tx}px)`,
-                display: "flex", alignItems: "center", gap: 12,
-                fontSize: 26,
-                color: colors.dimWhite,
-                fontFamily: fonts.display,
-              }}>
-                <span style={{
-                  width: 6, height: 6, borderRadius: 9999, background: colors.dimWhite,
-                }} />
-                {item}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Right — hidden */}
-        <div style={{
-          flex: 1,
-          padding: 36,
-          borderRadius: 16,
-          background: "rgba(0,180,216,0.04)",
-          border: `1px solid ${SIGNAL_CYAN}33`,
-          display: "flex", flexDirection: "column", gap: 18,
-          boxSizing: "border-box",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <LucideIcon name="eye-off" size={32} color={SIGNAL_CYAN} strokeWidth={1.5} />
-            <div style={{
-              fontSize: 24,
-              fontFamily: fonts.mono,
-              fontWeight: 700,
-              letterSpacing: "3px",
-              color: SIGNAL_CYAN,
-            }}>隱性</div>
-          </div>
-          {hiddenItems.map((item, i) => {
-            const start = 60 + i * 8;
-            const op = interpolate(frame, [start, start + 12], [0, 1], {
-              extrapolateLeft: "clamp", extrapolateRight: "clamp",
-            });
-            const tx = interpolate(frame, [start, start + 14], [12, 0], {
-              easing: Easing.out(Easing.cubic),
-              extrapolateLeft: "clamp", extrapolateRight: "clamp",
-            });
-            return (
-              <div key={item} style={{
-                opacity: op,
-                transform: `translateX(${tx}px)`,
-                display: "flex", alignItems: "center", gap: 12,
-                fontSize: 26,
-                color: SIGNAL_CYAN,
-                fontFamily: fonts.display,
-                fontWeight: 600,
-              }}>
-                <span style={{
-                  width: 6, height: 6, borderRadius: 9999, background: SIGNAL_CYAN,
-                }} />
-                {item}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Closing line */}
-      <div style={{
-        transform: `${m.transform} rotate(${rotZIn(frame, 180, 28, -6)}deg)`,
-      }}>
-        <TypewriterText
-          text="看不見的，才是關鍵。"
-          startFrame={180}
-          charStagger={4}
-          fontSize={96}
-          fontWeight={900}
-          letterSpacing="-3px"
-          colorScheme="white-to-cyan"
-        />
-      </div>
-    </AbsoluteFill>
-  );
+  const m = momentAnim(frame, 0, 8, 108, 120);
+  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <TypewriterText text="代價，正在發生。" startFrame={10} charStagger={4} fontSize={158} fontWeight={800} colorScheme="white-to-blue" />
+  </AbsoluteFill>;
 };
 
-// ── Scene root ───────────────────────────────────────────────────────
-export const S1_PainPoints: React.FC = () => {
-  // skewSettle imported for symmetry with other scenes; not directly used here.
-  void skewSettle;
-  return (
-    <AbsoluteFill style={{ background: colors.void }}>
-      {/* Light backdrop B1–B3 (0–1500) */}
-      <Sequence from={0} durationInFrames={1500} layout="none">
-        <AbsoluteFill>
-          <BgCalm theme="light" tint="blue" />
-        </AbsoluteFill>
-      </Sequence>
-
-      {/* Dark backdrop B4–B9 (1500–3900) */}
-      <Sequence from={1500} durationInFrames={2400} layout="none">
-        <AbsoluteFill>
-          <BgCalm theme="dark" tint="blue" />
-        </AbsoluteFill>
-      </Sequence>
-
-      {/* B1 0–360 Audience opener */}
-      <Sequence from={0} durationInFrames={360} layout="none">
-        <B1Audience />
-      </Sequence>
-
-      {/* B2 360–1140 Gut feeling */}
-      <Sequence from={360} durationInFrames={780} layout="none">
-        <B2GutFeeling />
-      </Sequence>
-
-      {/* B3 1140–1500 Tag pills */}
-      <Sequence from={1140} durationInFrames={360} layout="none">
-        <B3TagPills />
-      </Sequence>
-
-      {/* B4 1500–1740 Transition */}
-      <Sequence from={1500} durationInFrames={240} layout="none">
-        <B4Transition />
-      </Sequence>
-
-      {/* B5 1740–2280 Stat 1 */}
-      <Sequence from={1740} durationInFrames={540} layout="none">
-        <BigStatCard
-          icon="clock"
-          color={colors.warningYellow}
-          eyebrow="找人難"
-          value={60.3}
-          decimals={1}
-          unit="天"
-          subtitle="招募空窗期"
-        />
-      </Sequence>
-
-      {/* B6 2280–2820 Stat 2 */}
-      <Sequence from={2280} durationInFrames={540} layout="none">
-        <BigStatCard
-          icon="trending-down"
-          color={colors.alertOrange}
-          eyebrow="留不住"
-          value={65.4}
-          decimals={1}
-          unit="%"
-          subtitle="新人快閃率"
-        />
-      </Sequence>
-
-      {/* B7 2820–3360 Stat 3 */}
-      <Sequence from={2820} durationInFrames={540} layout="none">
-        <B7Stat3 />
-      </Sequence>
-
-      {/* B8 3360–3600 Combine */}
-      <Sequence from={3360} durationInFrames={240} layout="none">
-        <B8Combine />
-      </Sequence>
-
-      {/* B9 3600–3900 Visible vs hidden */}
-      <Sequence from={3600} durationInFrames={300} layout="none">
-        <B9Compare />
-      </Sequence>
-
-      <SubtitleBar />
-    </AbsoluteFill>
-  );
+const StatCard: React.FC<{ icon: React.ComponentProps<typeof LucideIcon>["name"]; eyebrow: string; value: number; decimals?: number; suffix: string; caption: string; color: string }> = ({ icon, eyebrow, value, decimals = 0, suffix, caption, color }) => {
+  const frame = useCurrentFrame();
+  const m = momentAnim(frame, 0, 8, 228, 240);
+  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ ...card, width: 980, minHeight: 470, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 22 }}>
+      <div style={{ width: 72, height: 72, borderRadius: 16, background: `${color}12`, border: `1px solid ${color}33`, display: "flex", alignItems: "center", justifyContent: "center", color }}><LucideIcon name={icon} size={38} /></div>
+      <div style={{ color: colors.hcFgMuted, fontFamily: fonts.mono, fontSize: 22, letterSpacing: "0.14em" }}>{eyebrow}</div>
+      <Counter value={value} decimals={decimals} suffix={suffix} color={color} />
+      <div style={{ color: colors.hcFgSecondary, fontSize: 36, fontWeight: 600 }}>{caption}</div>
+    </div>
+  </AbsoluteFill>;
 };
+
+const Cost: React.FC = () => {
+  const frame = useCurrentFrame();
+  const m = momentAnim(frame, 0, 8, 228, 240);
+  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ ...card, width: 980, minHeight: 470, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 24 }}>
+      <div style={{ width: 72, height: 72, borderRadius: 16, background: `${colors.hcRisk}12`, border: `1px solid ${colors.hcRisk}33`, display: "flex", alignItems: "center", justifyContent: "center", color: colors.hcRisk }}><LucideIcon name="coins" size={38} /></div>
+      <div style={{ color: colors.hcFgMuted, fontFamily: fonts.mono, fontSize: 22, letterSpacing: "0.14em" }}>代價高</div>
+      <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+        <span style={{ fontFamily: fonts.mono, fontSize: 62, fontWeight: 700, color: colors.hcRisk }}>NT$</span>
+        <Counter value={30} fontSize={210} color={colors.hcRisk} />
+        <span style={{ fontFamily: fonts.display, fontSize: 82, fontWeight: 800, color: colors.hcRisk }}>萬</span>
+      </div>
+      <div style={{ color: colors.hcFgSecondary, fontSize: 36, fontWeight: 600 }}>單次錯配成本</div>
+    </div>
+  </AbsoluteFill>;
+};
+
+const Combine: React.FC = () => {
+  const frame = useCurrentFrame();
+  const m = momentAnim(frame, 0, 8, 108, 120);
+  const items = ["60.3 天", "65.4%", "NT$ 20–30 萬"];
+  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 28 }}>
+    <TypewriterText text="三個數字，一個系統性問題" startFrame={8} charStagger={2} fontSize={54} fontWeight={700} colorScheme="white" />
+    <div style={{ display: "flex", gap: 18 }}>{items.map((it, i) => <div key={it} style={{ padding: "26px 34px", minWidth: 330, borderRadius: 10, border: "1px solid rgba(255,255,255,0.10)", color: "#FFFFFF", fontFamily: fonts.mono, fontSize: 40, textAlign: "center", opacity: interpolate(frame, [48 + i * 10, 58 + i * 10], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>{it}</div>)}</div>
+  </AbsoluteFill>;
+};
+
+const Hidden: React.FC = () => {
+  const frame = useCurrentFrame();
+  const m = momentAnim(frame, 0, 8, 108, 120);
+  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", gap: 42 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, width: 1120 }}>
+      {[{ title: "看得到", icon: "eye", items: ["履歷", "面試表達", "測驗標籤"] }, { title: "看不到", icon: "eye-off", items: ["壓力反應", "決策邏輯", "協作適應"] }].map((col, idx) => <div key={col.title} style={{ ...card, padding: "34px 38px", background: idx ? "#F7F8FB" : "#FFFFFF" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 22, color: idx ? colors.hcBlue : colors.hcFgMuted }}><LucideIcon name={col.icon as any} size={28} /><span style={{ fontSize: 34, fontWeight: 750 }}>{col.title}</span></div>
+        {col.items.map((x, i) => <div key={x} style={{ fontSize: 30, color: colors.hcFgSecondary, padding: "11px 0", borderTop: i ? `1px solid ${colors.hcHairline}` : "none" }}>{x}</div>)}
+      </div>)}
+    </div>
+    <div style={{ position: "absolute", bottom: 100 }}><TypewriterText text="看不見的，才是關鍵。" startFrame={70} charStagger={3} fontSize={58} fontWeight={800} colorScheme="white-to-cyan" /></div>
+  </AbsoluteFill>;
+};
+
+export const S1_PainPoints: React.FC = () => <AbsoluteFill>
+  <Sequence from={0} durationInFrames={720} layout="none"><AbsoluteFill><BgCalm theme="light" tint="blue" /></AbsoluteFill></Sequence>
+  <Sequence from={720} durationInFrames={1080} layout="none"><AbsoluteFill><BgCalm theme="dark" tint="blue" /></AbsoluteFill></Sequence>
+  <Sequence from={0} durationInFrames={240} layout="none"><Audience /></Sequence>
+  <Sequence from={240} durationInFrames={240} layout="none"><GutFeeling /></Sequence>
+  <Sequence from={480} durationInFrames={240} layout="none"><Pills /></Sequence>
+  <Sequence from={720} durationInFrames={120} layout="none"><Transition /></Sequence>
+  <Sequence from={840} durationInFrames={240} layout="none"><StatCard icon="clock" eyebrow="找人難" value={60.3} decimals={1} suffix="天" caption="招募空窗期" color={colors.hcWatch} /></Sequence>
+  <Sequence from={1080} durationInFrames={240} layout="none"><StatCard icon="trending-down" eyebrow="留不住" value={65.4} decimals={1} suffix="%" caption="六個月新人留任率" color={colors.hcRisk} /></Sequence>
+  <Sequence from={1320} durationInFrames={240} layout="none"><Cost /></Sequence>
+  <Sequence from={1560} durationInFrames={120} layout="none"><Combine /></Sequence>
+  <Sequence from={1680} durationInFrames={120} layout="none"><Hidden /></Sequence>
+</AbsoluteFill>;

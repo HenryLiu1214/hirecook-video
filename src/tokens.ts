@@ -1,38 +1,34 @@
-// Design tokens — Gemini-style × Digital Rationalism
+// Design tokens — HireCook Digital Rationalism
 
 export const FPS = 60;
-export const TOTAL_SECONDS = 225; // 3:45
-export const DURATION_IN_FRAMES = TOTAL_SECONDS * FPS; // 13500
+export const TOTAL_SECONDS = 180; // 3:00 competition cut
+export const DURATION_IN_FRAMES = TOTAL_SECONDS * FPS; // 10800
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
 
 export const colors = {
-  // Background
-  void: "#05050F",
-  deepNavy: "#080820",
-  darkSlate: "#0D0D2B",
-  // Primary
-  authorityBlue: "#1E4096",
-  electricBlue: "#0A84FF",
-  neonBlue: "#3B82F6",
-  // Secondary
-  deepPurple: "#4A00B0",
-  vividPurple: "#7C3AED",
-  softPurple: "#A78BFA",
-  lavender: "#C4B5FD",
-  // Functional
-  alertOrange: "#FF6B35",
-  energyGreen: "#10B981",
-  warningYellow: "#FBBF24",
-  infoCyan: "#06B6D4",
-  // Text
+  // Legacy aliases kept for existing shared components
+  void: "#05070C",
+  deepNavy: "#090C13",
+  darkSlate: "#0E121C",
+  authorityBlue: "#1430A0",
+  electricBlue: "#2151F5",
+  neonBlue: "#436BFB",
+  deepPurple: "#0A1850",
+  vividPurple: "#2151F5",
+  softPurple: "#6A8FFF",
+  lavender: "#9CB6FF",
+  alertOrange: "#B83A2E",
+  energyGreen: "#1B7A4D",
+  warningYellow: "#B27800",
+  infoCyan: "#00B4D8",
   pureWhite: "#FFFFFF",
-  softWhite: "#E2E8F0",
-  dimWhite: "#94A3B8",
-  midGray: "#64748B",
-  // Light mode accents (still used in some panels)
-  perspectiveBlue: "#E6F0FF",
-  canvasWhite: "#F8FAFC",
+  softWhite: "#ECEFF6",
+  dimWhite: "#B4BCD0",
+  midGray: "#8C95AE",
+  perspectiveBlue: "#EAF0FF",
+  canvasWhite: "#FFFFFF",
+
   // HireCook Design System
   hcBlue: "#2151F5",
   hcBlueDark: "#1430A0",
@@ -45,10 +41,12 @@ export const colors = {
   hcFitFg: "#146F3E",
   hcFitBorder: "rgba(27,122,77,0.22)",
   hcWatch: "#B27800",
+  hcWatchBg: "#FBF2DD",
   hcRisk: "#B83A2E",
   hcRiskBg: "#FBE7E5",
   hcCanvas: "#FFFFFF",
   hcSubtle: "#F7F8FB",
+  hcSubtle2: "#F2F4F9",
   hcHairline: "rgba(8,16,40,0.06)",
   hcSoft: "rgba(8,16,40,0.10)",
   hcInk900: "#0E121C",
@@ -64,12 +62,12 @@ export const fonts = {
   mono: "'JetBrains Mono', 'Courier New', monospace",
 };
 
-// Scene timing (frames @ 60fps)
+// Scene timing (frames @ 60fps) — 3:00 competition cut
 export const SCENES = {
-  s0: { start: 0,     end: 300   }, // 0-5s    Intro
-  s1: { start: 300,   end: 4200  }, // 5-70s   Pain points
-  s2: { start: 4200,  end: 8400  }, // 70-140s Science
-  s3: { start: 8400,  end: 12000 }, // 140-200s DIT
-  s4: { start: 12000, end: 12900 }, // 200-215s Compare
-  s5: { start: 12900, end: 13500 }, // 215-225s CTA
+  s0: { start: 0,    end: 240   }, // 0-4s    Intro
+  s1: { start: 240,  end: 2040  }, // 4-34s   Pain points
+  s2: { start: 2040, end: 4200  }, // 34-70s  Science
+  s3: { start: 4200, end: 9000  }, // 70-150s DIT demo
+  s4: { start: 9000, end: 9960  }, // 150-166s Difference
+  s5: { start: 9960, end: 10800 }, // 166-180s CTA
 };

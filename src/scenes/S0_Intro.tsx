@@ -3,10 +3,9 @@ import { useCurrentFrame, useVideoConfig, interpolate, Easing, AbsoluteFill, Img
 import { colors, fonts } from "../tokens";
 import { BgCalm } from "../components/BgCalm";
 import { TypewriterText } from "../components/TypewriterText";
-import { SubtitleBar } from "../components/SubtitleBar";
 import { rotZIn, rotXSettle, breathe } from "../anim";
 
-// S0: 300 frames (5s) — HireCook brand + 讓他煮 team intro
+// S0: 240 frames (4s) — HireCook brand + 讓他煮 team intro
 
 export const S0_Intro: React.FC = () => {
   const frame = useCurrentFrame();
@@ -122,7 +121,6 @@ export const S0_Intro: React.FC = () => {
         </div>
       </div>
 
-      <SubtitleBar />
     </AbsoluteFill>
   );
 };

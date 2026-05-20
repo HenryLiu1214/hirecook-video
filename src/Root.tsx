@@ -7,11 +7,12 @@ import { S2_Science } from "./scenes/S2_Science";
 import { S3_DIT } from "./scenes/S3_DIT";
 import { S4_Tech } from "./scenes/S4_Tech";
 import { S5_CTA } from "./scenes/S5_CTA";
+import { SubtitleBar } from "./components/SubtitleBar";
 
 const HireCookVideo: React.FC = () => {
   return (
     <AbsoluteFill>
-      <Audio src={staticFile("music.wav")} volume={0.35} />
+      <Audio src={staticFile("music.wav")} volume={0.26} />
       <Series>
         <Series.Sequence durationInFrames={SCENES.s0.end - SCENES.s0.start}>
           <S0_Intro />
@@ -36,6 +37,7 @@ const HireCookVideo: React.FC = () => {
           <S5_CTA />
         </Series.Sequence>
       </Series>
+      <SubtitleBar />
     </AbsoluteFill>
   );
 };
@@ -43,7 +45,7 @@ const HireCookVideo: React.FC = () => {
 export const RemotionRoot: React.FC = () => {
   return (
     <>
-      {/* Full 3-minute video */}
+      {/* Full 3-minute competition cut */}
       <Composition
         id="HireCook"
         component={HireCookVideo}

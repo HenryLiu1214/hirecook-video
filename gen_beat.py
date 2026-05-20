@@ -1,149 +1,115 @@
-import wave, struct, math, random
+import wave, struct, math
+import numpy as np
 
 SR = 44100
-BPM = 126
-BEAT = SR * 60 // BPM  # 21000 samples per beat
-BAR = BEAT * 4
-DUR = 210
-TOTAL = SR * DUR
-out = [0.0] * TOTAL
+BPM = 122
+DUR = 184
+N = SR * DUR
+BEAT = int(SR * 60 / BPM)
+out = np.zeros(N, dtype=np.float32)
+rng = np.random.default_rng(7)
 
-random.seed(42)
-
-def place(buf, pos, sig, gain=1.0):
-    for i, v in enumerate(sig):
-        if 0 <= pos + i < len(buf):
-            buf[pos + i] += v * gain
+def add(pos, sig, gain=1.0):
+    pos = int(pos)
+    if pos >= N:
+        return
+    n = min(len(sig), N - pos)
+    if n > 0:
+        out[pos:pos+n] += sig[:n] * gain
 
 def kick():
-    n = int(SR * 0.5)
-    result = []
-    phase = 0.0
-    for i in range(n):
-        t = i / SR
-        freq = 90 * math.exp(-t * 22) + 45
-        phase += 2 * math.pi * freq / SR
-        body_amp = math.exp(-t * 9) * 0.9
-        click = math.exp(-t * 400) * 0.25 * random.gauss(0, 1)
-        result.append(body_amp * math.sin(phase) + click)
-    return result
+    n = int(SR * 0.34)
+    t = np.arange(n) / SR
+    freq = 74 * np.exp(-t * 20) + 42
+    phase = np.cumsum(2 * np.pi * freq / SR)
+    click = np.exp(-t * 250) * 0.045 * rng.normal(size=n)
+    return (np.sin(phase) * np.exp(-t * 8.5) * 0.82 + click).astype(np.float32)
 
-def snare():
-    n = int(SR * 0.22)
-    result = []
-    for i in range(n):
-        t = i / SR
-        body = math.exp(-t * 40) * 0.4 * math.sin(2 * math.pi * 200 * t)
-        noise = math.exp(-t * 20) * 0.65 * random.gauss(0, 1)
-        result.append(body + noise)
-    return result
+def clap():
+    n = int(SR * 0.16)
+    t = np.arange(n) / SR
+    return (rng.normal(size=n) * np.exp(-t * 24) * 0.22 + np.sin(2*np.pi*185*t) * np.exp(-t*35) * 0.12).astype(np.float32)
 
-def hihat(decay=200, vol=0.28):
-    n = int(SR * 0.04)
-    return [math.exp(-i / SR * decay) * vol * random.gauss(0, 1) for i in range(n)]
+def tick(vol=0.08):
+    n = int(SR * 0.025)
+    t = np.arange(n) / SR
+    return (rng.normal(size=n) * np.exp(-t * 180) * vol).astype(np.float32)
 
-def open_hat():
-    n = int(SR * 0.14)
-    return [math.exp(-i / SR * 28) * 0.22 * random.gauss(0, 1) for i in range(n)]
+def pluck(freq, dur_beats=0.18, vol=0.10):
+    n = max(32, int(BEAT * dur_beats))
+    t = np.arange(n) / SR
+    env = np.minimum(1, t * 90) * np.exp(-t * 7)
+    wave = np.sin(2*np.pi*freq*t) + 0.35*np.sin(2*np.pi*freq*2*t + 0.2)
+    return (wave * env * vol).astype(np.float32)
 
-def bass_note(freq, dur_beats):
-    n = int(BEAT * dur_beats)
-    result = []
-    for i in range(n):
-        t = i / SR
-        env = min(1.0, t * 80) * math.exp(-max(0, t - 0.06) * 5)
-        env = max(0, env)
-        v = math.sin(2 * math.pi * freq * t) + 0.35 * math.sin(2 * math.pi * freq * 2 * t + 0.5)
-        result.append(v * env * 0.55)
-    return result
+def bass(freq, beats=1, vol=0.25):
+    n = int(BEAT * beats)
+    t = np.arange(n) / SR
+    env = np.minimum(1, t * 55) * np.exp(-np.maximum(0, t - 0.08) * 4.2)
+    wave = np.sin(2*np.pi*freq*t) + 0.22*np.sin(2*np.pi*freq*2*t)
+    return (wave * env * vol).astype(np.float32)
 
-def pad(freq, dur_s, vol=0.15):
+def pad(freq, dur_s, vol=0.07):
     n = int(SR * dur_s)
-    result = []
-    for i in range(n):
-        t = i / SR
-        att = min(1.0, t / 1.2)
-        rel = max(0, 1.0 - max(0, t - (dur_s - 1.5)) / 1.5)
-        env = att * rel
-        lfo = 1 + 0.035 * math.sin(2 * math.pi * 0.35 * t)
-        v = (math.sin(2 * math.pi * freq * t) +
-             0.45 * math.sin(2 * math.pi * freq * 2 * t + 0.8) +
-             0.2 * math.sin(2 * math.pi * freq * 3 * t + 1.5))
-        result.append(v * env * lfo * vol)
-    return result
+    t = np.arange(n) / SR
+    attack = np.minimum(1, t / 1.8)
+    release = np.maximum(0, 1 - np.maximum(0, t - (dur_s - 2.0)) / 2.0)
+    lfo = 1 + 0.025*np.sin(2*np.pi*0.22*t)
+    wave = np.sin(2*np.pi*freq*t) + 0.38*np.sin(2*np.pi*freq*2*t + 0.7)
+    return (wave * attack * release * lfo * vol).astype(np.float32)
 
-KICK = kick()
-SNARE = snare()
-HIHAT = hihat()
-OPEN_HAT = open_hat()
+K, C, T = kick(), clap(), tick()
+for beat in range(N // BEAT + 1):
+    pos = beat * BEAT
+    sec = pos / SR
+    bar = beat % 4
+    mid = sec >= 34
+    full = 70 <= sec < 166
+    pain = sec >= 4
+    if pain and bar in (0, 2):
+        add(pos, K, 0.78 if mid else 0.48)
+    if full and bar in (1, 3):
+        add(pos, C, 0.55)
+    elif mid and bar == 3:
+        add(pos, C, 0.32)
+    if mid:
+        for div in range(4):
+            g = 0.36 if div == 0 else 0.20
+            if sec > 166: g *= 0.45
+            add(pos + div * BEAT // 4, T, g)
 
-# -- Drums: 4/4 grid --
-# Every beat, place hihat. Kick on 1+3, snare on 2+4
-# Every 16 beats, add variation
-beat_num = 0
+bass_pattern = [(55,1),(55,1),(82.4,1),(73.4,1),(65.4,1),(65.4,1),(82.4,1),(98,1)]
 pos = 0
-while pos < TOTAL:
-    bar_beat = beat_num % 4
-    bar_num = beat_num // 4
-    phrase = bar_num % 8
-
-    # Kick on 1 and 3
-    if bar_beat == 0:
-        place(out, pos, KICK)
-        if phrase in [3, 7]:  # extra kick pickup
-            place(out, pos + BEAT * 3 // 4, KICK, 0.65)
-    elif bar_beat == 2:
-        place(out, pos, KICK)
-
-    # Snare on 2 and 4
-    if bar_beat == 1 or bar_beat == 3:
-        place(out, pos, SNARE)
-
-    # Hi-hat: every 8th note (half-beat)
-    place(out, pos, HIHAT)
-    hat_vol = 0.55 if (beat_num % 2 == 1) else 1.0
-    place(out, pos + BEAT // 2, HIHAT, hat_vol)
-
-    # Open hat on every 4th beat offbeat
-    if bar_beat == 3 and phrase % 2 == 1:
-        place(out, pos + BEAT // 2, OPEN_HAT)
-
+idx = 0
+while pos < N:
+    sec = pos / SR
+    if 4 <= sec < 176:
+        f,b = bass_pattern[idx % len(bass_pattern)]
+        add(pos, bass(f,b), 0.55 if 70 <= sec < 166 else 0.36)
     pos += BEAT
-    beat_num += 1
+    idx += 1
 
-# -- Bass: 8-note pattern over 2 bars (8 beats) --
-BASS_NOTES = [
-    (110, 1), (110, 1), (82.4, 0.5), (110, 0.5), (98, 1),
-    (110, 1), (82.4, 1), (98, 0.5), (110, 0.5),
-]
+pulse_notes = [220, 246.9, 261.6, 329.6]
+step_len = BEAT // 4
+for step in range(N // step_len):
+    pos = step * step_len
+    sec = pos / SR
+    if 34 <= sec < 166:
+        add(pos, pluck(pulse_notes[step % len(pulse_notes)]), 0.30 if sec >= 70 else 0.20)
+
+cycle_s = BEAT * 32 / SR
 pos = 0
-note_i = 0
-while pos < TOTAL:
-    freq, beats = BASS_NOTES[note_i % len(BASS_NOTES)]
-    note = bass_note(freq, beats)
-    place(out, pos, note)
-    pos += int(BEAT * beats)
-    note_i += 1
+while pos < N:
+    for f in [110, 130.8, 164.8]:
+        add(pos, pad(f, cycle_s), 1.0)
+    pos += int(cycle_s * SR)
 
-# -- Pads: A minor chord (A2=110, C3=130.8, E3=164.8), 8-bar cycles --
-chord_dur = BAR * 4 / SR  # 4 bars in seconds
-pos = 0
-while pos < TOTAL:
-    for freq in [110, 130.8, 164.8]:
-        place(out, pos, pad(freq, chord_dur))
-    pos += int(SR * chord_dur)
-
-# -- Normalize --
-peak = max(abs(x) for x in out)
-scale = 0.88 / peak if peak > 0 else 1.0
-
-out_path = '/Users/henry/Desktop/hirecook-video/public/music.wav'
-with wave.open(out_path, 'w') as wf:
+peak = float(np.max(np.abs(out))) or 1.0
+out = np.clip(out * (0.70 / peak), -1.0, 1.0)
+pcm = (out * 32767).astype('<i2').tobytes()
+with wave.open('/Users/henry/Desktop/hirecook-video/public/music.wav', 'wb') as wf:
     wf.setnchannels(1)
     wf.setsampwidth(2)
     wf.setframerate(SR)
-    for s in out:
-        clamped = max(-1.0, min(1.0, s * scale))
-        wf.writeframes(struct.pack('<h', int(clamped * 32767)))
-
-print(f"Done — {DUR}s rhythmic beat at {BPM} BPM written to {out_path}")
+    wf.writeframes(pcm)
+print(f'Done — {DUR}s SaaS pulse at {BPM} BPM')

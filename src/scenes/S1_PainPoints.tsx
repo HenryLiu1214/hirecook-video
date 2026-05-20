@@ -88,7 +88,7 @@ const Transition: React.FC = () => {
 
 const StatCard: React.FC<{ icon: React.ComponentProps<typeof LucideIcon>["name"]; eyebrow: string; value: number; decimals?: number; suffix: string; caption: string; color: string }> = ({ icon, eyebrow, value, decimals = 0, suffix, caption, color }) => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 228, 240);
+  const m = momentAnim(frame, 0, 8, 168, 180);
   return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center" }}>
     <div style={{ ...card, width: 980, minHeight: 470, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 22 }}>
       <div style={{ width: 72, height: 72, borderRadius: 16, background: `${color}12`, border: `1px solid ${color}33`, display: "flex", alignItems: "center", justifyContent: "center", color }}><LucideIcon name={icon} size={38} /></div>
@@ -101,7 +101,7 @@ const StatCard: React.FC<{ icon: React.ComponentProps<typeof LucideIcon>["name"]
 
 const Cost: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 228, 240);
+  const m = momentAnim(frame, 0, 8, 168, 180);
   return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center" }}>
     <div style={{ ...card, width: 980, minHeight: 470, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 24 }}>
       <div style={{ width: 72, height: 72, borderRadius: 16, background: `${colors.hcRisk}12`, border: `1px solid ${colors.hcRisk}33`, display: "flex", alignItems: "center", justifyContent: "center", color: colors.hcRisk }}><LucideIcon name="coins" size={38} /></div>
@@ -118,7 +118,7 @@ const Cost: React.FC = () => {
 
 const Combine: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 108, 120);
+  const m = momentAnim(frame, 0, 8, 138, 150);
   const items = ["60.3 天", "65.4%", "NT$ 20–30 萬"];
   return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 28 }}>
     <TypewriterText text="三個數字，一個系統性問題" startFrame={8} charStagger={2} fontSize={54} fontWeight={700} colorScheme="white" />
@@ -128,28 +128,55 @@ const Combine: React.FC = () => {
 
 const Hidden: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 108, 120);
+  const m = momentAnim(frame, 0, 8, 258, 270);
   return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", gap: 42 }}>
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, width: 1120 }}>
-      {[{ title: "看得到", icon: "eye", items: ["履歷", "面試表達", "測驗標籤"] }, { title: "看不到", icon: "eye-off", items: ["壓力反應", "決策邏輯", "協作適應"] }].map((col, idx) => <div key={col.title} style={{ ...card, padding: "34px 38px", background: idx ? "#F7F8FB" : "#FFFFFF" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 22, color: idx ? colors.hcBlue : colors.hcFgMuted }}><LucideIcon name={col.icon as any} size={28} /><span style={{ fontSize: 34, fontWeight: 750 }}>{col.title}</span></div>
-        {col.items.map((x, i) => <div key={x} style={{ fontSize: 30, color: colors.hcFgSecondary, padding: "11px 0", borderTop: i ? `1px solid ${colors.hcHairline}` : "none" }}>{x}</div>)}
-      </div>)}
+      {[
+        { title: "看得到", icon: "eye", items: ["履歷", "面試表達", "測驗標籤"] },
+        { title: "看不到", icon: "eye-off", items: ["壓力反應", "決策邏輯", "協作適應"] },
+      ].map((col, idx) => (
+        <div key={col.title} style={{
+          background: idx ? "rgba(33,81,245,0.09)" : "rgba(255,255,255,0.05)",
+          border: `1px solid ${idx ? "rgba(33,81,245,0.28)" : "rgba(255,255,255,0.12)"}`,
+          borderRadius: 12,
+          padding: "34px 38px",
+          boxSizing: "border-box" as const,
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 22, color: idx ? colors.hcCyan : colors.dimWhite }}>
+            <LucideIcon name={col.icon as any} size={28} />
+            <span style={{ fontSize: 34, fontWeight: 750 }}>{col.title}</span>
+          </div>
+          {col.items.map((x, i) => (
+            <div key={x} style={{ fontSize: 30, color: colors.softWhite, padding: "11px 0", borderTop: i ? "1px solid rgba(255,255,255,0.08)" : "none" }}>{x}</div>
+          ))}
+        </div>
+      ))}
     </div>
-    <div style={{ position: "absolute", bottom: 100 }}><TypewriterText text="看不見的，才是關鍵。" startFrame={70} charStagger={3} fontSize={58} fontWeight={800} colorScheme="white-to-cyan" /></div>
+    <div style={{ position: "absolute", bottom: 100 }}>
+      <TypewriterText text="看不見的，才是關鍵。" startFrame={70} charStagger={3} fontSize={58} fontWeight={800} colorScheme="white-to-cyan" />
+    </div>
   </AbsoluteFill>;
 };
 
 export const S1_PainPoints: React.FC = () => <AbsoluteFill>
-  <Sequence from={0} durationInFrames={720} layout="none"><AbsoluteFill><BgCalm theme="light" tint="blue" /></AbsoluteFill></Sequence>
-  <Sequence from={720} durationInFrames={1080} layout="none"><AbsoluteFill><BgCalm theme="dark" tint="blue" /></AbsoluteFill></Sequence>
-  <Sequence from={0} durationInFrames={240} layout="none"><Audience /></Sequence>
-  <Sequence from={240} durationInFrames={240} layout="none"><GutFeeling /></Sequence>
-  <Sequence from={480} durationInFrames={240} layout="none"><Pills /></Sequence>
-  <Sequence from={720} durationInFrames={120} layout="none"><Transition /></Sequence>
-  <Sequence from={840} durationInFrames={240} layout="none"><StatCard icon="clock" eyebrow="找人難" value={60.3} decimals={1} suffix="天" caption="招募空窗期" color={colors.hcWatch} /></Sequence>
-  <Sequence from={1080} durationInFrames={240} layout="none"><StatCard icon="trending-down" eyebrow="留不住" value={65.4} decimals={1} suffix="%" caption="六個月新人留任率" color={colors.hcRisk} /></Sequence>
-  <Sequence from={1320} durationInFrames={240} layout="none"><Cost /></Sequence>
-  <Sequence from={1560} durationInFrames={120} layout="none"><Combine /></Sequence>
-  <Sequence from={1680} durationInFrames={120} layout="none"><Hidden /></Sequence>
+  {/* ── Backgrounds ── */}
+  {/* light: audience / gut / pills */}
+  <Sequence from={0}    durationInFrames={720} layout="none"><AbsoluteFill><BgCalm theme="light" tint="blue" /></AbsoluteFill></Sequence>
+  {/* dark: transition beat */}
+  <Sequence from={720}  durationInFrames={120} layout="none"><AbsoluteFill><BgCalm theme="dark"  tint="blue" /></AbsoluteFill></Sequence>
+  {/* light: three stat cards */}
+  <Sequence from={840}  durationInFrames={540} layout="none"><AbsoluteFill><BgCalm theme="light" tint="blue" /></AbsoluteFill></Sequence>
+  {/* dark: combine + hidden */}
+  <Sequence from={1380} durationInFrames={420} layout="none"><AbsoluteFill><BgCalm theme="dark"  tint="blue" /></AbsoluteFill></Sequence>
+
+  {/* ── Beats ── */}
+  <Sequence from={0}    durationInFrames={240} layout="none"><Audience /></Sequence>
+  <Sequence from={240}  durationInFrames={240} layout="none"><GutFeeling /></Sequence>
+  <Sequence from={480}  durationInFrames={240} layout="none"><Pills /></Sequence>
+  <Sequence from={720}  durationInFrames={120} layout="none"><Transition /></Sequence>
+  <Sequence from={840}  durationInFrames={180} layout="none"><StatCard icon="clock"         eyebrow="找人難" value={60.3} decimals={1} suffix="天" caption="招募空窗期"    color={colors.hcWatch} /></Sequence>
+  <Sequence from={1020} durationInFrames={180} layout="none"><StatCard icon="trending-down" eyebrow="留不住" value={65.4} decimals={1} suffix="%" caption="六個月新人留任率" color={colors.hcRisk}  /></Sequence>
+  <Sequence from={1200} durationInFrames={180} layout="none"><Cost /></Sequence>
+  <Sequence from={1380} durationInFrames={150} layout="none"><Combine /></Sequence>
+  <Sequence from={1530} durationInFrames={270} layout="none"><Hidden /></Sequence>
 </AbsoluteFill>;

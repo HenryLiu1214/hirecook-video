@@ -270,14 +270,32 @@ const SliderRow: React.FC<{
   const op = interpolate(localFrame, [barStart - 10, barStart + 5], [0, 1], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
+  // Thumb handle fades in as bar starts moving
+  const thumbOp = interpolate(localFrame, [barStart, barStart + 10], [0, 1], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
   return (
     <div style={{ opacity: op, display: "flex", flexDirection: "column", gap: 4 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span style={{ fontSize: 18, color: "#0B1020", fontWeight: 600, fontFamily: fonts.display }}>{label}</span>
-        <span style={{ fontSize: 16, color, fontWeight: 700, fontFamily: fonts.mono }}>{value}</span>
+        <span style={{ fontSize: 16, color, fontWeight: 700, fontFamily: fonts.mono }}>{Math.round(w)}</span>
       </div>
-      <div style={{ height: 8, background: "rgba(8,16,40,0.06)", borderRadius: 9999 }}>
+      <div style={{ height: 8, background: "rgba(8,16,40,0.06)", borderRadius: 9999, position: "relative" }}>
         <div style={{ height: "100%", width: `${w}%`, background: color, borderRadius: 9999 }} />
+        {/* Draggable thumb handle */}
+        <div style={{
+          position: "absolute",
+          left: `${w}%`,
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+          width: 18, height: 18,
+          borderRadius: "50%",
+          background: "#FFFFFF",
+          border: `2.5px solid ${color}`,
+          boxShadow: `0 1px 6px rgba(8,16,40,0.30), 0 0 0 3px ${color}22`,
+          opacity: thumbOp,
+          zIndex: 1,
+        }} />
       </div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <span style={{ fontSize: 11, fontFamily: fonts.mono, color: "#8C95AE" }}>{leftLabel}</span>
@@ -291,21 +309,29 @@ const SliderRow: React.FC<{
 
 const KPICard: React.FC<{
   eyebrow: string;
-  value: string;
+  value: number;
+  decimals?: number;
   unit: string;
   sub: string;
   delta?: string;
   signal?: boolean;
   localFrame: number;
   delay: number;
-}> = ({ eyebrow, value, unit, sub, delta, signal, localFrame, delay }) => {
+}> = ({ eyebrow, value, decimals = 0, unit, sub, delta, signal, localFrame, delay }) => {
   const op = interpolate(localFrame, [delay, delay + 14], [0, 1], {
     easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
   const sc = interpolate(localFrame, [delay, delay + 14], [0.88, 1], {
     easing: Easing.out(Easing.back(1.2)), extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
+  // Count-up animation: 0 → final value over 70 frames from reveal
+  const numVal = interpolate(localFrame, [delay, delay + 70], [0, value], {
+    easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
+  const displayVal = decimals > 0 ? numVal.toFixed(decimals) : Math.round(numVal).toString();
   const isPositive = delta && delta.startsWith("+");
+  // Signal dot pulse
+  const dotGlow = signal ? 0.5 + 0.5 * Math.sin(localFrame * 0.18) : 0;
   return (
     <div style={{
       opacity: op,
@@ -325,14 +351,14 @@ const KPICard: React.FC<{
           <div style={{
             width: 7, height: 7, borderRadius: "50%",
             background: "#00B4D8",
-            boxShadow: "0 0 6px #00B4D8",
+            boxShadow: `0 0 ${4 + 6 * dotGlow}px rgba(0,180,216,${0.6 + 0.4 * dotGlow})`,
             flexShrink: 0,
           }} />
         )}
         <span style={{ fontSize: 14, fontFamily: fonts.mono, color: "#5C677F", letterSpacing: "0.12em", textTransform: "uppercase" as const }}>{eyebrow}</span>
       </div>
       <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-        <span style={{ fontSize: 48, fontFamily: fonts.mono, fontWeight: 700, color: "#0B1020", lineHeight: 1 }}>{value}</span>
+        <span style={{ fontSize: 48, fontFamily: fonts.mono, fontWeight: 700, color: "#0B1020", lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{displayVal}</span>
         <span style={{ fontSize: 16, fontFamily: fonts.mono, color: "#8C95AE" }}>{unit}</span>
       </div>
       <span style={{ fontSize: 14, color: "#5C677F" }}>{sub}</span>
@@ -553,20 +579,77 @@ const B2Define: React.FC = () => {
     easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
 
+  // Live pressure score counts up as hex radar draws
+  const pressureScore = Math.round(interpolate(frame, [240, 440], [0, 65], {
+    easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  }));
+
+  // Inference chip dot pulse
+  const dotPulse = 0.55 + 0.45 * Math.sin(frame * 0.19);
+
+  const headerOp = interpolate(frame, [0, 15], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
   return (
     <AbsoluteFill>
       <BgCalm theme="light" tint="blue" />
       <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform }}>
-        {/* Eyebrow */}
+
+        {/* ── Top app bar (matches actual product screenshot) ── */}
         <div style={{
-          position: "absolute", top: 64, left: 96,
-          opacity: interpolate(frame, [0, 15], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
-          fontSize: 20, fontFamily: fonts.mono, color: ds.fgMuted,
-          letterSpacing: "0.16em", textTransform: "uppercase" as const,
-        }}>D · Define</div>
+          position: "absolute", top: 0, left: 0, right: 0, height: 52,
+          background: "#FFFFFF",
+          borderBottom: "1px solid rgba(8,16,40,0.06)",
+          display: "flex", alignItems: "center", padding: "0 32px", gap: 24,
+          opacity: headerOp, zIndex: 10,
+        }}>
+          {/* Logo */}
+          <div style={{ display: "flex", alignItems: "center", gap: 9, flexShrink: 0 }}>
+            <div style={{ width: 22, height: 22, borderRadius: 5, background: "linear-gradient(135deg,#1430A0,#2151F5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ fontSize: 9, fontFamily: fonts.mono, fontWeight: 800, color: "#FFF" }}>HC</span>
+            </div>
+            <span style={{ fontSize: 14, fontWeight: 700, color: ds.fgPrimary, fontFamily: fonts.display }}>HireCook</span>
+          </div>
+          <span style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.fgFaint, letterSpacing: "0.10em" }}>ROLE ENVIRONMENTS · NEW ENVIRONMENT</span>
+          <div style={{ flex: 1 }} />
+          {/* Inference active chip */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 11px", borderRadius: 999, border: "1px solid rgba(0,180,216,0.28)", background: "rgba(0,180,216,0.06)" }}>
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: ds.cyan, opacity: dotPulse, boxShadow: `0 0 ${4 + 5 * dotPulse}px ${ds.cyan}` }} />
+            <span style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.cyan, letterSpacing: "0.08em" }}>inference active</span>
+          </div>
+        </div>
+
+        {/* ── Step progress bar ── */}
+        <div style={{
+          position: "absolute", top: 52, left: 0, right: 0,
+          padding: "10px 32px 0",
+          background: "#FFFFFF",
+          borderBottom: "1px solid rgba(8,16,40,0.05)",
+          display: "flex", alignItems: "center", gap: 0,
+          opacity: headerOp, zIndex: 9,
+        }}>
+          {[
+            { n: "01", label: "Basics", done: true, active: false },
+            { n: "02", label: "Environment", done: false, active: true },
+            { n: "03", label: "Review", done: false, active: false },
+          ].map((step, i) => (
+            <React.Fragment key={step.n}>
+              {i > 0 && <div style={{ width: 40, height: 1, background: step.done || step.active ? ds.blue : "rgba(8,16,40,0.10)", margin: "0 4px", marginBottom: 10 }} />}
+              <div style={{ display: "flex", alignItems: "center", gap: 6, paddingBottom: 10, borderBottom: step.active ? `2px solid ${ds.blue}` : "2px solid transparent" }}>
+                <div style={{ width: 20, height: 20, borderRadius: "50%", background: step.done ? ds.blue : step.active ? ds.blue : "transparent", border: `1.5px solid ${step.done || step.active ? ds.blue : "rgba(8,16,40,0.18)"}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {step.done
+                    ? <span style={{ fontSize: 10, color: "#FFF" }}>✓</span>
+                    : <span style={{ fontSize: 9, fontFamily: fonts.mono, fontWeight: 700, color: step.active ? "#FFF" : ds.fgFaint }}>{step.n}</span>
+                  }
+                </div>
+                <span style={{ fontSize: 12, fontFamily: fonts.display, fontWeight: step.active ? 600 : 400, color: step.active ? ds.fgPrimary : ds.fgMuted }}>{step.label}</span>
+              </div>
+            </React.Fragment>
+          ))}
+        </div>
 
         <div style={{
           position: "absolute", inset: 0,
+          paddingTop: 110,
           display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 20,
         }}>
           {/* Left card — sliders */}
@@ -638,7 +721,7 @@ const B2Define: React.FC = () => {
                 prog={hexProg}
               />
               <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-                <span style={{ fontSize: 40, fontFamily: fonts.mono, fontWeight: 700, color: ds.fgPrimary }}>65</span>
+                <span style={{ fontSize: 40, fontFamily: fonts.mono, fontWeight: 700, color: ds.blue, fontVariantNumeric: "tabular-nums" }}>{pressureScore}</span>
                 <span style={{ fontSize: 16, fontFamily: fonts.mono, color: ds.fgFaint }}>/100</span>
                 <span style={{ fontSize: 14, color: ds.fgMuted, marginLeft: 6 }}>綜合壓力指數</span>
               </div>
@@ -727,7 +810,8 @@ const B4Interact: React.FC = () => {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
 
-  const optionASelected = frame >= 340;
+  // Cursor clicks at frame 140+400=540 within this Sequence → option selected from frame 540
+  const optionASelected = frame >= 540;
 
   const sjtOptions = [
     { letter: "A", text: "直接接手配菜工作，自己同時備兩個位置。" },
@@ -833,23 +917,40 @@ const B4Interact: React.FC = () => {
                 extrapolateLeft: "clamp", extrapolateRight: "clamp",
               });
               const selected = opt.letter === "A" && optionASelected;
+              // Scale-pop when option A is first selected
+              const clickPop = selected
+                ? interpolate(frame, [540, 544, 552], [1, 1.025, 1.0], {
+                    easing: Easing.out(Easing.back(1.4)),
+                    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+                  })
+                : 1;
+              // Tick mark bounce-in
+              const tickSc = selected
+                ? interpolate(frame, [540, 548], [0, 1], {
+                    easing: Easing.out(Easing.back(1.6)),
+                    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+                  })
+                : 0;
               return (
                 <div key={opt.letter} style={{
                   opacity: optOp,
+                  transform: `scale(${clickPop})`,
                   display: "flex",
                   alignItems: "center",
                   gap: 14,
                   padding: "14px 16px",
                   borderRadius: 8,
                   background: selected ? "rgba(33,81,245,0.18)" : "rgba(255,255,255,0.03)",
-                  border: `1.5px solid ${selected ? "#2151F588" : "rgba(255,255,255,0.06)"}`,
-                  transition: "all 0.2s ease",
+                  border: `1.5px solid ${selected ? "#2151F5AA" : "rgba(255,255,255,0.06)"}`,
+                  boxShadow: selected ? "0 0 0 3px rgba(33,81,245,0.12)" : "none",
                 }}>
                   <div style={{
                     width: 28, height: 28, borderRadius: 6,
                     background: selected ? ds.blue : "rgba(255,255,255,0.06)",
+                    border: `1.5px solid ${selected ? ds.blue : "rgba(255,255,255,0.10)"}`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     flexShrink: 0,
+                    transform: selected ? `scale(${interpolate(frame, [540,546],[1.2,1],{extrapolateLeft:"clamp",extrapolateRight:"clamp"})})` : "none",
                   }}>
                     <span style={{ fontSize: 13, fontFamily: fonts.mono, fontWeight: 700, color: "#FFFFFF" }}>{opt.letter}</span>
                   </div>
@@ -860,27 +961,49 @@ const B4Interact: React.FC = () => {
                     flex: 1,
                   }}>{opt.text}</span>
                   {selected && (
-                    <span style={{ fontSize: 16, color: ds.blue, fontWeight: 700, marginLeft: "auto" }}>✓</span>
+                    <span style={{
+                      fontSize: 16, color: ds.cyan, fontWeight: 700, marginLeft: "auto",
+                      transform: `scale(${tickSc})`,
+                      display: "inline-block",
+                    }}>✓</span>
                   )}
                 </div>
               );
             })}
+
+            {/* Behavior capture bar — sweeps in after option selected */}
+            <div style={{
+              height: 2,
+              borderRadius: 1,
+              background: `linear-gradient(90deg, ${ds.blue}, ${ds.cyan})`,
+              width: `${interpolate(frame, [542, 610], [0, 100], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" })}%`,
+              opacity: interpolate(frame, [540, 544, 700, 720], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+            }} />
+            {/* Behavior captured label */}
+            <div style={{
+              display: "flex", alignItems: "center", gap: 8,
+              opacity: interpolate(frame, [614, 624, 800, 820], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+            }}>
+              <div style={{ width: 6, height: 6, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 6px ${ds.cyan}` }} />
+              <span style={{ fontSize: 12, fontFamily: fonts.mono, color: ds.cyan, letterSpacing: "0.10em" }}>BEHAVIOR CAPTURED · 行為指紋記錄中</span>
+            </div>
           </div>
         </div>
       </AbsoluteFill>
 
-      {/* HandCursor click */}
+      {/* HandCursor — synchronized: arrives at option A at e=400, click fires at frame 140+400=540 */}
       <HandCursor
-        startFrame={200}
-        duration={900}
+        startFrame={140}
+        duration={700}
         path={[
-          { x: 1500, y: 200 },
-          { x: 1300, y: 500 },
-          { x: 880, y: 660 },
-          { x: 880, y: 660 },
+          { x: 1420, y: 200 },   // start top-right
+          { x: 1060, y: 480 },   // scan toward options (hovering option B area)
+          { x: 660, y: 558 },    // land on option A
+          { x: 660, y: 558 },    // stay for ripple
         ]}
-        clickAt={[340]}
+        clickAt={[400]}
         size={42}
+        fadeOut={40}
       />
     </AbsoluteFill>
   );
@@ -999,7 +1122,20 @@ const B7Tailor: React.FC = () => {
             opacity: headerOp,
             transform: `translateY(${floatY(t, 0.74, 10, 0.5)}px)`,
           }}>
-            <span style={{ fontSize: 12, fontFamily: fonts.mono, color: ds.fgMuted, letterSpacing: "0.12em", textTransform: "uppercase" as const, marginRight: 8 }}>
+            {/* Inference active chip — pulses briefly then resolves */}
+            <div style={{
+              display: "flex", alignItems: "center", gap: 6,
+              padding: "4px 10px", borderRadius: 999,
+              border: `1px solid rgba(0,180,216,${interpolate(frame, [0, 28, 40], [0.28, 0.28, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`,
+              background: `rgba(0,180,216,${interpolate(frame, [0, 28, 40], [0.06, 0.06, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`,
+              opacity: interpolate(frame, [0, 8, 38, 44], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+            }}>
+              <div style={{ width: 6, height: 6, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 5px ${ds.cyan}`, opacity: 0.6 + 0.4 * Math.sin(frame * 0.22) }} />
+              <span style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.cyan, letterSpacing: "0.08em" }}>AI 分析中…</span>
+            </div>
+
+            <span style={{ fontSize: 12, fontFamily: fonts.mono, color: ds.fgMuted, letterSpacing: "0.12em", textTransform: "uppercase" as const, marginRight: 8,
+              opacity: interpolate(frame, [16, 28], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
               TAT PLAYBOOK · CHD-047
             </span>
             <div style={{
@@ -1007,13 +1143,16 @@ const B7Tailor: React.FC = () => {
               background: "linear-gradient(135deg, #1430A0, #2151F5)",
               display: "flex", alignItems: "center", justifyContent: "center",
               flexShrink: 0,
+              opacity: interpolate(frame, [10, 22], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
             }}>
               <span style={{ fontSize: 14, fontFamily: fonts.mono, fontWeight: 700, color: "#FFFFFF" }}>CW</span>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 2,
+              opacity: interpolate(frame, [10, 22], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
               <span style={{ fontSize: 22, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display }}>陳威宇</span>
               <span style={{ fontSize: 14, color: ds.fgMuted, fontFamily: fonts.display }}>後端工程師 L3 · 2 天前測驗 via SJT-v4</span>
             </div>
+            {/* Fit badge pops in after inference resolves */}
             <div style={{
               marginLeft: "auto",
               display: "inline-flex",
@@ -1023,6 +1162,8 @@ const B7Tailor: React.FC = () => {
               borderRadius: 9999,
               background: "#E6F5EC",
               border: "1px solid rgba(27,122,77,0.22)",
+              opacity: interpolate(frame, [38, 48], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+              transform: `scale(${interpolate(frame, [38, 48], [0.6, 1], { easing: Easing.out(Easing.back(1.5)), extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`,
             }}>
               <div style={{ width: 6, height: 6, borderRadius: "50%", background: ds.fit }} />
               <span style={{ fontSize: 13, fontWeight: 600, color: "#146F3E", fontFamily: fonts.display }}>適配</span>
@@ -1031,10 +1172,10 @@ const B7Tailor: React.FC = () => {
 
           {/* KPI row */}
           <div style={{ display: "flex", gap: 12 }}>
-            <KPICard eyebrow="P×E適配" value="88.5" unit="/100" sub="± 2.1 信賴區間" delta="+4.2" signal={true} localFrame={frame} delay={30} />
-            <KPICard eyebrow="6個月留任率" value="84" unit="%" sub="對照基準 65.4%" localFrame={frame} delay={48} />
-            <KPICard eyebrow="錯配成本節省" value="22" unit="萬" sub="NT$ · 預期效益" localFrame={frame} delay={66} />
-            <KPICard eyebrow="預測信心度" value="91" unit="%" sub="model.v4.3 · 穩定" localFrame={frame} delay={84} />
+            <KPICard eyebrow="P×E適配"   value={88.5} decimals={1} unit="/100" sub="± 2.1 信賴區間"   delta="+4.2" signal={true} localFrame={frame} delay={30} />
+            <KPICard eyebrow="6個月留任率" value={84}              unit="%"    sub="對照基準 65.4%"                            localFrame={frame} delay={48} />
+            <KPICard eyebrow="錯配成本節省" value={22}             unit="萬"   sub="NT$ · 預期效益"                            localFrame={frame} delay={66} />
+            <KPICard eyebrow="預測信心度"   value={91}             unit="%"    sub="model.v4.3 · 穩定"                         localFrame={frame} delay={84} />
           </div>
 
           {/* Bottom row */}

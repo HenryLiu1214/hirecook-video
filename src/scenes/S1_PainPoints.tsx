@@ -205,30 +205,27 @@ const Pills: React.FC = () => {
 const Transition: React.FC = () => {
   const frame = useCurrentFrame();
 
-  // Entrance: slash wipe over 28 frames
-  const wipe = slashWipe(frame, 0, 28);
+  // Entrance: smooth slash wipe matching the rest
+  const wipe = slashWipe(frame, 0, 24);
 
-  // Exit: fade out towards end of 210-frame sequence
-  const exitOp = interpolate(frame, [180, 210], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const exitScale = interpolate(frame, [180, 210], [1, 1.08], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  // Subtitle: "「我看人很準」背後"
+  const subOp = interpolate(frame, [16, 32], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const subY = interpolate(frame, [16, 36], [24, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  // Subtitle: "「我看人很準」背後" — fade+rise after wipe settles
-  const subOp = interpolate(frame, [24, 42], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const subY = interpolate(frame, [24, 48], [28, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-
-  return <AbsoluteFill style={{ opacity: exitOp, clipPath: wipe, transform: `scale(${exitScale})`, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 28 }}>
-    <BgCalm theme="dark" tint="blue" />
-    <div style={{
-      opacity: subOp,
-      transform: `translateY(${subY}px)`,
-      color: colors.dimWhite,
-      fontSize: 38,
-      fontWeight: 700,
-      letterSpacing: "-0.02em",
-      fontFamily: fonts.display,
-    }}>「我看人很準」背後</div>
-    <TypewriterText text="主管直覺" startFrame={32} charStagger={5} fontSize={162} fontWeight={850} colorScheme="white-to-blue" />
-  </AbsoluteFill>;
+  return (
+    <AbsoluteFill style={{ clipPath: wipe, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 32 }}>
+      <BgCalm theme="dark" tint="blue" />
+      <div style={{
+        opacity: subOp,
+        transform: `translateY(${subY}px)`,
+        color: "rgba(255, 255, 255, 0.85)",
+        fontSize: 42,
+        fontWeight: 700,
+        letterSpacing: "0.04em",
+      }}>「我看人很準」背後</div>
+      <TypewriterText text="主管直覺" startFrame={28} charStagger={4} fontSize={168} fontWeight={850} colorScheme="white-to-blue" />
+    </AbsoluteFill>
+  );
 };
 
 const StatCard: React.FC<{ icon: React.ComponentProps<typeof LucideIcon>["name"]; eyebrow: string; value: number; decimals?: number; suffix: string; caption: string; color: string }> = ({ icon, eyebrow, value, decimals = 0, suffix, caption, color }) => {
@@ -399,7 +396,7 @@ const Hidden: React.FC = () => {
   //         kw4 start=690 noExit   → reads 690→860 = 170f (2.8s) before belowOp fade
 
   return (
-    <AbsoluteFill style={{ background: bg }}>
+    <AbsoluteFill style={{ background: bg, clipPath: slashWipe(frame, 0, 24) }}>
       {/* Ambient glow + dot grid */}
       <div style={{ position: "absolute", inset: 0, opacity: dark, background: "radial-gradient(ellipse 80% 70% at 50% 54%, rgba(33,81,245,0.34), transparent 68%)" }} />
       <div style={{ position: "absolute", inset: 0, opacity: 0.18 + dark * 0.16, backgroundImage: "radial-gradient(circle, rgba(33,81,245,0.55) 1px, transparent 1px)", backgroundSize: "34px 34px" }} />
@@ -472,6 +469,6 @@ export const S1_PainPoints: React.FC = () => <AbsoluteFill>
   <Sequence from={360}  durationInFrames={204} layout="none"><Audience /></Sequence>
   <Sequence from={540}  durationInFrames={204} layout="none"><GutFeeling /></Sequence>
   <Sequence from={720}  durationInFrames={210} layout="none"><Pills /></Sequence>
-  <Sequence from={900} durationInFrames={210} layout="none"><Transition /></Sequence>
+  <Sequence from={900} durationInFrames={240} layout="none"><Transition /></Sequence>
   <Sequence from={1110} durationInFrames={900} layout="none"><Hidden /></Sequence>
 </AbsoluteFill>;

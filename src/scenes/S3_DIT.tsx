@@ -944,14 +944,15 @@ const B2Define: React.FC = () => {
       {/* ── Floating explanation text (dynamic, not a fixed header) ── */}
       {active && calloutOp > 0.01 && (
         <div style={{
-          position: "absolute", zIndex: 9, top: 286, width: 560, padding: "26px 30px",
+          position: "absolute", zIndex: 9, top: 286, width: 560, padding: "28px 32px",
           ...(calloutSide === "left" ? { left: 56 } : { right: 56 }),
           opacity: calloutOp * m.opacity, transform: `translateY(${calloutRise}px)`,
           textAlign: calloutSide === "left" ? "right" as const : "left" as const,
-          // Soft borderless scrim so text stays legible over the dimmed interface
-          background: calloutSide === "left"
-            ? "radial-gradient(ellipse 120% 90% at 80% 50%, rgba(247,248,251,0.96) 0%, rgba(247,248,251,0.82) 45%, rgba(247,248,251,0) 80%)"
-            : "radial-gradient(ellipse 120% 90% at 20% 50%, rgba(247,248,251,0.96) 0%, rgba(247,248,251,0.82) 45%, rgba(247,248,251,0) 80%)",
+          background: "rgba(255, 255, 255, 0.15)",
+          backdropFilter: "blur(20px)",
+          borderRadius: 24,
+          border: "1px solid rgba(255,255,255,0.25)",
+          boxShadow: "0 24px 80px rgba(8,16,40,0.08)",
           ...(calloutSide === "left" ? { display: "flex", flexDirection: "column" as const, alignItems: "flex-end" } : {}),
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
@@ -1532,13 +1533,13 @@ const B7Tailor: React.FC = () => {
   const lf = Math.max(0, frame - terminalEnd); // playbook local frame
 
   // ── Terminal Out Transition ──
-  const termOutOp = interpolate(frame, [terminalEnd, terminalEnd + 20], [1, 0], cl);
-  const termOutSc = interpolate(frame, [terminalEnd, terminalEnd + 24], [1, 0.85], { easing: Easing.out(Easing.cubic), ...cl });
+  const termOutOp = interpolate(frame, [terminalEnd, terminalEnd + 16], [1, 0], cl);
+  const termOutSc = interpolate(frame, [terminalEnd, terminalEnd + 20], [1, 1.5], { easing: Easing.in(Easing.cubic), ...cl });
 
   // ── Dashboard reveal ──
-  const dashOp = interpolate(lf, [0, 24], [0, 1], { easing: Easing.out(Easing.cubic), ...cl });
-  const dashY  = interpolate(lf, [0, 24], [30, 0], { easing: Easing.out(Easing.cubic), ...cl });
-  const dashSc = interpolate(lf, [0, 24], [1.06, 1], { easing: Easing.out(Easing.cubic), ...cl });
+  const dashOp = interpolate(lf, [0, 20], [0, 1], { easing: Easing.out(Easing.cubic), ...cl });
+  const dashY  = 0;
+  const dashSc = interpolate(lf, [0, 24], [0.75, 1], { easing: Easing.out(Easing.cubic), ...cl });
 
   // KPI counters
   const fitScore = interpolate(lf, [10, 120], [0, 88.5], { easing: Easing.out(Easing.cubic), ...cl });
@@ -1549,10 +1550,10 @@ const B7Tailor: React.FC = () => {
   // ── Camera tour stops ──
   type B7Stop = { k: [number,number,number,number]; ox: number; oy: number; z: number; sect: "kpi"|"pemap"|"xai"|"recs"; n: string; title: string; desc: string; calloutPos: "bottom"|"right"|"left"|"top" };
   const b7Stops: B7Stop[] = [
-    { k: [200, 228, 388, 416], ox: 50, oy: 15, z: 1.22, sect: "kpi",   n: "①", title: "P×E 預測結果", desc: "結合環境與行為，直接預測留任率與錯配成本。", calloutPos: "bottom" },
-    { k: [416, 444, 604, 632], ox: 24, oy: 54, z: 1.22, sect: "pemap", n: "②", title: "雷達疊合分析", desc: "視覺化比對雙方落差，找出隱藏的摩擦風險點。", calloutPos: "left" },
-    { k: [632, 660, 820, 848], ox: 76, oy: 54, z: 1.22, sect: "xai",   n: "③", title: "行為驅動因子", desc: "XAI 解釋為什麼適合，給予高信心度的背後原因。", calloutPos: "right" },
-    { k: [848, 876, 1036, 1064], ox: 50, oy: 85, z: 1.18, sect: "recs",  n: "④", title: "專屬管理建議", desc: "直接給主管第一天的具體帶人指南，避免磨合失敗。", calloutPos: "top" },
+    { k: [200, 228, 388, 416], ox: 50, oy: 15, z: 1.15, sect: "kpi",   n: "①", title: "P×E 預測結果", desc: "結合環境與行為，直接預測留任率與錯配成本。", calloutPos: "top" },
+    { k: [416, 444, 604, 632], ox: 25, oy: 54, z: 1.15, sect: "pemap", n: "②", title: "雷達疊合分析", desc: "視覺化比對雙方落差，找出隱藏的摩擦風險點。", calloutPos: "left" },
+    { k: [632, 660, 820, 848], ox: 75, oy: 54, z: 1.15, sect: "xai",   n: "③", title: "行為驅動因子", desc: "XAI 解釋為什麼適合，給予高信心度的背後原因。", calloutPos: "right" },
+    { k: [848, 876, 1036, 1064], ox: 50, oy: 85, z: 1.15, sect: "recs",  n: "④", title: "專屬管理建議", desc: "直接給主管第一天的具體帶人指南，避免磨合失敗。", calloutPos: "bottom" },
   ];
   const b7Active = b7Stops.find(s => lf >= s.k[0] && lf < s.k[3]);
   
@@ -1560,12 +1561,12 @@ const B7Tailor: React.FC = () => {
   // Keyframes: before | kpi-in | kpi-hold | pemap-in | pemap-hold | xai-in | xai-hold | recs-in | recs-hold | out
   const camZ = interpolate(lf,
     [200, 228, 388, 444, 604, 660, 820, 876, 1036, 1064],
-    [  1, 1.22, 1.22, 1.22, 1.22, 1.22, 1.22, 1.18, 1.18,    1],
+    [  1, 1.15, 1.15, 1.15, 1.15, 1.15, 1.15, 1.15, 1.15,    1],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
   const camOx = interpolate(lf,
     [200, 228, 388, 444, 604, 660, 820, 876, 1036, 1064],
-    [ 50,  50,  50,  24,  24,  76,  76,   50,   50,  50],
+    [ 50,  50,  50,  25,  25,  75,  75,   50,   50,  50],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
   const camOy = interpolate(lf,
@@ -1626,6 +1627,23 @@ const B7Tailor: React.FC = () => {
             <div style={{ position: "absolute", inset: 0, paddingTop: 150 }}>
               <B7TailorTerminal lf={terminalLF} />
             </div>
+            {terminalLF >= 160 && (
+              <div style={{
+                position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
+                background: `rgba(14,18,28,${interpolate(terminalLF, [160, 175], [0, 0.75])})`,
+                backdropFilter: `blur(${interpolate(terminalLF, [160, 175], [0, 12])}px)`,
+                zIndex: 20
+              }}>
+                <div style={{
+                  fontSize: 72, fontFamily: fonts.mono, color: "#FFFFFF", fontWeight: 800, letterSpacing: "0.2em",
+                  textShadow: `0 0 30px ${ds.cyan}, 0 0 60px ${ds.blue}`,
+                  transform: `scale(${interpolate(terminalLF, [160, 200], [0.85, 1.15])})`,
+                  opacity: interpolate(terminalLF, [160, 175, 200], [0, 1, 0])
+                }}>
+                  RENDERING UI...
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -1636,12 +1654,17 @@ const B7Tailor: React.FC = () => {
             <div style={{ transformOrigin: "50% 50%", transform: `translate(${-camZ * (camOx - 50)}%, ${-camZ * (camOy - 50)}%) scale(${camZ})` }}>
               {/* Dashboard shell */}
               <div style={{
-                width: 1680, borderRadius: 16, overflow: "hidden" as const,
+                width: 1440, borderRadius: 16, overflow: "hidden" as const, position: "relative" as const,
                 background: "#FFFFFF",
                 boxShadow: "0 24px 80px rgba(8,16,40,0.11), 0 1px 0 rgba(8,16,40,0.06)",
                 opacity: dashOp, transform: `translateY(${dashY + b7Float}px) scale(${dashSc})`,
                 display: "flex", flexDirection: "column" as const,
               }}>
+                {/* Sweep overlay for transition */}
+                <div style={{ position: "absolute", inset: 0, zIndex: 100, opacity: interpolate(lf, [0, 6, 24, 30], [0, 1, 1, 0], cl), pointerEvents: "none" }}>
+                  <div style={{ position: "absolute", top: interpolate(lf, [0, 30], [0, 1000], cl), left: 0, right: 0, height: 4, background: ds.cyan, boxShadow: `0 0 24px 4px ${ds.cyan}` }} />
+                  <div style={{ position: "absolute", top: 0, height: interpolate(lf, [0, 30], [0, 1000], cl), left: 0, right: 0, background: "rgba(0,180,216,0.08)" }} />
+                </div>
 
                 {/* ── Header ───────────────────────────────────── */}
                 <div style={{ height: 52, padding: "0 24px", display: "flex", alignItems: "center", gap: 12, borderBottom: "1px solid rgba(8,16,40,0.06)", flexShrink: 0 }}>
@@ -1783,6 +1806,12 @@ const B7Tailor: React.FC = () => {
                     : `translateY(calc(-50% + ${calloutRise}px))`,
                   width: 440,
                   display: "flex", flexDirection: "column", gap: 14,
+                  background: "rgba(255, 255, 255, 0.15)",
+                  backdropFilter: "blur(20px)",
+                  borderRadius: 24,
+                  border: "1px solid rgba(255,255,255,0.25)",
+                  boxShadow: "0 24px 80px rgba(8,16,40,0.08)",
+                  padding: "24px 28px",
                 }}>
                   <div style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                     <div style={{ width: 28, height: 28, borderRadius: "50%", background: ds.fit, color: "#FFF", fontSize: 13, fontFamily: fonts.mono, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>{b7Active.n}</div>

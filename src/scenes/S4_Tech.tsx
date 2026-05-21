@@ -70,7 +70,7 @@ const GutFeeling: React.FC<{ start: number }> = ({ start }) => {
           </div>
           <div style={{ 
             position: "absolute", 
-            top: "50%", 
+            top: "43%", 
             left: "-5%", 
             width: `${lineDraw * 110}%`, 
             height: 16, 

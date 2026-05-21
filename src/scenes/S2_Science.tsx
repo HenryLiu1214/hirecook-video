@@ -8,7 +8,7 @@ import { momentAnim, breathe, rotXSettle, rotZIn, rippleBurst, slashWipe } from 
 
 const BigBeat: React.FC<{ text: string; sub?: string; start?: number; colorScheme?: React.ComponentProps<typeof TypewriterText>["colorScheme"]; size?: number; dark?: boolean; wipe?: "ripple" | "slash" }> = ({ text, sub, start = 14, colorScheme = "plum-to-pink", size = 190, dark = false, wipe }) => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 228, 240);
+  const m = momentAnim(frame, 0, 8, 288, 300);
   const cp = wipe === "ripple" ? rippleBurst(frame, 0, 34) : wipe === "slash" ? slashWipe(frame, 0, 24) : undefined;
   return <AbsoluteFill style={{ opacity: m.opacity, clipPath: cp, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 24, perspective: "1400px" }}>
     <div style={{ transform: `scale(${breathe(frame / 60, 1, 0.006)}) rotate(${rotZIn(frame, start, 28, -8)}deg) rotateX(${rotXSettle(frame, start, 32)}deg)` }}>
@@ -75,8 +75,8 @@ const Formula: React.FC = () => {
 
 const PE: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 348, 360);
-  const overlap = interpolate(frame, [80, 180], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const m = momentAnim(frame, 0, 8, 228, 240);
+  const overlap = interpolate(frame, [40, 100], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const px = -270 + overlap * 170;
   const ex = 270 - overlap * 170;
   const circle = (label: string, sub: string, color: string): React.CSSProperties => ({ width: 320, height: 320, borderRadius: "50%", border: `2px solid ${color}77`, background: `${color}10`, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", color });
@@ -86,7 +86,7 @@ const PE: React.FC = () => {
       <div style={{ position: "absolute", left: `calc(50% + ${ex}px - 160px)`, top: 20, ...circle("E", "Environment", colors.hcBlue) }}><div style={{ fontSize: 96, fontWeight: 850, fontFamily: fonts.mono }}>E</div><div style={{ fontSize: 24 }}>Environment</div></div>
       <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", opacity: overlap * overlap, color: "#FFFFFF", fontFamily: fonts.mono, fontSize: 64, fontWeight: 850, letterSpacing: "0.08em" }}>FIT</div>
     </div>
-    <TypewriterText text="P-E Fit 決定適配" startFrame={210} charStagger={3} fontSize={92} fontWeight={850} colorScheme="white-to-cyan" />
+    <TypewriterText text="P-E Fit 決定適配" startFrame={120} charStagger={2} fontSize={92} fontWeight={850} colorScheme="white-to-cyan" />
   </AbsoluteFill>;
 };
 
@@ -333,14 +333,15 @@ const MBTIInjection: React.FC = () => {
 
 const OvercookedPlay: React.FC = () => {
   const frame = useCurrentFrame();
-  const cover = interpolate(frame, [0, 72], [1, 0], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const coverOp = interpolate(frame, [0, 42], [1, 0], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const entryY = interpolate(frame, [12, 48], [40, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const entryOp = interpolate(frame, [12, 36], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const playsPunch = interpolate(frame, [84, 106, 128], [0.92, 1.08, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const pressurePunch = interpolate(frame, [136, 158, 180], [0.90, 1.08, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const scanY = interpolate(frame, [190, 382], [0, 226], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const frameDraw = interpolate(frame, [118, 292], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const traceDraw = interpolate(frame, [430, 510], [0, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const exitX = interpolate(frame, [548, 600], [0, -44], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const handoff = interpolate(frame, [528, 600], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const tags = [
     { en: "TIME PRESSURE", zh: "倒數壓力", c: colors.hcCyanBright },
     { en: "ROLE HANDOFF", zh: "角色交接", c: colors.hcBlue },
@@ -350,7 +351,7 @@ const OvercookedPlay: React.FC = () => {
     <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 71% 46%, rgba(111,227,245,0.18), transparent 36%), linear-gradient(112deg, #071D32 0%, #0D1430 39%, #F7F8FB 39.2%, #EEF4FF 100%)" }} />
     <div style={{ position: "absolute", inset: 0, opacity: 0.16, backgroundImage: "radial-gradient(circle, rgba(111,227,245,0.42) 1px, transparent 1px)", backgroundSize: "34px 34px" }} />
 
-    <div style={{ position: "absolute", left: 70, top: 92, width: 580, opacity: interpolate(frame, [540, 590], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+    <div style={{ position: "absolute", left: 70, top: 92, width: 580, opacity: Math.min(entryOp, interpolate(frame, [540, 590], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })), transform: `translateY(${entryY}px)` }}>
       <div style={{ color: colors.hcCyanBright, fontFamily: fonts.mono, fontSize: 25, fontWeight: 900, letterSpacing: "0.22em" }}>AI AGENT</div>
       <div style={{ marginTop: 18, color: "#FFFFFF", fontSize: 124, fontWeight: 950, letterSpacing: "-0.078em", lineHeight: 0.82, transform: `scale(${playsPunch})`, transformOrigin: "left center", textShadow: `0 0 ${interpolate(frame, [84, 108, 150], [0, 34, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px rgba(255,255,255,0.42)` }}>PLAYS</div>
       <div style={{ color: colors.hcCyanBright, fontSize: 114, fontWeight: 950, letterSpacing: "-0.078em", lineHeight: 0.82, transform: `scale(${pressurePunch})`, transformOrigin: "left center", textShadow: `0 0 ${interpolate(frame, [136, 160, 204], [0, 40, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px rgba(111,227,245,0.55)` }}>PRESSURE</div>
@@ -404,12 +405,13 @@ const OvercookedPlay: React.FC = () => {
       TRACE CAPTURED →
     </div>
 
-    <div style={{ position: "absolute", inset: 0, opacity: handoff, background: "linear-gradient(90deg, transparent 0%, transparent 48%, rgba(5,7,12,0.18) 66%, rgba(5,7,12,0.78) 84%, #05070C 100%)", pointerEvents: "none" }} />
-
-    <div style={{ position: "absolute", left: 960, top: 590, width: 340 + cover * 3260, height: 340 + cover * 3260, background: "#17339C", opacity: cover, transform: "translate(-50%, -50%)", borderRadius: "50%", border: `${7 + cover * 913}px solid rgba(111,227,245,0.42)`, boxShadow: "0 0 120px rgba(111,227,245,0.36)", zIndex: 10 }} />
-    <div style={{ position: "absolute", left: 960, top: 590, width: 340, height: 340, opacity: cover, transform: "translate(-50%, -50%)", zIndex: 11 }}>
-      <RobotAgent size={340} boot={1} bodyColor="#17339C" />
-    </div>
+    {frame < 60 && (
+      <div style={{ position: "absolute", inset: 0, background: "#17339C", opacity: coverOp, zIndex: 10 }}>
+        <div style={{ position: "absolute", left: 960, top: 590, width: 340, height: 340, transform: "translate(-50%, -50%)" }}>
+          <RobotAgent size={340} boot={1} bodyColor="#17339C" />
+        </div>
+      </div>
+    )}
   </AbsoluteFill>;
 };
 
@@ -494,8 +496,8 @@ const FingerprintResults: React.FC = () => {
 const ScienceClose: React.FC = () => {
   const frame = useCurrentFrame();
   // Bypass the entry animation of momentAnim so the scene starts perfectly at scale 1.0 (no jumping)
-  const exitOp = interpolate(frame, [228, 240], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const exitScale = interpolate(frame, [228, 240], [1, 0.96], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const exitOp = interpolate(frame, [288, 300], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const exitScale = interpolate(frame, [288, 300], [1, 0.96], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   
   // Smoothly fade in the white background over the dark one
   const bgOp = interpolate(frame, [0, 35], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -521,7 +523,7 @@ const ScienceClose: React.FC = () => {
   const calcY = interpolate(frame, [25, 45], [20, 24], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   const iconShift = interpolate(frame, [104, 148], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const quoteOp = interpolate(frame, [126, 164, 224, 238], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const quoteOp = interpolate(frame, [126, 164, 284, 298], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const quoteY = interpolate(frame, [126, 166], [66, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const iconX = interpolate(iconShift, [0, 1], [0, -470], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const iconY = interpolate(iconShift, [0, 1], [0, -18], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -567,15 +569,15 @@ export const S2_Science: React.FC = () => {
   return <AbsoluteFill>
     {/* Actual S2 contents wiping in over the previous scene */}
     <AbsoluteFill style={{ clipPath: slashWipe(frame, 0, 36) }}>
-      <Sequence from={0} durationInFrames={240} layout="none"><AbsoluteFill><BgCalm theme="light" tint="blue" /></AbsoluteFill></Sequence>
-      <Sequence from={240} durationInFrames={2640} layout="none"><AbsoluteFill><BgCalm theme="dark" tint="blue" /></AbsoluteFill></Sequence>
-      <Sequence from={0} durationInFrames={240} layout="none"><BigBeat text="MBTI" sub="Personality signal，不是錄用結論，是模擬輸入" size={214} /></Sequence>
-      <Sequence from={240} durationInFrames={360} layout="none"><Formula /></Sequence>
-      <Sequence from={600} durationInFrames={360} layout="none"><PE /></Sequence>
-      <Sequence from={960} durationInFrames={420} layout="none"><MBTIInjection /></Sequence>
-      <Sequence from={1380} durationInFrames={600} layout="none"><OvercookedPlay /></Sequence>
-      <Sequence from={1920} durationInFrames={720} layout="none"><FingerprintResults /></Sequence>
-      <Sequence from={2640} durationInFrames={240} layout="none"><ScienceClose /></Sequence>
+      <Sequence from={0} durationInFrames={300} layout="none"><AbsoluteFill><BgCalm theme="light" tint="blue" /></AbsoluteFill></Sequence>
+      <Sequence from={300} durationInFrames={2580} layout="none"><AbsoluteFill><BgCalm theme="dark" tint="blue" /></AbsoluteFill></Sequence>
+      <Sequence from={0} durationInFrames={300} layout="none"><BigBeat text="MBTI" sub="Personality signal，不是錄用結論，是模擬輸入" size={214} /></Sequence>
+      <Sequence from={300} durationInFrames={360} layout="none"><Formula /></Sequence>
+      <Sequence from={660} durationInFrames={240} layout="none"><PE /></Sequence>
+      <Sequence from={900} durationInFrames={420} layout="none"><MBTIInjection /></Sequence>
+      <Sequence from={1320} durationInFrames={600} layout="none"><OvercookedPlay /></Sequence>
+      <Sequence from={1860} durationInFrames={720} layout="none"><FingerprintResults /></Sequence>
+      <Sequence from={2580} durationInFrames={300} layout="none"><ScienceClose /></Sequence>
     </AbsoluteFill>
   </AbsoluteFill>;
 };

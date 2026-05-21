@@ -23,3 +23,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# Large asset pack
+public/Articulated--Starter_Pack_v2.0/
+

@@ -861,14 +861,14 @@ const B2LeftC: React.FC<{ lf: number }> = ({ lf }) => {
 // ── B2Define orchestrator ─────────────────────────────────────────────────────
 const B2Define: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 1140, 1154);
+  const m = momentAnim(frame, 0, 16, 1140, 1164);
 
   // ── Timeline: no intro, directly show the COMPLETE interface ──
-  const sceneOp = interpolate(frame, [0, 24], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const cardOp  = interpolate(frame, [0, 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const sceneOp = interpolate(frame, [0, 24, 1140, 1164], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const cardOp  = interpolate(frame, [0, 30, 1140, 1164], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   // Phase boundaries (whole-interface steps) — left panel crossfades, no flash
-  const PB = 440, PC = 860;
+  const PB = 440, PC = 780;
   const phaseA = frame < PB;
   const phaseB = frame >= PB && frame < PC;
   const phaseC = frame >= PC;
@@ -1022,38 +1022,62 @@ const PingDot: React.FC<{ frame: number; color?: string }> = ({ frame, color = "
 
 const B3Bridge: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 136, 150);
+  // 360f total — 4 phases, ~90f each with cross-fades
+  // P1 0-90: 有了環境，下一步——
+  const p1Op = interpolate(frame, [0, 12, 72, 90], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const p1DashW = interpolate(frame, [24, 50], [0, 180], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  // P2 78-168: STEP 02 · INTERACT + 求職者視角
+  const p2Op = interpolate(frame, [78, 96, 150, 168], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  // P3 156-246: 他收到了—— / 一份邀請
+  const p3Op = interpolate(frame, [156, 174, 228, 246], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const p3SubOp = interpolate(frame, [168, 186], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const p3SubY = interpolate(frame, [168, 186], [20, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  // P4 234-360: SJT 情境測驗
+  const p4Op = interpolate(frame, [234, 252, 346, 360], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
+  const rootOp = interpolate(frame, [0, 16], [0, 1], cl);
+  const outOp = interpolate(frame, [336, 360], [1, 0], cl);
 
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={{ opacity: rootOp * outOp }}>
       <BgCalm theme="dark" tint="blue" />
-      {/* Ping dot: absolute, centered horizontally, just above vertical center */}
-      <div style={{
-        position: "absolute",
-        top: "50%", left: "50%",
-        transform: "translate(-50%, -150px)",
-        opacity: m.opacity,
-      }}>
-        <PingDot frame={frame} color="#5B8AFF" />
-      </div>
-      {/* Text centered in AbsoluteFill */}
-      <AbsoluteFill style={{
-        opacity: m.opacity,
-        transform: `rotate(${rotZIn(frame, 10, 28, -6)}deg) skewX(${skewSettle(frame, 10, 24)}deg)`,
-        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-      }}>
-        <div style={{ marginBottom: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 16px", borderRadius: 999, border: "1px solid rgba(91,138,255,0.40)", background: "rgba(91,138,255,0.15)", opacity: interpolate(frame, [10, 20], [0, 1], { extrapolateLeft: "clamp" }) }}>
+
+      {/* P1: 有了環境，下一步—— */}
+      <AbsoluteFill style={{ opacity: p1Op, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 0 }}>
+          <TypewriterText text="有了環境，下一步" startFrame={6} charStagger={2} fontSize={88} fontWeight={850} colorScheme="white" letterSpacing="-0.04em" />
+          <div style={{ width: p1DashW, height: 8, background: `linear-gradient(90deg, ${colors.hcCyanBright}, transparent)`, borderRadius: 4, marginLeft: 8, boxShadow: `0 0 24px ${colors.hcCyanBright}` }} />
+        </div>
+      </AbsoluteFill>
+
+      {/* P2: STEP 02 · INTERACT + 求職者視角 */}
+      <AbsoluteFill style={{ opacity: p2Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -150px)" }}>
+          <PingDot frame={Math.max(0, frame - 78)} color="#5B8AFF" />
+        </div>
+        <div style={{ marginBottom: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 16px", borderRadius: 999, border: "1px solid rgba(91,138,255,0.40)", background: "rgba(91,138,255,0.15)" }}>
           <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#5B8AFF", boxShadow: "0 0 8px #5B8AFF" }} />
           <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#9CB6FF", letterSpacing: "0.24em" }}>STEP 02 · INTERACT</span>
         </div>
-        <TypewriterText
-          text="SJT 情境測驗"
-          startFrame={14}
-          charStagger={4}
-          fontSize={110}
-          fontWeight={800}
-          colorScheme="white-to-cyan"
-        />
+        <TypewriterText text="求職者視角" startFrame={88} charStagger={3} fontSize={110} fontWeight={800} colorScheme="white-to-cyan" />
+      </AbsoluteFill>
+
+      {/* P3: 他收到了—— 一份邀請 */}
+      <AbsoluteFill style={{ opacity: p3Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12 }}>
+        <div style={{ color: colors.dimWhite, fontSize: 36, fontWeight: 700, letterSpacing: "-0.02em" }}>他收到了——</div>
+        <div style={{ color: "#FFFFFF", fontSize: 96, fontWeight: 900, letterSpacing: "-0.06em", opacity: p3SubOp, transform: `translateY(${p3SubY}px)` }}>一份邀請</div>
+      </AbsoluteFill>
+
+      {/* P4: SJT 情境測驗 */}
+      <AbsoluteFill style={{ opacity: p4Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -150px)" }}>
+          <PingDot frame={Math.max(0, frame - 234)} color="#5B8AFF" />
+        </div>
+        <TypewriterText text="SJT 情境測驗" startFrame={244} charStagger={3} fontSize={110} fontWeight={800} colorScheme="white-to-cyan" />
       </AbsoluteFill>
     </AbsoluteFill>
   );
@@ -1178,7 +1202,7 @@ const SJTCard: React.FC<{
 
 const B4Interact: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 686, 700);
+  const m = momentAnim(frame, 0, 16, 586, 610);
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
   const O = 0;
@@ -1214,10 +1238,10 @@ const B4Interact: React.FC = () => {
   const wireRot = frame * 0.4;
 
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={{ opacity: m.opacity }}>
       <BgCalm theme="dark" tint="blue" />
 
-      <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform }}>
+      <AbsoluteFill style={{ transform: m.transform }}>
         
         <div style={{ width: "100%", height: "100%", position: "absolute", display: "flex", alignItems: "center", justifyContent: "center" }}>
           
@@ -1321,7 +1345,7 @@ const B4Interact: React.FC = () => {
 
 const B5Capture: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 240, 250);
+  const m = momentAnim(frame, 0, 16, 190, 214);
 
   // Phase 1 (0-40): gradient circle scales in with bounce + radial glow expands
   const circleSc = interpolate(frame, [8, 32], [0, 1], {
@@ -1348,9 +1372,9 @@ const B5Capture: React.FC = () => {
   const textY  = interpolate(frame, [50, 70], [28, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={{ opacity: m.opacity }}>
       <BgCalm theme="dark" tint="blue" />
-      <AbsoluteFill style={{ opacity: m.opacity, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 44 }}>
+      <AbsoluteFill style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 44 }}>
         {/* Glow halo behind circle — brand blue luminance */}
         <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <div style={{
@@ -1421,37 +1445,52 @@ const B5Capture: React.FC = () => {
 
 const B6Bridge: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 136, 150);
+  const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
+  const rootOp = interpolate(frame, [0, 16], [0, 1], cl);
+  const outOp = interpolate(frame, [336, 360], [1, 0], cl);
+  // 360f total — 3 phases, ~120f each with cross-fades
+  // P1 0-120: 不知道 / 背後的標準答案是什麼
+  const p1Op = interpolate(frame, [0, 12, 100, 120], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const p1Line2Op = interpolate(frame, [18, 34], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const p1Line2Y = interpolate(frame, [18, 34], [16, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  // P2 108-228: 接著，給主管一份手冊——
+  const p2Op = interpolate(frame, [108, 126, 210, 228], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const p2DashW = interpolate(frame, [140, 170], [0, 180], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  // P3 216-360: STEP 03 · TARGET + P×E 交叉分析
+  const p3Op = interpolate(frame, [216, 234, 346, 360], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={{ opacity: rootOp * outOp }}>
       <BgCalm theme="dark" tint="blue" />
-      {/* Ping dot: absolute, centered just above text */}
-      <div style={{
-        position: "absolute",
-        top: "50%", left: "50%",
-        transform: "translate(-50%, -150px)",
-        opacity: m.opacity,
-      }}>
-        <PingDot frame={frame} color={ds.fit} />
-      </div>
-      <AbsoluteFill style={{
-        opacity: m.opacity,
-        transform: `rotate(${rotZIn(frame, 10, 28, -6)}deg) skewX(${skewSettle(frame, 10, 24)}deg)`,
-        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-      }}>
-        <div style={{ marginBottom: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 16px", borderRadius: 999, border: `1px solid ${ds.fit}40`, background: `${ds.fit}15`, opacity: interpolate(frame, [10, 20], [0, 1], { extrapolateLeft: "clamp" }) }}>
+
+      {/* P1: 不知道 / 背後的標準答案是什麼 */}
+      <AbsoluteFill style={{ opacity: p1Op, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 12 }}>
+          <div style={{ color: colors.dimWhite, fontSize: 64, fontWeight: 700, letterSpacing: "-0.02em" }}>不知道</div>
+          <div style={{ color: colors.hcCyanBright, fontSize: 88, fontWeight: 900, letterSpacing: "-0.04em", opacity: p1Line2Op, transform: `translateY(${p1Line2Y}px)`, textShadow: `0 0 36px ${colors.hcCyanBright}44` }}>背後的標準答案是什麼</div>
+        </div>
+      </AbsoluteFill>
+
+      {/* P2: 接著，給主管一份手冊—— */}
+      <AbsoluteFill style={{ opacity: p2Op, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 0 }}>
+          <TypewriterText text="接著，給主管一份手冊" startFrame={118} charStagger={2} fontSize={88} fontWeight={850} colorScheme="white" letterSpacing="-0.04em" />
+          <div style={{ width: p2DashW, height: 8, background: `linear-gradient(90deg, ${colors.hcCyanBright}, transparent)`, borderRadius: 4, marginLeft: 8, boxShadow: `0 0 24px ${colors.hcCyanBright}` }} />
+        </div>
+      </AbsoluteFill>
+
+      {/* P3: STEP 03 · TARGET + P×E 交叉分析 */}
+      <AbsoluteFill style={{ opacity: p3Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -150px)" }}>
+          <PingDot frame={Math.max(0, frame - 216)} color={ds.fit} />
+        </div>
+        <div style={{ marginBottom: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 16px", borderRadius: 999, border: `1px solid ${ds.fit}40`, background: `${ds.fit}15` }}>
           <div style={{ width: 6, height: 6, borderRadius: "50%", background: ds.fit, boxShadow: `0 0 8px ${ds.fit}` }} />
           <span style={{ fontSize: 13, fontFamily: fonts.mono, color: ds.fit, letterSpacing: "0.24em" }}>STEP 03 · TARGET</span>
         </div>
-        <TypewriterText
-          text="P×E 交叉分析"
-          startFrame={14}
-          charStagger={4}
-          fontSize={110}
-          fontWeight={800}
-          colorScheme="white-to-cyan"
-        />
+        <TypewriterText text="P×E 交叉分析" startFrame={226} charStagger={3} fontSize={110} fontWeight={800} colorScheme="white-to-cyan" />
       </AbsoluteFill>
     </AbsoluteFill>
   );
@@ -1523,7 +1562,7 @@ const B7TailorTerminal: React.FC<{ lf: number }> = ({ lf }) => {
 
 const B7Tailor: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 1170, 1184);
+  const m = momentAnim(frame, 0, 24, 1140, 1154);
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
   // Phase gates & Transition
@@ -1550,28 +1589,28 @@ const B7Tailor: React.FC = () => {
   // ── Camera tour stops ──
   type B7Stop = { k: [number,number,number,number]; ox: number; oy: number; z: number; sect: "kpi"|"pemap"|"xai"|"recs"; n: string; title: string; desc: string; calloutPos: "bottom"|"right"|"left"|"top" };
   const b7Stops: B7Stop[] = [
-    { k: [200, 228, 388, 416], ox: 50, oy: 15, z: 1.15, sect: "kpi",   n: "①", title: "P×E 預測結果", desc: "結合環境與行為，直接預測留任率與錯配成本。", calloutPos: "top" },
-    { k: [416, 444, 604, 632], ox: 25, oy: 54, z: 1.15, sect: "pemap", n: "②", title: "雷達疊合分析", desc: "視覺化比對雙方落差，找出隱藏的摩擦風險點。", calloutPos: "left" },
-    { k: [632, 660, 820, 848], ox: 75, oy: 54, z: 1.15, sect: "xai",   n: "③", title: "行為驅動因子", desc: "XAI 解釋為什麼適合，給予高信心度的背後原因。", calloutPos: "right" },
-    { k: [848, 876, 1036, 1064], ox: 50, oy: 85, z: 1.15, sect: "recs",  n: "④", title: "專屬管理建議", desc: "直接給主管第一天的具體帶人指南，避免磨合失敗。", calloutPos: "bottom" },
+    { k: [170, 198, 330, 358], ox: 50, oy: 15, z: 1.15, sect: "kpi",   n: "①", title: "P×E 預測結果", desc: "結合環境與行為，直接預測留任率與錯配成本。", calloutPos: "top" },
+    { k: [358, 386, 518, 546], ox: 25, oy: 54, z: 1.15, sect: "pemap", n: "②", title: "雷達疊合分析", desc: "視覺化比對雙方落差，找出隱藏的摩擦風險點。", calloutPos: "left" },
+    { k: [546, 574, 706, 734], ox: 75, oy: 54, z: 1.15, sect: "xai",   n: "③", title: "行為驅動因子", desc: "XAI 解釋為什麼適合，給予高信心度的背後原因。", calloutPos: "right" },
+    { k: [734, 762, 894, 922], ox: 50, oy: 85, z: 1.15, sect: "recs",  n: "④", title: "專屬管理建議", desc: "直接給主管第一天的具體帶人指南，避免磨合失敗。", calloutPos: "bottom" },
   ];
   const b7Active = b7Stops.find(s => lf >= s.k[0] && lf < s.k[3]);
   
   // Continuous camera path — no reset between stops, direct pan+zoom
   // Keyframes: before | kpi-in | kpi-hold | pemap-in | pemap-hold | xai-in | xai-hold | recs-in | recs-hold | out
   const camZ = interpolate(lf,
-    [200, 228, 388, 444, 604, 660, 820, 876, 1036, 1064],
+    [170, 198, 330, 386, 518, 574, 706, 762, 894, 922],
     [  1, 1.15, 1.15, 1.15, 1.15, 1.15, 1.15, 1.15, 1.15,    1],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
   const camOx = interpolate(lf,
-    [200, 228, 388, 444, 604, 660, 820, 876, 1036, 1064],
-    [ 50,  50,  50,  25,  25,  75,  75,   50,   50,  50],
+    [170, 198, 330, 386, 518, 574, 706, 762, 894, 922],
+    [ 50,  50,  50,  25,  25,  75,  75,  50,  50,  50],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
   const camOy = interpolate(lf,
-    [200, 228, 388, 444, 604, 660, 820, 876, 1036, 1064],
-    [ 50,  15,  15,  54,  54,  54,  54,   85,   85,  50],
+    [170, 198, 330, 386, 518, 574, 706, 762, 894, 922],
+    [ 50,  15,  15,  54,  54,  54,  54,  85,  85,  50],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
   // Idle float — keeps the dashboard alive on arrival, damped to 0 once the camera zooms in
@@ -1608,10 +1647,15 @@ const B7Tailor: React.FC = () => {
     { n: "03", text: "動機誘因：自主探索 + 清晰成果邊界", detail: "內部驅動型——外部物質激勵效果有限" },
   ];
 
+  const bgLightOp = interpolate(lf, [0, 20], [0, 1], cl);
+
   return (
-    <AbsoluteFill>
-      <BgCalm theme={!showTerminal ? "light" : "dark"} tint={!showTerminal ? "blue" : "blue"} />
-      <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform }}>
+    <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform }}>
+      <BgCalm theme="dark" tint="blue" />
+      <AbsoluteFill style={{ opacity: bgLightOp }}>
+        <BgCalm theme="light" tint="blue" />
+      </AbsoluteFill>
+      <AbsoluteFill>
 
         {/* ── Phase A: terminal ── */}
         {showTerminal && (
@@ -1648,7 +1692,7 @@ const B7Tailor: React.FC = () => {
         )}
 
         {/* ── Phase B: Full HC dashboard + camera tour ── */}
-        {!showTerminal && (
+        {lf >= 0 && (
           <AbsoluteFill style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
             {/* Camera zoom wrapper */}
             <div style={{ transformOrigin: "50% 50%", transform: `translate(${-camZ * (camOx - 50)}%, ${-camZ * (camOy - 50)}%) scale(${camZ})` }}>
@@ -1833,15 +1877,14 @@ const B7Tailor: React.FC = () => {
 export const S3_DIT: React.FC = () => {
   return (
     <AbsoluteFill>
-      {/* S3 total: 4800f (80s @ 60fps).  Each Sequence overlaps ~24f with previous → crossfade, no flash.
-          B0:372  B2:1284  B3:150  B4:1104(+120 opener)  B5:264  B6:150  B7:1560(+90 opener) */}
+      {/* S3 total: 4018f. B2Define extended back to 1164f to give ample time for the final confirm step. All subsequent sequences shifted by +150f. */}
       <Sequence from={0}    durationInFrames={300}  layout="none"><B0Overview /></Sequence>
       <Sequence from={276}  durationInFrames={1164} layout="none"><B2Define /></Sequence>
-      <Sequence from={1416} durationInFrames={150}  layout="none"><B3Bridge /></Sequence>
-      <Sequence from={1542} durationInFrames={710}  layout="none"><B4Interact /></Sequence>
-      <Sequence from={2228} durationInFrames={264}  layout="none"><B5Capture /></Sequence>
-      <Sequence from={2468} durationInFrames={150}  layout="none"><B6Bridge /></Sequence>
-      <Sequence from={2594} durationInFrames={1184} layout="none"><B7Tailor /></Sequence>
+      <Sequence from={1416} durationInFrames={360}  layout="none"><B3Bridge /></Sequence>
+      <Sequence from={1752} durationInFrames={610}  layout="none"><B4Interact /></Sequence>
+      <Sequence from={2338} durationInFrames={214}  layout="none"><B5Capture /></Sequence>
+      <Sequence from={2528} durationInFrames={360}  layout="none"><B6Bridge /></Sequence>
+      <Sequence from={2864} durationInFrames={1154} layout="none"><B7Tailor /></Sequence>
     </AbsoluteFill>
   );
 };

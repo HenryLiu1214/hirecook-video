@@ -470,53 +470,25 @@ const recs: { num: string; text: string; delay: number }[] = [
 
 const B0Overview: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 588, 600);
+  const m = momentAnim(frame, 0, 8, 288, 300);
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
-  // ── Phase 0 (0–90f): HOW HIRECOOK WORKS title card ───────────────────────
-  const p0Op = interpolate(frame, [0, 14, 70, 90], [0, 1, 1, 0], cl);
+  // Phase 0 (0-120f): HOW HIRECOOK WORKS
+  const p0Op = interpolate(frame, [0, 14, 90, 110], [0, 1, 1, 0], cl);
 
-  // ── Phase 1 (80–230f): D · 企業端 ────────────────────────────────────────
-  const p1Op     = interpolate(frame, [80, 100, 212, 230], [0, 1, 1, 0], cl);
-  const p1EyeOp  = interpolate(frame, [82, 100], [0, 1], cl);
-  const p1TitleOp = interpolate(frame, [94, 114], [0, 1], cl);
-  const p1TitleY  = interpolate(frame, [94, 118], [32, 0], { easing: Easing.out(Easing.cubic), ...cl });
-  const p1SubOp   = interpolate(frame, [114, 132], [0, 1], cl);
-  const p1SubY    = interpolate(frame, [114, 136], [24, 0], { easing: Easing.out(Easing.cubic), ...cl });
-  const p1DivW    = interpolate(frame, [134, 164], [0, 260], { easing: Easing.out(Easing.cubic), ...cl });
-  const p1DivOp   = interpolate(frame, [134, 150], [0, 1], cl);
-  const p1OutOp   = interpolate(frame, [148, 166], [0, 1], cl);
-  const p1OutY    = interpolate(frame, [148, 170], [20, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  // Phase 1 (100-300f): DIT side-by-side framework
+  const p1Op = interpolate(frame, [100, 120, 290, 300], [0, 1, 1, 0], cl);
+  const zoomSc = interpolate(frame, [218, 258], [1, 4.5], { easing: Easing.inOut(Easing.cubic), ...cl });
+  const zoomX = interpolate(frame, [218, 258], [0, 490.7], { easing: Easing.inOut(Easing.cubic), ...cl });
+  const zoomY = interpolate(frame, [218, 258], [0, 45], { easing: Easing.inOut(Easing.cubic), ...cl });
+  const detailOp = interpolate(frame, [218, 238], [1, 0], cl);
+  const titleOp = interpolate(frame, [120, 140, 200, 218], [0, 1, 1, 0], cl);
 
-  // ── Phase 2 (220–370f): I · 求職者 ───────────────────────────────────────
-  const p2Op     = interpolate(frame, [220, 240, 352, 370], [0, 1, 1, 0], cl);
-  const p2EyeOp  = interpolate(frame, [222, 240], [0, 1], cl);
-  const p2TitleOp = interpolate(frame, [234, 254], [0, 1], cl);
-  const p2TitleY  = interpolate(frame, [234, 258], [32, 0], { easing: Easing.out(Easing.cubic), ...cl });
-  const p2SubOp   = interpolate(frame, [254, 272], [0, 1], cl);
-  const p2SubY    = interpolate(frame, [254, 276], [24, 0], { easing: Easing.out(Easing.cubic), ...cl });
-  const p2DivW    = interpolate(frame, [274, 304], [0, 260], { easing: Easing.out(Easing.cubic), ...cl });
-  const p2DivOp   = interpolate(frame, [274, 290], [0, 1], cl);
-  const p2OutOp   = interpolate(frame, [288, 306], [0, 1], cl);
-  const p2OutY    = interpolate(frame, [288, 310], [20, 0], { easing: Easing.out(Easing.cubic), ...cl });
-
-  // ── Phase 3 (360–510f): T · 決策者 ───────────────────────────────────────
-  const p3Op     = interpolate(frame, [360, 380, 492, 510], [0, 1, 1, 0], cl);
-  const p3EyeOp  = interpolate(frame, [362, 380], [0, 1], cl);
-  const p3TitleOp = interpolate(frame, [374, 394], [0, 1], cl);
-  const p3TitleY  = interpolate(frame, [374, 398], [32, 0], { easing: Easing.out(Easing.cubic), ...cl });
-  const p3SubOp   = interpolate(frame, [394, 412], [0, 1], cl);
-  const p3SubY    = interpolate(frame, [394, 416], [24, 0], { easing: Easing.out(Easing.cubic), ...cl });
-  const p3DivW    = interpolate(frame, [414, 444], [0, 260], { easing: Easing.out(Easing.cubic), ...cl });
-  const p3DivOp   = interpolate(frame, [414, 430], [0, 1], cl);
-  const p3OutOp   = interpolate(frame, [428, 446], [0, 1], cl);
-  const p3OutY    = interpolate(frame, [428, 450], [20, 0], { easing: Easing.out(Easing.cubic), ...cl });
-
-  // ── Phase 4 (500–600f): D · I · T cue ────────────────────────────────────
-  const p4Op     = interpolate(frame, [500, 518, 582, 600], [0, 1, 1, 0], cl);
-  const p4LetOp  = interpolate(frame, [502, 522], [0, 1], cl);
-  const p4CueOp  = interpolate(frame, [520, 540], [0, 1], cl);
-  const p4CueY   = interpolate(frame, [520, 542], [20, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  const steps = [
+    { id: "D", tag: "STEP 01 · DEFINE", title: "設定職位壓力場", out: "環境指紋 E", c: ds.blue, delay: 110 },
+    { id: "I", tag: "STEP 02 · INTERACT", title: "SJT 情境測驗", out: "行為指紋 P", c: "#5B8AFF", delay: 125 },
+    { id: "T", tag: "STEP 03 · TARGET", title: "P×E 交叉分析", out: "TAT 管理手冊", c: ds.fit, delay: 140 },
+  ];
 
   return (
     <AbsoluteFill>
@@ -534,95 +506,43 @@ const B0Overview: React.FC = () => {
             <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#6FE3F5", letterSpacing: "0.24em" }}>HOW HIRECOOK WORKS</span>
           </div>
           <div style={{ fontSize: 110, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-5px", lineHeight: 1.08, textAlign: "center" as const }}>
-            三個角色<br /><span style={{ color: ds.cyan }}>一份決策手冊</span>
+            三個步驟<br /><span style={{ color: ds.cyan }}>一份決策手冊</span>
           </div>
         </AbsoluteFill>
 
-        {/* ── Phase 1: D 企業端 ── */}
-        <AbsoluteFill style={{ opacity: p1Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ position: "absolute", fontSize: 520, fontWeight: 900, fontFamily: fonts.mono, color: ds.blue, opacity: 0.05, lineHeight: 1, letterSpacing: "-28px", userSelect: "none" as const }}>D</div>
-          <div style={{ opacity: p1EyeOp, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(33,81,245,0.38)", background: "rgba(33,81,245,0.08)", marginBottom: 28 }}>
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: ds.blue, boxShadow: `0 0 8px ${ds.blue}` }} />
-            <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#6A8FFF", letterSpacing: "0.20em" }}>STEP 01 · D · DEFINE · 企業端</span>
-          </div>
-          <div style={{ opacity: p1TitleOp, transform: `translateY(${p1TitleY}px)`, fontSize: 96, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-4px", lineHeight: 1.05, textAlign: "center" as const }}>
-            設定職位壓力場
-          </div>
-          <div style={{ opacity: p1SubOp, transform: `translateY(${p1SubY}px)`, marginTop: 22, fontSize: 28, color: "rgba(255,255,255,0.48)", fontFamily: fonts.display, textAlign: "center" as const, letterSpacing: "-0.3px" }}>
-            協作密度、決策節奏、壓力情境等六個維度
-          </div>
-          <div style={{ opacity: p1DivOp, width: p1DivW, height: 2, background: `linear-gradient(90deg, ${ds.blue}, ${ds.cyan})`, borderRadius: 1, margin: "28px 0" }} />
-          <div style={{ opacity: p1OutOp, transform: `translateY(${p1OutY}px)`, display: "flex", alignItems: "center", gap: 14 }}>
-            <span style={{ fontSize: 12, fontFamily: fonts.mono, color: "rgba(33,81,245,0.60)", letterSpacing: "0.18em" }}>OUTPUT</span>
-            <span style={{ fontSize: 32, fontFamily: fonts.mono, fontWeight: 700, color: ds.blue }}>環境指紋 E</span>
-          </div>
-        </AbsoluteFill>
-
-        {/* ── Phase 2: I 求職者 ── */}
-        <AbsoluteFill style={{ opacity: p2Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ position: "absolute", fontSize: 520, fontWeight: 900, fontFamily: fonts.mono, color: "#5B8AFF", opacity: 0.05, lineHeight: 1, letterSpacing: "-28px", userSelect: "none" as const }}>I</div>
-          <div style={{ opacity: p2EyeOp, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(91,138,255,0.38)", background: "rgba(91,138,255,0.08)", marginBottom: 28 }}>
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#5B8AFF", boxShadow: "0 0 8px #5B8AFF" }} />
-            <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#8AADFF", letterSpacing: "0.20em" }}>STEP 02 · I · INTERACT · 求職者</span>
-          </div>
-          <div style={{ opacity: p2TitleOp, transform: `translateY(${p2TitleY}px)`, fontSize: 96, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-4px", lineHeight: 1.05, textAlign: "center" as const }}>
-            SJT 情境行為測驗
-          </div>
-          <div style={{ opacity: p2SubOp, transform: `translateY(${p2SubY}px)`, marginTop: 22, fontSize: 28, color: "rgba(255,255,255,0.48)", fontFamily: fonts.display, textAlign: "center" as const, letterSpacing: "-0.3px" }}>
-            從真實廚房情境中推論決策模式
-          </div>
-          <div style={{ opacity: p2DivOp, width: p2DivW, height: 2, background: "linear-gradient(90deg, #5B8AFF, #6FE3F5)", borderRadius: 1, margin: "28px 0" }} />
-          <div style={{ opacity: p2OutOp, transform: `translateY(${p2OutY}px)`, display: "flex", alignItems: "center", gap: 14 }}>
-            <span style={{ fontSize: 12, fontFamily: fonts.mono, color: "rgba(91,138,255,0.60)", letterSpacing: "0.18em" }}>OUTPUT</span>
-            <span style={{ fontSize: 32, fontFamily: fonts.mono, fontWeight: 700, color: "#5B8AFF" }}>行為指紋 P</span>
-          </div>
-        </AbsoluteFill>
-
-        {/* ── Phase 3: T 決策者 ── */}
-        <AbsoluteFill style={{ opacity: p3Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ position: "absolute", fontSize: 520, fontWeight: 900, fontFamily: fonts.mono, color: ds.fit, opacity: 0.05, lineHeight: 1, letterSpacing: "-28px", userSelect: "none" as const }}>T</div>
-          <div style={{ opacity: p3EyeOp, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(27,122,77,0.38)", background: "rgba(27,122,77,0.08)", marginBottom: 28 }}>
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: ds.fit, boxShadow: `0 0 8px ${ds.fit}` }} />
-            <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#5FC48C", letterSpacing: "0.20em" }}>STEP 03 · T · TARGET · 決策者</span>
-          </div>
-          <div style={{ opacity: p3TitleOp, transform: `translateY(${p3TitleY}px)`, fontSize: 96, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-4px", lineHeight: 1.05, textAlign: "center" as const }}>
-            P × E 交叉分析
-          </div>
-          <div style={{ opacity: p3SubOp, transform: `translateY(${p3SubY}px)`, marginTop: 22, fontSize: 28, color: "rgba(255,255,255,0.48)", fontFamily: fonts.display, textAlign: "center" as const, letterSpacing: "-0.3px" }}>
-            AI 模型比對行為指紋與環境模型
-          </div>
-          <div style={{ opacity: p3DivOp, width: p3DivW, height: 2, background: `linear-gradient(90deg, ${ds.fit}, ${ds.cyan})`, borderRadius: 1, margin: "28px 0" }} />
-          <div style={{ opacity: p3OutOp, transform: `translateY(${p3OutY}px)`, display: "flex", alignItems: "center", gap: 14 }}>
-            <span style={{ fontSize: 12, fontFamily: fonts.mono, color: "rgba(27,122,77,0.60)", letterSpacing: "0.18em" }}>OUTPUT</span>
-            <span style={{ fontSize: 32, fontFamily: fonts.mono, fontWeight: 700, color: ds.fit }}>TAT 管理手冊</span>
-          </div>
-        </AbsoluteFill>
-
-        {/* ── Phase 4: D · I · T cue ── */}
-        <AbsoluteFill style={{ opacity: p4Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 32 }}>
-          <div style={{ opacity: p4LetOp, display: "flex", alignItems: "center", gap: 24 }}>
-            {([
-              { letter: "D", color: ds.blue },
-              { letter: "·", color: "rgba(255,255,255,0.22)" },
-              { letter: "I", color: "#5B8AFF" },
-              { letter: "·", color: "rgba(255,255,255,0.22)" },
-              { letter: "T", color: ds.fit },
-            ] as { letter: string; color: string }[]).map((item, idx) => (
-              <span key={idx} style={{ fontSize: 88, fontFamily: fonts.mono, fontWeight: 900, color: item.color, lineHeight: 1 }}>{item.letter}</span>
-            ))}
-          </div>
-          <div style={{ opacity: p4CueOp, transform: `translateY(${p4CueY}px)`, display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 ${4 + 5 * (0.5 + 0.5 * Math.sin(frame * 0.18))}px ${ds.cyan}` }} />
-            <span style={{ fontSize: 28, fontFamily: fonts.display, color: "rgba(255,255,255,0.62)", letterSpacing: "-0.3px" }}>接下來，逐一示範這三步</span>
+        {/* ── Phase 1: Side-by-side Global Roadmap ── */}
+        <AbsoluteFill style={{ opacity: p1Op, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${zoomSc}) translate(${zoomX}px, ${zoomY}px)` }}>
+          <div style={{ position: "absolute", top: 120, fontSize: 30, fontWeight: 800, color: "rgba(255,255,255,0.7)", fontFamily: fonts.display, letterSpacing: "0.25em", opacity: titleOp }}>GLOBAL WORKFLOW</div>
+          <div style={{ display: "flex", gap: 32, width: 1440 }}>
+            {steps.map((s) => {
+              const cardOp = interpolate(frame, [s.delay, s.delay + 20], [0, 1], cl);
+              const cardY = interpolate(frame, [s.delay, s.delay + 24], [40, 0], { easing: Easing.out(Easing.cubic), ...cl });
+              return (
+                <div key={s.id} style={{ flex: 1, opacity: cardOp, transform: `translateY(${cardY}px)`, display: "flex", flexDirection: "column", alignItems: "center", padding: "56px 40px", borderRadius: 24, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", position: "relative", overflow: "hidden" }}>
+                  <div style={{ position: "absolute", right: -40, top: -20, fontSize: 320, fontWeight: 900, fontFamily: fonts.mono, color: s.c, opacity: 0.05, lineHeight: 1, letterSpacing: "-10px", userSelect: "none" as const }}>{s.id}</div>
+                  
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 12px", borderRadius: 999, border: `1px solid ${s.c}44`, background: `${s.c}1A`, marginBottom: 32, zIndex: 1 }}>
+                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: s.c, boxShadow: `0 0 8px ${s.c}` }} />
+                    <span style={{ fontSize: 12, fontFamily: fonts.mono, color: s.c, letterSpacing: "0.15em" }}>{s.tag}</span>
+                  </div>
+                  
+                  <div style={{ fontSize: 44, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-2px", textAlign: "center", zIndex: 1, whiteSpace: "nowrap" as const }}>{s.title}</div>
+                  
+                  <div style={{ opacity: detailOp, display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+                    <div style={{ width: "100%", height: 1, background: `linear-gradient(90deg, transparent, ${s.c}88, transparent)`, margin: "40px 0", zIndex: 1 }} />
+                    <div style={{ fontSize: 12, fontFamily: fonts.mono, color: "rgba(255,255,255,0.4)", letterSpacing: "0.18em", marginBottom: 12, zIndex: 1 }}>OUTPUT</div>
+                    <div style={{ fontSize: 28, fontFamily: fonts.mono, fontWeight: 700, color: s.c, zIndex: 1 }}>{s.out}</div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </AbsoluteFill>
 
       </AbsoluteFill>
     </AbsoluteFill>
   );
-
 };
-
 
 // ────────────────────────────────────────────────────────────────────────────
 // B2 — D · Define  (3 steps matching actual product, 1260 frames total)
@@ -914,25 +834,24 @@ const B2LeftC: React.FC<{ lf: number }> = ({ lf }) => {
 // ── B2Define orchestrator ─────────────────────────────────────────────────────
 const B2Define: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 1244, 1260);
+  const m = momentAnim(frame, 0, 8, 1140, 1154);
 
-  // ── Timeline: brief big-text intro, then the COMPLETE interface operates while
-  //    a "camera" zooms into each region to explain, then returns it to place. ──
-  const introOp = interpolate(frame, [0, 18, 120, 150], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const cardOp  = interpolate(frame, [120, 150], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  // ── Timeline: no intro, directly show the COMPLETE interface ──
+  const sceneOp = interpolate(frame, [0, 24], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const cardOp  = interpolate(frame, [0, 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   // Phase boundaries (whole-interface steps) — left panel crossfades, no flash
-  const PB = 560, PC = 980;
+  const PB = 440, PC = 860;
   const phaseA = frame < PB;
   const phaseB = frame >= PB && frame < PC;
   const phaseC = frame >= PC;
-  const lA = Math.max(0, frame - 140);
+  const lA = Math.max(0, frame - 20);
   const lB = Math.max(0, frame - PB);
   const lC = Math.max(0, frame - PC);
   const appBarStep: 0 | 1 | 2 = phaseA ? 0 : phaseB ? 1 : 2;
 
   // Crossfaded left-panel opacities (overlap ~16f at each boundary → smooth swap)
-  const aOp = interpolate(frame, [128, 150, PB, PB + 16], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const aOp = interpolate(frame, [8, 30, PB, PB + 16], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const bOp = interpolate(frame, [PB - 16, PB, PC, PC + 16], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const cOp = interpolate(frame, [PC - 16, PC], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
@@ -949,27 +868,27 @@ const B2Define: React.FC = () => {
   // Stop ① uses z:1.0 (no zoom) — callout + glow only; avoids repetitive zooming in Phase A
   type Stop = { k: number[]; ox: number; oy: number; z: number; panel: "left" | "right" | "none"; n: string; title: string; desc: string };
   const stops: Stop[] = [
-    { k: [210, 250, 330, 370], ox: 30, oy: 35, z: 1.0, panel: "left",  n: "①", title: "描述職位的真實樣貌", desc: "不是理想，是這個位置實際的運作方式。" },
-    { k: [600, 640, 722, 760],   ox: 30, oy: 54, z: 1.28, panel: "left",  n: "②", title: "六個維度，拉出壓力場", desc: "每個軸向對應一種真實的工作張力。" },
-    { k: [784, 822, 894, 930],   ox: 80, oy: 40, z: 1.32, panel: "right", n: "③", title: "環境指紋即時生成", desc: "六維壓力分數，量化成一張雷達。" },
-    { k: [952, 988, 1062, 1096], ox: 80, oy: 70, z: 1.32, panel: "right", n: "④", title: "16 型人格即時適配", desc: "每動一格，預測適配同步重算。" },
-    { k: [1094, 1130, 1222, 1256], ox: 46, oy: 62, z: 1.22, panel: "none",  n: "⑤", title: "確認後，一鍵建模", desc: "生成環境指紋與適配分佈。" },
+    { k: [90, 130, 210, 250], ox: 30, oy: 35, z: 1.0, panel: "left",  n: "①", title: "描述職位的真實樣貌", desc: "不是理想，是這個位置實際的運作方式。" },
+    { k: [480, 520, 602, 640],   ox: 30, oy: 54, z: 1.28, panel: "left",  n: "②", title: "六個維度，拉出壓力場", desc: "每個軸向對應一種真實的工作張力。" },
+    { k: [664, 702, 774, 810],   ox: 80, oy: 40, z: 1.32, panel: "right", n: "③", title: "環境指紋即時生成", desc: "六維壓力分數，量化成一張雷達。" },
+    { k: [832, 868, 942, 976], ox: 80, oy: 70, z: 1.32, panel: "right", n: "④", title: "16 型人格即時適配", desc: "每動一格，預測適配同步重算。" },
+    { k: [974, 1010, 1102, 1136], ox: 46, oy: 62, z: 1.22, panel: "none",  n: "⑤", title: "確認後，一鍵建模", desc: "生成環境指紋與適配分佈。" },
   ];
   const active = stops.find((s) => frame >= s.k[0] && frame < s.k[3]);
   // Continuous camera path — ②③④⑤ flow directly, no return to 1.0 between stops
-  // Gap ②→③: 760-784 (24f pan left→right)  Gap ③→④: 930-952 (22f shift down)  Gap ④→⑤: 1096-1130 (34f sweep right→center)
+  // Gap ②→③: 640-664 (24f pan left→right)  Gap ③→④: 810-832 (22f shift down)  Gap ④→⑤: 976-1010 (34f sweep right→center)
   const camZoom = interpolate(frame,
-    [600,  640,  722,  760,  784,  822,  894,  930,  952,  988, 1062, 1096, 1130, 1222, 1256],
+    [480,  520,  602,  640,  664,  702,  774,  810,  832,  868,  942,  976, 1010, 1102, 1136],
     [  1, 1.28, 1.28, 1.28, 1.32, 1.32, 1.32, 1.32, 1.32, 1.32, 1.32, 1.22, 1.22, 1.22,    1],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
   const camOx = interpolate(frame,
-    [600,  640,  722,  760,  784,  822,  894,  930,  952,  988, 1062, 1096, 1130, 1222, 1256],
+    [480,  520,  602,  640,  664,  702,  774,  810,  832,  868,  942,  976, 1010, 1102, 1136],
     [ 50,   30,   30,   30,   80,   80,   80,   80,   80,   80,   80,   46,   46,   46,   50],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
   const camOy = interpolate(frame,
-    [600,  640,  722,  760,  784,  822,  894,  930,  952,  988, 1062, 1096, 1130, 1222, 1256],
+    [480,  520,  602,  640,  664,  702,  774,  810,  832,  868,  942,  976, 1010, 1102, 1136],
     [ 50,   54,   54,   54,   40,   40,   40,   40,   70,   70,   70,   62,   62,   62,   50],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
@@ -987,21 +906,10 @@ const B2Define: React.FC = () => {
   const calloutSide: "left" | "right" = active?.panel === "left" ? "right" : "left";
 
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={{ opacity: sceneOp }}>
       <BgCalm theme="light" tint="blue" />
 
-      {/* ── Big-text intro (crossfades into the interface) ── */}
-      {frame < 155 && (
-        <AbsoluteFill style={{ opacity: introOp * m.opacity, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ position: "absolute", fontSize: 600, fontWeight: 900, fontFamily: fonts.mono, color: ds.blue, opacity: 0.06, lineHeight: 1, letterSpacing: "-26px", userSelect: "none" as const }}>D</div>
-          <div style={{ marginBottom: 8, display: "inline-flex", alignItems: "center", gap: 10, padding: "6px 16px", borderRadius: 999, border: `1px solid ${ds.blue}30`, background: `${ds.blue}0D` }}>
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: ds.blue }} />
-            <span style={{ fontSize: 14, fontFamily: fonts.mono, color: ds.blue, letterSpacing: "0.20em" }}>STEP 01 · DEFINE</span>
-          </div>
-          <div style={{ transform: `translateY(${interpolate(frame, [0, 24], [40, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`, fontSize: 150, fontWeight: 800, color: ds.fgPrimary, fontFamily: fonts.display, letterSpacing: "-5px", lineHeight: 1 }}>定義環境</div>
-          <div style={{ opacity: interpolate(frame, [24, 42], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), marginTop: 18, fontSize: 30, color: ds.fgSecondary, fontFamily: fonts.display }}>企業端，把職位的真實壓力場量化出來</div>
-        </AbsoluteFill>
-      )}
+
 
       {/* ── Floating explanation text (dynamic, not a fixed header) ── */}
       {active && calloutOp > 0.01 && (
@@ -1028,11 +936,11 @@ const B2Define: React.FC = () => {
       {/* ── The COMPLETE interface, with a camera that zooms into regions ── */}
       <AbsoluteFill style={{ opacity: cardOp * m.opacity, display: "flex", alignItems: "center", justifyContent: "center", perspective: "1800px" }}>
         {(() => {
-          const entryTiltX = interpolate(frame, [120, 175], [16, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-          const baseY = interpolate(frame, [120, 175], [80, 28], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+          const entryTiltX = interpolate(frame, [0, 55], [16, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+          const baseY = interpolate(frame, [0, 55], [80, 28], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
           // Suppress float during camera zoom to prevent jitter on zoom-out return
           const floatAmp = interpolate(camZoom, [1.02, 1.1], [3, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-          const floatOsc = frame > 180 ? Math.sin(frame * 0.04) * floatAmp : 0;
+          const floatOsc = frame > 60 ? Math.sin(frame * 0.04) * floatAmp : 0;
           return (
             // Camera wrapper — scales about the focused region's origin, then returns
             <div style={{ transformOrigin: `${camOx}% ${camOy}%`, transform: `scale(${camZoom})` }}>
@@ -1092,23 +1000,27 @@ const B3Bridge: React.FC = () => {
       <div style={{
         position: "absolute",
         top: "50%", left: "50%",
-        transform: "translate(-50%, -130px)",
+        transform: "translate(-50%, -150px)",
         opacity: m.opacity,
       }}>
-        <PingDot frame={frame} color="#00B4D8" />
+        <PingDot frame={frame} color="#5B8AFF" />
       </div>
       {/* Text centered in AbsoluteFill */}
       <AbsoluteFill style={{
         opacity: m.opacity,
         transform: `rotate(${rotZIn(frame, 10, 28, -6)}deg) skewX(${skewSettle(frame, 10, 24)}deg)`,
-        display: "flex", alignItems: "center", justifyContent: "center",
+        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
       }}>
+        <div style={{ marginBottom: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 16px", borderRadius: 999, border: "1px solid rgba(91,138,255,0.40)", background: "rgba(91,138,255,0.15)", opacity: interpolate(frame, [10, 20], [0, 1], { extrapolateLeft: "clamp" }) }}>
+          <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#5B8AFF", boxShadow: "0 0 8px #5B8AFF" }} />
+          <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#9CB6FF", letterSpacing: "0.24em" }}>STEP 02 · INTERACT</span>
+        </div>
         <TypewriterText
-          text="有了環境，下一步——"
+          text="SJT 情境測驗"
           startFrame={14}
           charStagger={4}
-          fontSize={120}
-          fontWeight={700}
+          fontSize={110}
+          fontWeight={800}
           colorScheme="white-to-cyan"
         />
       </AbsoluteFill>
@@ -1126,6 +1038,38 @@ const B3Bridge: React.FC = () => {
 // ────────────────────────────────────────────────────────────────────────────
 
 // Shared SJT card shell ────────────────────────────────────────────────────
+// ─── HandCursor ───────────────────────────────────────────────────────────────
+// Animated pointer that travels along an interpolated waypoint path and clicks.
+// Render INSIDE a transformed container → it shares that coordinate space.
+const HandCursor: React.FC<{
+  frame: number;
+  path: { f: number; x: number; y: number }[];
+  clicks?: number[];
+  size?: number;
+  opacity?: number;
+}> = ({ frame, path, clicks = [], size = 30, opacity = 1 }) => {
+  const fs = path.map((p) => p.f);
+  const x = interpolate(frame, fs, path.map((p) => p.x), { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const y = interpolate(frame, fs, path.map((p) => p.y), { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  let press = 1, ripple = 0, rippleOp = 0;
+  for (const c of clicks) {
+    const d = frame - c;
+    if (d >= 0 && d < 7) press = Math.min(press, interpolate(d, [0, 3, 7], [1, 0.8, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
+    if (d >= 0 && d < 32) {
+      ripple = Math.max(ripple, interpolate(d, [0, 32], [0, 2.8], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
+      rippleOp = Math.max(rippleOp, interpolate(d, [0, 32], [0.5, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
+    }
+  }
+  return (
+    <div style={{ position: "absolute" as const, left: x, top: y, transform: `scale(${press})`, transformOrigin: "4px 4px", opacity, pointerEvents: "none" as const, zIndex: 60 }}>
+      <div style={{ position: "absolute" as const, left: 4, top: 4, width: 22, height: 22, marginLeft: -11, marginTop: -11, borderRadius: "50%", border: "2px solid rgba(33,81,245,0.78)", transform: `scale(${ripple})`, opacity: rippleOp }} />
+      <svg width={size} height={size} viewBox="0 0 24 24" style={{ filter: "drop-shadow(0 3px 5px rgba(0,0,0,0.45))" }}>
+        <path d="M4 2 L4 19 L8.5 14.7 L11.4 21.5 L14.3 20.3 L11.4 13.7 L17.6 13.7 Z" fill="#FFFFFF" stroke="#0B1020" strokeWidth="1.3" strokeLinejoin="round" />
+      </svg>
+    </div>
+  );
+};
+
 const SJTCard: React.FC<{
   questionNum: string;
   tag: string;
@@ -1141,7 +1085,8 @@ const SJTCard: React.FC<{
   floatOffset: number;
   focusKey?: string;        // "scenario" | "options" | "selected" | "none"
   hoverLetter?: string | null;
-}> = ({ questionNum, tag, scenario, prompt, options, selectedLetter, revealStart, clickFrame, localFrame, progressPct, totalQ, floatOffset, focusKey = "none", hoverLetter = null }) => {
+  cursor?: { path: { f: number; x: number; y: number }[]; clicks: number[] };
+}> = ({ questionNum, tag, scenario, prompt, options, selectedLetter, revealStart, clickFrame, localFrame, progressPct, totalQ, floatOffset, focusKey = "none", hoverLetter = null, cursor }) => {
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
   const cardOp = interpolate(localFrame, [0, 14], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const cardSc = interpolate(localFrame, [0, 16], [0.93, 1], {
@@ -1156,7 +1101,7 @@ const SJTCard: React.FC<{
     <div style={{
       opacity: cardOp,
       transform: `translateY(${floatOffset}px) scale(${cardSc})`,
-      width: 1100, borderRadius: 12, overflow: "hidden" as const,
+      width: 1100, borderRadius: 12, overflow: "hidden" as const, position: "relative" as const,
       boxShadow: "0 20px 80px rgba(0,0,0,0.5)",
     }}>
       {/* Header */}
@@ -1181,8 +1126,8 @@ const SJTCard: React.FC<{
         <div style={{
           opacity: scenarioDim, transition: "none",
           borderRadius: 10,
-          padding: scenarioGlow ? "14px 16px" : 0,
-          margin: scenarioGlow ? "-14px -16px" : 0,
+          padding: "14px 16px",
+          margin: "-14px -16px",
           background: scenarioGlow ? "rgba(0,180,216,0.06)" : "transparent",
           boxShadow: scenarioGlow ? "0 0 0 1.5px rgba(0,180,216,0.45), 0 0 24px rgba(0,180,216,0.18)" : "none",
           display: "flex", flexDirection: "column" as const, gap: 16,
@@ -1214,7 +1159,7 @@ const SJTCard: React.FC<{
           return (
             <div key={opt.letter} style={{
               opacity: optOp * dimUnchosen, transform: `scale(${pop})`,
-              display: "flex", alignItems: "center", gap: 14, padding: "15px 18px", borderRadius: 10,
+              display: "flex", alignItems: "center", gap: 14, height: 58, boxSizing: "border-box" as const, padding: "0 18px", borderRadius: 10,
               background: selected ? "rgba(33,81,245,0.18)" : hovered ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.03)",
               border: `1.5px solid ${selected ? "#2151F5AA" : hovered ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.06)"}`,
               boxShadow: selected ? "0 0 0 3px rgba(33,81,245,0.10)" : hovered ? "0 0 0 1px rgba(255,255,255,0.07)" : "none",
@@ -1248,6 +1193,7 @@ const SJTCard: React.FC<{
           }} />
         )}
       </div>
+      {cursor && <HandCursor frame={localFrame} path={cursor.path} clicks={cursor.clicks} />}
     </div>
   );
 };
@@ -1256,113 +1202,65 @@ const B4Interact: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
-  const m = momentAnim(frame, 0, 8, 1282, 1294);
+  const m = momentAnim(frame, 0, 8, 686, 700);
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
-  // ── 120f candidate-perspective opener before Q1 ───────────────────────────
-  const O = 180; // offset applied to all Q-phase frame thresholds
-  const openerPhase = frame < O;
-
-  // Opener: 3 sequential cinematic title cards
-  const s1Op = interpolate(frame, [0, 12, 72, 90], [0, 1, 1, 0], cl);      // 求職者視角
-  const s2Op = interpolate(frame, [88, 104, 136, 154], [0, 1, 1, 0], cl);  // 他收到一份邀請
-  const s3Op = interpolate(frame, [152, 168, 174, 180], [0, 1, 1, 0], cl); // 不知道背後在測什麼
-  const wmOp = interpolate(frame, [0, 20, 162, 180], [0, 1, 1, 0], cl);    // watermark opacity
+  // ── No opener, start immediately ──────────────────────────────────────────
+  const O = 0; // offset applied to all Q-phase frame thresholds
 
   // ── Q-phase flags (all shifted by O) ─────────────────────────────────────
   const qFrame      = Math.max(0, frame - O);   // local frame within Q phases
-  const showQ1      = frame >= O && frame < O + 550;
-  const showQ2      = frame >= O + 490 && frame < O + 750;
-  const showLoading = frame >= O + 710 && frame < O + 910;
-  const showScore   = frame >= O + 910;
+  const showQ1      = frame >= O && frame < O + 430;
+  const showQ2      = frame >= O + 370 && frame < O + 570;
+  const showLoading = frame >= O + 530 && frame < O + 710;
 
-  // Q1: click A at qFrame 400
+  // Q1: click A at qFrame 280
   const q1LocalFrame = qFrame;
-  const q1selected   = qFrame >= 400 ? "A" : null;
+  const q1selected   = qFrame >= 300 ? "A" : null;
 
-  // Q2: click B at q2LocalFrame 160
-  const q2LocalFrame = Math.max(0, qFrame - 520);
-  const q2selected   = qFrame >= 680 ? "B" : null;
+  // Q2: click B at q2LocalFrame 130
+  const q2LocalFrame = Math.max(0, qFrame - 370);
+  const q2selected   = qFrame >= 480 ? "B" : null;
 
   // Loading bar
-  const loadProg = interpolate(frame, [O + 740, O + 900], [0, 100], {
-    easing: Easing.out(Easing.cubic), ...cl,
-  });
-
-  // Score card
-  const scoreSc = interpolate(frame, [O + 910, O + 928], [0.82, 1], {
-    easing: Easing.out(Easing.back(1.25)), ...cl,
-  });
-  const scoreOp = interpolate(frame, [O + 910, O + 924], [0, 1], cl);
-  const scoreVal = interpolate(frame, [O + 930, O + 1010], [0, 88.5], {
+  const loadProg = interpolate(frame, [O + 560, O + 670], [0, 100], {
     easing: Easing.out(Easing.cubic), ...cl,
   });
 
   // ── Region focus controller (gaze guiding within the SJT card) ──
   const focusStage = (() => {
-    if (qFrame < 520) {
-      if (qFrame < 70)  return { key: "none",     title: "", desc: "" };
-      if (qFrame < 240) return { key: "scenario", title: "① 真實情境", desc: "把人放進一個沒有標準答案的高壓現場。" };
-      if (qFrame < 400) return { key: "options",  title: "② 四個選項", desc: "每個選項對應不同的決策風格與壓力反應。" };
+    if (qFrame < 370) {
+      if (qFrame < 50)  return { key: "none",     title: "", desc: "" };
+      if (qFrame < 160) return { key: "scenario", title: "① 真實情境", desc: "把人放進一個沒有標準答案的高壓現場。" };
+      if (qFrame < 300) return { key: "options",  title: "② 四個選項", desc: "每個選項對應不同的決策風格與壓力反應。" };
       return                   { key: "selected", title: "③ 真實選擇", desc: "選的不是對錯，是這個人實際會怎麼做。" };
     }
-    if (qFrame < 730) return { key: "options", title: "再來一題", desc: "換一個情境，交叉驗證行為的穩定度。" };
+    if (qFrame < 550) return { key: "options", title: "再來一題", desc: "換一個情境，交叉驗證行為的穩定度。" };
     return { key: "none", title: "", desc: "" };
   })();
 
   const floatA = floatY(t, 0.68, 8, 0.4);
 
   // ── Transitions ──
-  const q1ExitX  = interpolate(frame, [O + 496, O + 530], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
-  const q1ExitOp = interpolate(frame, [O + 490, O + 530], [1, 0], cl);
-  const q1ExitSc = interpolate(frame, [O + 496, O + 530], [1, 0.90], { easing: Easing.in(Easing.quad), ...cl });
+  const q1ExitX  = interpolate(frame, [O + 376, O + 410], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
+  const q1ExitOp = interpolate(frame, [O + 370, O + 410], [1, 0], cl);
+  const q1ExitSc = interpolate(frame, [O + 376, O + 410], [1, 0.90], { easing: Easing.in(Easing.quad), ...cl });
   
-  const q2EnterX = interpolate(frame, [O + 510, O + 550], [64, 0], { easing: Easing.out(Easing.cubic), ...cl });
-  const q2EnterOp = interpolate(frame, [O + 510, O + 540], [0, 1], cl);
-  const q2EnterSc = interpolate(frame, [O + 510, O + 550], [0.90, 1], { easing: Easing.out(Easing.cubic), ...cl });
+  const q2EnterX = interpolate(frame, [O + 390, O + 430], [64, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  const q2EnterOp = interpolate(frame, [O + 390, O + 420], [0, 1], cl);
+  const q2EnterSc = interpolate(frame, [O + 390, O + 430], [0.90, 1], { easing: Easing.out(Easing.cubic), ...cl });
 
-  const q2ExitX  = interpolate(frame, [O + 710, O + 740], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
-  const q2ExitOp = interpolate(frame, [O + 710, O + 740], [1, 0], cl);
-  const q2ExitSc = interpolate(frame, [O + 710, O + 740], [1, 0.90], { easing: Easing.in(Easing.quad), ...cl });
+  const q2ExitX  = interpolate(frame, [O + 530, O + 560], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
+  const q2ExitOp = interpolate(frame, [O + 530, O + 560], [1, 0], cl);
+  const q2ExitSc = interpolate(frame, [O + 530, O + 560], [1, 0.90], { easing: Easing.in(Easing.quad), ...cl });
 
   // Hover pre-click: candidate's cursor lingers before clicking
-  const q1HoverLetter = q1LocalFrame >= 340 && q1LocalFrame < 400 ? "A" : null;
-  const q2HoverLetter = q2LocalFrame >= 110 && q2LocalFrame < 160 ? "B" : null;
+  const q1HoverLetter = q1LocalFrame >= 258 && q1LocalFrame < 300 ? "A" : null;
+  const q2HoverLetter = q2LocalFrame >= 70 && q2LocalFrame < 110 ? "B" : null;
 
   return (
     <AbsoluteFill>
       <BgCalm theme="dark" tint="blue" />
-
-      {/* ── Opener: 3 cinematic title cards (0–180f) ── */}
-      {openerPhase && (
-        <AbsoluteFill style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-          {/* Persistent "I" watermark */}
-          <div style={{ position: "absolute", fontSize: 560, fontWeight: 900, fontFamily: fonts.mono, color: ds.blue, opacity: wmOp * 0.05, lineHeight: 1, letterSpacing: "-24px", userSelect: "none" as const }}>I</div>
-
-          {/* Stage 1 — 求職者視角 */}
-          <AbsoluteFill style={{ opacity: s1Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 0 }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(0,180,216,0.35)", background: "rgba(0,180,216,0.07)", marginBottom: 28 }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 ${4 + 5 * (0.5 + 0.5 * Math.sin(frame * 0.18))}px ${ds.cyan}` }} />
-              <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#6FE3F5", letterSpacing: "0.20em" }}>STEP 02 · INTERACT</span>
-            </div>
-            <div style={{ fontSize: 164, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-7px", lineHeight: 1 }}>求職者視角</div>
-          </AbsoluteFill>
-
-          {/* Stage 2 — 他收到一份邀請 */}
-          <AbsoluteFill style={{ opacity: s2Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 18 }}>
-            <div style={{ fontSize: 24, fontFamily: fonts.mono, color: "rgba(255,255,255,0.38)", letterSpacing: "0.14em" }}>他收到了——</div>
-            <div style={{ fontSize: 132, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-5px", lineHeight: 1 }}>一份邀請</div>
-          </AbsoluteFill>
-
-          {/* Stage 3 — 不知道背後在測什麼 */}
-          <AbsoluteFill style={{ opacity: s3Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ display: "flex", flexDirection: "column" as const, alignItems: "center", gap: 6 }}>
-              <div style={{ fontSize: 108, fontWeight: 800, color: "rgba(255,255,255,0.68)", fontFamily: fonts.display, letterSpacing: "-4px", lineHeight: 1.1 }}>不知道</div>
-              <div style={{ fontSize: 108, fontWeight: 800, color: ds.cyan, fontFamily: fonts.display, letterSpacing: "-4px", lineHeight: 1.1 }}>背後在測什麼</div>
-            </div>
-          </AbsoluteFill>
-        </AbsoluteFill>
-      )}
 
 
       <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform }}>
@@ -1383,17 +1281,24 @@ const B4Interact: React.FC = () => {
                 ]}
                 selectedLetter={q1selected}
                 revealStart={70}
-                clickFrame={400}
+                clickFrame={300}
                 localFrame={q1LocalFrame}
                 progressPct={46}
                 floatOffset={floatA}
                 focusKey={focusStage.key}
                 hoverLetter={q1HoverLetter}
+                cursor={{ path: [
+                  { f: 20, x: 780, y: 580 },
+                  { f: 140, x: 470, y: 380 },
+                  { f: 262, x: 118, y: 314 },
+                  { f: 300, x: 118, y: 314 },
+                  { f: 345, x: 250, y: 300 },
+                ], clicks: [300] }}
               />
               </div>
             )}
             {showQ2 && (
-              <div style={{ transform: `translateX(${q2EnterX + q2ExitX}) scale(${q2EnterSc * q2ExitSc})`, opacity: q2EnterOp * q2ExitOp }}>
+              <div style={{ transform: `translateX(${q2EnterX + q2ExitX}px) scale(${q2EnterSc * q2ExitSc})`, opacity: q2EnterOp * q2ExitOp }}>
               <SJTCard
                 questionNum="08" totalQ="15" tag="情境 08 · 遠端會議 · 技術分歧"
                 scenario="你在跨時區的視訊設計評審中，提出的架構方案遭到資深工程師當場否決，理由簡短且缺乏解釋。其他人保持沉默，主持人正準備繼續下一議題。"
@@ -1406,12 +1311,18 @@ const B4Interact: React.FC = () => {
                 ]}
                 selectedLetter={q2selected}
                 revealStart={10}
-                clickFrame={160}
+                clickFrame={110}
                 localFrame={q2LocalFrame}
                 progressPct={53}
                 floatOffset={floatY(t, 0.74, 8, 0.5)}
                 focusKey={focusStage.key}
                 hoverLetter={q2HoverLetter}
+                cursor={{ path: [
+                  { f: 28, x: 740, y: 560 },
+                  { f: 72, x: 300, y: 420 },
+                  { f: 108, x: 118, y: 346 },
+                  { f: 145, x: 118, y: 346 },
+                ], clicks: [110] }}
               />
               </div>
             )}
@@ -1420,20 +1331,20 @@ const B4Interact: React.FC = () => {
 
         {/* Loading — large sequential trait reveal */}
         {showLoading && (() => {
-          const loadOp = interpolate(frame, [O + 640, O + 660], [0, 1], cl);
+          const loadOp = interpolate(frame, [O + 540, O + 560, O + 690, O + 710], [0, 1, 1, 0], cl);
           const traits = ["壓力反應模式", "協作決策傾向", "模糊容忍度", "衝突處理策略"];
-          const traitCycle = 38; // frames per trait
-          const traitProgress = (frame - (O + 670)) / traitCycle;
+          const traitCycle = 26; // frames per trait
+          const traitProgress = (frame - (O + 560)) / traitCycle;
           const traitIdx = Math.max(0, Math.min(traits.length - 1, Math.floor(traitProgress)));
-          const traitLocalF = (frame - (O + 670)) - traitIdx * traitCycle;
-          const traitOp = interpolate(traitLocalF, [0, 10, 28, 38], [0, 1, 1, 0], cl);
+          const traitLocalF = (frame - (O + 560)) - traitIdx * traitCycle;
+          const traitOp = interpolate(traitLocalF, [0, 8, 20, 26], [0, 1, 1, 0], cl);
           return (
             <AbsoluteFill style={{ opacity: loadOp, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 48 }}>
-              <TypewriterText text="分析行為指紋中…" startFrame={O + 640} charStagger={3} fontSize={64} fontWeight={700} colorScheme="white-to-cyan" />
+              <TypewriterText text="分析行為指紋中…" startFrame={O + 540} charStagger={3} fontSize={64} fontWeight={700} colorScheme="white-to-cyan" />
               <div style={{ width: 560, height: 5, background: "rgba(255,255,255,0.08)", borderRadius: 9999 }}>
                 <div style={{ height: "100%", width: `${loadProg}%`, background: `linear-gradient(90deg,${ds.blue},${ds.cyan})`, borderRadius: 9999, transition: "none" }} />
               </div>
-              {frame >= O + 670 && traitIdx < traits.length && (
+              {frame >= O + 560 && traitIdx < traits.length && (
                 <div style={{ opacity: traitOp, display: "flex", alignItems: "center", gap: 12 }}>
                   <div style={{ width: 8, height: 8, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 10px ${ds.cyan}` }} />
                   <span style={{ fontSize: 28, fontFamily: fonts.mono, color: "rgba(255,255,255,0.60)", letterSpacing: "0.14em" }}>{traits[traitIdx]}</span>
@@ -1442,46 +1353,6 @@ const B4Interact: React.FC = () => {
             </AbsoluteFill>
           );
         })()}
-
-        {/* Score — cinematic full-screen reveal */}
-        {showScore && (
-          <AbsoluteFill style={{
-            opacity: scoreOp, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 0,
-          }}>
-            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 55% 50% at 50% 50%, rgba(27,122,77,0.20) 0%, transparent 70%)" }} />
-            <div style={{ fontSize: 16, fontFamily: fonts.mono, color: "rgba(255,255,255,0.38)", letterSpacing: "0.20em", marginBottom: 28, zIndex: 1 }}>行為指紋分析完成</div>
-            <div style={{ transform: `scale(${scoreSc})`, display: "flex", alignItems: "baseline", gap: 14, zIndex: 1 }}>
-              <span style={{ fontSize: 210, fontFamily: fonts.mono, fontWeight: 800, color: "#FFFFFF", fontVariantNumeric: "tabular-nums", lineHeight: 0.82 }}>{scoreVal.toFixed(1)}</span>
-              <span style={{ fontSize: 56, fontFamily: fonts.mono, color: "rgba(255,255,255,0.28)", alignSelf: "flex-end", marginBottom: 16 }}>/100</span>
-            </div>
-            <div style={{
-              marginTop: 32, zIndex: 1,
-              opacity: interpolate(frame, [O + 854, O + 870], [0, 1], cl),
-              transform: `scale(${interpolate(frame, [O + 854, O + 870], [0.5, 1], { easing: Easing.out(Easing.back(1.5)), ...cl })})`,
-              display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 32px", borderRadius: 999,
-              background: "#E6F5EC", border: "1px solid rgba(27,122,77,0.28)",
-            }}>
-              <div style={{ width: 8, height: 8, borderRadius: "50%", background: ds.fit, boxShadow: `0 0 10px ${ds.fit}` }} />
-              <span style={{ fontSize: 24, fontWeight: 700, color: "#146F3E", fontFamily: fonts.display }}>適配 · P×E FIT</span>
-            </div>
-            <div style={{ display: "flex", gap: 36, marginTop: 40, zIndex: 1 }}>
-              {[
-                { label: "壓力反應", score: "92" },
-                { label: "協作決策", score: "87" },
-                { label: "模糊容忍", score: "84" },
-                { label: "衝突處理", score: "79" },
-              ].map((item, i) => {
-                const subOp = interpolate(frame, [O + 1112 + i * 14, O + 1126 + i * 14], [0, 1], cl);
-                return (
-                  <div key={item.label} style={{ opacity: subOp, textAlign: "center" as const }}>
-                    <div style={{ fontSize: 50, fontFamily: fonts.mono, fontWeight: 700, color: ds.cyan, lineHeight: 1 }}>{item.score}</div>
-                    <div style={{ fontSize: 14, fontFamily: fonts.mono, color: "rgba(255,255,255,0.42)", marginTop: 8, letterSpacing: "0.08em" }}>{item.label}</div>
-                  </div>
-                );
-              })}
-            </div>
-          </AbsoluteFill>
-        )}
       </AbsoluteFill>
     </AbsoluteFill>
   );
@@ -1493,7 +1364,7 @@ const B4Interact: React.FC = () => {
 
 const B5Capture: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 230, 240);
+  const m = momentAnim(frame, 0, 8, 240, 250);
 
   // Phase 1 (0-40): gradient circle scales in with bounce + radial glow expands
   const circleSc = interpolate(frame, [8, 32], [0, 1], {
@@ -1602,22 +1473,26 @@ const B6Bridge: React.FC = () => {
       <div style={{
         position: "absolute",
         top: "50%", left: "50%",
-        transform: "translate(-50%, -115px)",
+        transform: "translate(-50%, -150px)",
         opacity: m.opacity,
       }}>
-        <PingDot frame={frame} color="#00B4D8" />
+        <PingDot frame={frame} color={ds.fit} />
       </div>
       <AbsoluteFill style={{
         opacity: m.opacity,
         transform: `rotate(${rotZIn(frame, 10, 28, -6)}deg) skewX(${skewSettle(frame, 10, 24)}deg)`,
-        display: "flex", alignItems: "center", justifyContent: "center",
+        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
       }}>
+        <div style={{ marginBottom: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 16px", borderRadius: 999, border: `1px solid ${ds.fit}40`, background: `${ds.fit}15`, opacity: interpolate(frame, [10, 20], [0, 1], { extrapolateLeft: "clamp" }) }}>
+          <div style={{ width: 6, height: 6, borderRadius: "50%", background: ds.fit, boxShadow: `0 0 8px ${ds.fit}` }} />
+          <span style={{ fontSize: 13, fontFamily: fonts.mono, color: ds.fit, letterSpacing: "0.24em" }}>STEP 03 · TARGET</span>
+        </div>
         <TypewriterText
-          text="接著，給主管一份手冊——"
+          text="P×E 交叉分析"
           startFrame={14}
           charStagger={4}
-          fontSize={100}
-          fontWeight={700}
+          fontSize={110}
+          fontWeight={800}
           colorScheme="white-to-cyan"
         />
       </AbsoluteFill>
@@ -1634,22 +1509,22 @@ const B6Bridge: React.FC = () => {
 
 const TERMINAL_LINES = [
   { text: "> 載入環境向量 ENV-2024-0847…",                        start: 10 },
-  { text: "> 比對行為指紋 BFP-陳威宇-0312…",                      start: 48 },
-  { text: "> 計算 P×E 適配矩陣 [6×6]…",                          start: 86 },
-  { text: "> 解析 XAI 驅動因子 (決策自主性 +4.2σ)…",              start: 124 },
-  { text: "> 匹配歷史留任資料庫 n=14,820…",                       start: 162 },
-  { text: "> 生成管理建議 Playbook v4.3…",                        start: 200 },
-  { text: "",                                                     start: 238 },  // blank line
-  { text: "  適配分數    88.5 / 100",                             start: 250 },
-  { text: "  6個月留任率  84%   (↑ +18.6pp vs 基準)",             start: 268 },
-  { text: "  錯配成本節省  NT$ 22 萬   預期效益",                  start: 286 },
-  { text: "",                                                     start: 304 },
-  { text: "  [完成] TAT Playbook 已就緒",                         start: 310 },
+  { text: "> 比對行為指紋 BFP-陳威宇-0312…",                      start: 26 },
+  { text: "> 計算 P×E 適配矩陣 [6×6]…",                          start: 42 },
+  { text: "> 解析 XAI 驅動因子 (決策自主性 +4.2σ)…",              start: 58 },
+  { text: "> 匹配歷史留任資料庫 n=14,820…",                       start: 74 },
+  { text: "> 生成管理建議 Playbook v4.3…",                        start: 90 },
+  { text: "",                                                     start: 106 },
+  { text: "  適配分數    88.5 / 100",                             start: 112 },
+  { text: "  6個月留任率  84%   (↑ +18.6pp vs 基準)",             start: 122 },
+  { text: "  錯配成本節省  NT$ 22 萬   預期效益",                  start: 132 },
+  { text: "",                                                     start: 142 },
+  { text: "  [完成] TAT Playbook 已就緒",                         start: 146 },
 ];
 
 const TerminalLine: React.FC<{ text: string; startF: number; highlight?: boolean; lf: number }> = ({ text, startF, highlight, lf }) => {
   if (!text) return <div style={{ height: 10 }} />;
-  const n = Math.floor(interpolate(lf, [startF, startF + text.length * 1.8], [0, text.length], {
+  const n = Math.floor(interpolate(lf, [startF, startF + text.length * 0.8], [0, text.length], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   }));
   const displayed = text.slice(0, n);
@@ -1691,25 +1566,23 @@ const B7TailorTerminal: React.FC<{ lf: number }> = ({ lf }) => {
 
 const B7Tailor: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 1872, 1884);
+  const m = momentAnim(frame, 0, 8, 1642, 1654);
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
-  // Phase gates
-  const showOpener   = frame < 90;
-  const showTerminal = frame >= 90 && frame < 450;
-  const terminalLF   = Math.max(0, frame - 90);
-  const lf = Math.max(0, frame - 450); // playbook local frame
+  // Phase gates & Transition
+  const terminalEnd = 220; // Shorter wait time
+  const showTerminal = frame < terminalEnd + 30; // keep mounted during transition
+  const terminalLF   = frame;
+  const lf = Math.max(0, frame - terminalEnd); // playbook local frame
 
-  // ── Opener ──
-  const openerOp = interpolate(frame, [0, 12, 76, 90], [0, 1, 1, 0], cl);
-  const opBigSc  = interpolate(frame, [10, 32], [0.2, 1], { easing: Easing.out(Easing.back(1.4)), ...cl });
-  const opBigOp  = interpolate(frame, [10, 24], [0, 1], cl);
-  const opSubOp  = interpolate(frame, [36, 52], [0, 1], cl);
-  const opSubY   = interpolate(frame, [36, 54], [18, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  // ── Terminal Out Transition ──
+  const termOutOp = interpolate(frame, [terminalEnd, terminalEnd + 20], [1, 0], cl);
+  const termOutSc = interpolate(frame, [terminalEnd, terminalEnd + 24], [1, 0.85], { easing: Easing.out(Easing.cubic), ...cl });
 
   // ── Dashboard reveal ──
-  const dashOp = interpolate(lf, [0, 28], [0, 1], { easing: Easing.out(Easing.cubic), ...cl });
-  const dashY  = interpolate(lf, [0, 32], [28, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  const dashOp = interpolate(lf, [0, 24], [0, 1], { easing: Easing.out(Easing.cubic), ...cl });
+  const dashY  = interpolate(lf, [0, 24], [30, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  const dashSc = interpolate(lf, [0, 24], [1.06, 1], { easing: Easing.out(Easing.cubic), ...cl });
 
   // KPI counters
   const fitScore = interpolate(lf, [10, 120], [0, 88.5], { easing: Easing.out(Easing.cubic), ...cl });
@@ -1727,10 +1600,23 @@ const B7Tailor: React.FC = () => {
   ];
   const b7Active = b7Stops.find(s => lf >= s.k[0] && lf < s.k[3]);
   
-  // Static camera - discard zoom, keep the whole dashboard visible
-  const camZ = 1;
-  const camOx = 50;
-  const camOy = 50;
+  // Continuous camera path — no reset between stops, direct pan+zoom
+  // Keyframes: before | kpi-in | kpi-hold | pemap-in | pemap-hold | xai-in | xai-hold | recs-in | recs-hold | out
+  const camZ = interpolate(lf,
+    [200, 228, 430, 486, 688, 744, 946, 1002, 1204, 1232],
+    [  1, 1.28, 1.28, 1.34, 1.34, 1.34, 1.34, 1.28, 1.28,    1],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  const camOx = interpolate(lf,
+    [200, 228, 430, 486, 688, 744, 946, 1002, 1204, 1232],
+    [ 50,  50,  50,  24,  24,  76,  76,   50,   50,  50],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  const camOy = interpolate(lf,
+    [200, 228, 430, 486, 688, 744, 946, 1002, 1204, 1232],
+    [ 50,  15,  15,  54,  54,  54,  54,   85,   85,  50],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
 
   // Section highlight / dim helpers
   const sOp = (sect: string): number => {
@@ -1764,27 +1650,12 @@ const B7Tailor: React.FC = () => {
 
   return (
     <AbsoluteFill>
-      <BgCalm theme={!showOpener && !showTerminal ? "light" : "dark"} tint={!showOpener && !showTerminal ? "blue" : "blue"} />
+      <BgCalm theme={!showTerminal ? "light" : "dark"} tint={!showTerminal ? "blue" : "blue"} />
       <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform }}>
-
-        {/* ── Phase 0: T·TARGET opener ── */}
-        {showOpener && (
-          <AbsoluteFill style={{ opacity: openerOp, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 0 }}>
-            <div style={{ position: "absolute", fontSize: 560, fontWeight: 900, fontFamily: fonts.mono, color: ds.fit, opacity: 0.05, lineHeight: 1, letterSpacing: "-24px", userSelect: "none" as const }}>T</div>
-            <div style={{ opacity: interpolate(frame, [6, 18], [0, 1], cl), display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(27,122,77,0.40)", background: "rgba(27,122,77,0.08)", marginBottom: 20 }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: ds.fit, boxShadow: `0 0 8px ${ds.fit}` }} />
-              <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#5FC48C", letterSpacing: "0.20em" }}>STEP 03 · TARGET</span>
-            </div>
-            <div style={{ opacity: opBigOp, transform: `scale(${opBigSc})`, fontSize: 140, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-5px", lineHeight: 1 }}>客製手冊</div>
-            <div style={{ opacity: opSubOp, transform: `translateY(${opSubY}px)`, marginTop: 20, fontSize: 26, color: "rgba(255,255,255,0.50)", fontFamily: fonts.display, letterSpacing: "-0.3px", textAlign: "center" as const }}>
-              把 P×E 分析，轉化成主管能直接用的行動指南
-            </div>
-          </AbsoluteFill>
-        )}
 
         {/* ── Phase A: terminal ── */}
         {showTerminal && (
-          <>
+          <div style={{ position: "absolute", inset: 0, opacity: termOutOp, transform: `scale(${termOutSc})` }}>
             <div style={{ position: "absolute", top: 70, left: 0, right: 0, zIndex: 6, display: "flex", flexDirection: "column", alignItems: "center", gap: 11, opacity: interpolate(terminalLF, [0, 15], [0, 1], cl) }}>
               <div style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(0,180,216,0.35)", background: "rgba(0,180,216,0.07)" }}>
                 <span style={{ width: 6, height: 6, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 ${4 + 5 * (0.5 + 0.5 * Math.sin(frame * 0.18))}px ${ds.cyan}` }} />
@@ -1796,11 +1667,11 @@ const B7Tailor: React.FC = () => {
             <div style={{ position: "absolute", inset: 0, paddingTop: 150 }}>
               <B7TailorTerminal lf={terminalLF} />
             </div>
-          </>
+          </div>
         )}
 
         {/* ── Phase B: Full HC dashboard + camera tour ── */}
-        {!showOpener && !showTerminal && (
+        {!showTerminal && (
           <AbsoluteFill style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
             {/* Camera zoom wrapper */}
             <div style={{ transformOrigin: `${camOx}% ${camOy}%`, transform: `scale(${camZ})` }}>
@@ -1809,7 +1680,7 @@ const B7Tailor: React.FC = () => {
                 width: 1680, borderRadius: 16, overflow: "hidden" as const,
                 background: "#FFFFFF",
                 boxShadow: "0 24px 80px rgba(8,16,40,0.11), 0 1px 0 rgba(8,16,40,0.06)",
-                opacity: dashOp, transform: `translateY(${dashY}px)`,
+                opacity: dashOp, transform: `translateY(${dashY}px) scale(${dashSc})`,
                 display: "flex", flexDirection: "column" as const,
               }}>
 
@@ -1940,7 +1811,7 @@ const B7Tailor: React.FC = () => {
             </div>
 
             {/* ── Explanation Callout Overlay ── */}
-            <AbsoluteFill style={{ zIndex: 30, opacity: calloutOp * m.opacity, pointerEvents: "none" }}>
+            <AbsoluteFill style={{ zIndex: 30, opacity: calloutOp, pointerEvents: "none" }}>
               {b7Active && (
                 <div style={{
                   position: "absolute",
@@ -1976,13 +1847,13 @@ export const S3_DIT: React.FC = () => {
     <AbsoluteFill>
       {/* S3 total: 4800f (80s @ 60fps).  Each Sequence overlaps ~24f with previous → crossfade, no flash.
           B0:372  B2:1284  B3:150  B4:1104(+120 opener)  B5:264  B6:150  B7:1560(+90 opener) */}
-      <Sequence from={0}    durationInFrames={600}  layout="none"><B0Overview /></Sequence>
-      <Sequence from={576}  durationInFrames={1284} layout="none"><B2Define /></Sequence>
-      <Sequence from={1836} durationInFrames={150}  layout="none"><B3Bridge /></Sequence>
-      <Sequence from={1962} durationInFrames={1294} layout="none"><B4Interact /></Sequence>
-      <Sequence from={3232} durationInFrames={264}  layout="none"><B5Capture /></Sequence>
-      <Sequence from={3472} durationInFrames={150}  layout="none"><B6Bridge /></Sequence>
-      <Sequence from={3598} durationInFrames={1884} layout="none"><B7Tailor /></Sequence>
+      <Sequence from={0}    durationInFrames={300}  layout="none"><B0Overview /></Sequence>
+      <Sequence from={276}  durationInFrames={1164} layout="none"><B2Define /></Sequence>
+      <Sequence from={1416} durationInFrames={150}  layout="none"><B3Bridge /></Sequence>
+      <Sequence from={1542} durationInFrames={710}  layout="none"><B4Interact /></Sequence>
+      <Sequence from={2228} durationInFrames={264}  layout="none"><B5Capture /></Sequence>
+      <Sequence from={2468} durationInFrames={150}  layout="none"><B6Bridge /></Sequence>
+      <Sequence from={2594} durationInFrames={1654} layout="none"><B7Tailor /></Sequence>
     </AbsoluteFill>
   );
 };

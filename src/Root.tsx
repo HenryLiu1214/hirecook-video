@@ -25,23 +25,24 @@ const HireCookVideo: React.FC = () => {
         <Series.Sequence durationInFrames={SCENES.s0.end - SCENES.s0.start}>
           <S0_Intro />
         </Series.Sequence>
-        <Series.Sequence durationInFrames={SCENES.s1.end - SCENES.s1.start}>
+
+        <Series.Sequence durationInFrames={SCENES.s1.end - SCENES.s1.start} offset={SCENES.s1.start - SCENES.s0.end}>
           <S1_PainPoints />
         </Series.Sequence>
 
-        <Series.Sequence durationInFrames={SCENES.s2.end - SCENES.s2.start}>
+        <Series.Sequence durationInFrames={SCENES.s2.end - SCENES.s2.start} offset={SCENES.s2.start - SCENES.s1.end}>
           <S2_Science />
         </Series.Sequence>
 
-        <Series.Sequence durationInFrames={SCENES.s3.end - SCENES.s3.start}>
+        <Series.Sequence durationInFrames={SCENES.s3.end - SCENES.s3.start} offset={SCENES.s3.start - SCENES.s2.end}>
           <S3_DIT />
         </Series.Sequence>
 
-        <Series.Sequence durationInFrames={SCENES.s4.end - SCENES.s4.start}>
+        <Series.Sequence durationInFrames={SCENES.s4.end - SCENES.s4.start} offset={SCENES.s4.start - SCENES.s3.end}>
           <S4_Tech />
         </Series.Sequence>
 
-        <Series.Sequence durationInFrames={SCENES.s5.end - SCENES.s5.start}>
+        <Series.Sequence durationInFrames={SCENES.s5.end - SCENES.s5.start} offset={SCENES.s5.start - SCENES.s4.end}>
           <S5_CTA />
         </Series.Sequence>
       </Series>

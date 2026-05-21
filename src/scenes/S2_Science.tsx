@@ -339,12 +339,14 @@ const OvercookedPlay: React.FC = () => {
   const scanY = interpolate(frame, [190, 382], [0, 226], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const frameDraw = interpolate(frame, [118, 292], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const traceDraw = interpolate(frame, [430, 510], [0, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const exitX = interpolate(frame, [548, 600], [0, -44], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const handoff = interpolate(frame, [528, 600], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const tags = [
     { en: "TIME PRESSURE", zh: "倒數壓力", c: colors.hcCyanBright },
     { en: "ROLE HANDOFF", zh: "角色交接", c: colors.hcBlue },
     { en: "RESOURCE CONFLICT", zh: "資源衝突", c: colors.hcRisk },
   ];
-  return <AbsoluteFill style={{ overflow: "hidden", background: "#F7F8FB" }}>
+  return <AbsoluteFill style={{ overflow: "hidden", background: "#F7F8FB", transform: `translateX(${exitX}px)` }}>
     <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 71% 46%, rgba(111,227,245,0.18), transparent 36%), linear-gradient(112deg, #071D32 0%, #0D1430 39%, #F7F8FB 39.2%, #EEF4FF 100%)" }} />
     <div style={{ position: "absolute", inset: 0, opacity: 0.16, backgroundImage: "radial-gradient(circle, rgba(111,227,245,0.42) 1px, transparent 1px)", backgroundSize: "34px 34px" }} />
 
@@ -402,6 +404,8 @@ const OvercookedPlay: React.FC = () => {
       TRACE CAPTURED →
     </div>
 
+    <div style={{ position: "absolute", inset: 0, opacity: handoff, background: "linear-gradient(90deg, transparent 0%, transparent 48%, rgba(5,7,12,0.18) 66%, rgba(5,7,12,0.78) 84%, #05070C 100%)", pointerEvents: "none" }} />
+
     <div style={{ position: "absolute", left: 960, top: 590, width: 340 + cover * 3260, height: 340 + cover * 3260, background: "#17339C", opacity: cover, transform: "translate(-50%, -50%)", borderRadius: "50%", border: `${7 + cover * 913}px solid rgba(111,227,245,0.42)`, boxShadow: "0 0 120px rgba(111,227,245,0.36)", zIndex: 10 }} />
     <div style={{ position: "absolute", left: 960, top: 590, width: 340, height: 340, opacity: cover, transform: "translate(-50%, -50%)", zIndex: 11 }}>
       <RobotAgent size={340} boot={1} bodyColor="#17339C" />
@@ -411,7 +415,9 @@ const OvercookedPlay: React.FC = () => {
 
 const FingerprintResults: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 708, 720);
+  const m = momentAnim(frame, 0, 8, 9998, 9999);
+  const reveal = interpolate(frame, [0, 72], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const revealX = interpolate(reveal, [0, 1], [1920, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const modelFocus = interpolate(frame, [514, 574], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const analysisDim = interpolate(modelFocus, [0, 1], [1, 0.22]);
   const curves = [
@@ -419,7 +425,11 @@ const FingerprintResults: React.FC = () => {
     { value: "73.9% accuracy", note: "行為指紋可識別人格差異", c: colors.hcBlue, y: 508, amp: 54, start: 70, width: 9 },
     { value: "Social Friction", note: "影響績效與留任的關鍵訊號", c: colors.hcRisk, y: 754, amp: 50, start: 106, width: 8 },
   ];
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, overflow: "hidden" }}>
+  return <AbsoluteFill style={{
+    opacity: m.opacity,
+    transform: `${m.transform} translateX(${revealX}px)`,
+    overflow: "hidden",
+  }}>
     <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 74% 50%, rgba(33,81,245,0.34), transparent 44%), radial-gradient(circle at 78% 75%, rgba(184,58,46,0.14), transparent 38%), linear-gradient(135deg, #05070C 0%, #101521 54%, #071D32 100%)" }} />
     <div style={{ position: "absolute", inset: 0, opacity: 0.13, backgroundImage: "radial-gradient(circle, rgba(111,227,245,0.42) 1px, transparent 1px)", backgroundSize: "34px 34px" }} />
 
@@ -465,7 +475,7 @@ const FingerprintResults: React.FC = () => {
 
     <div style={{ position: "absolute", inset: 0, opacity: modelFocus, background: "radial-gradient(ellipse at center, rgba(5,7,12,0.92) 0%, rgba(5,7,12,0.74) 42%, rgba(5,7,12,0.18) 76%, transparent 100%)" }} />
 
-    <div style={{ position: "absolute", left: 0, right: 0, top: 348, opacity: interpolate(frame, [536, 584, 650, 690], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), transform: `translateY(${interpolate(frame, [536, 584], [44, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`, textAlign: "center" }}>
+    <div style={{ position: "absolute", left: 0, right: 0, top: 320, opacity: interpolate(frame, [536, 584], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), transform: `translateY(${interpolate(frame, [536, 584], [44, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`, textAlign: "center" }}>
       <div style={{ color: "#FFFFFF", fontSize: 82, fontWeight: 920, letterSpacing: "-0.06em", lineHeight: 0.98, textShadow: "0 28px 110px rgba(0,0,0,0.60)" }}>
         Behavior Data <span style={{ color: colors.hcCyanBright }}>→</span> P × E Fit Model
       </div>
@@ -474,8 +484,8 @@ const FingerprintResults: React.FC = () => {
       </div>
     </div>
 
-    <div style={{ position: "absolute", left: "50%", bottom: 122, width: 6, height: interpolate(frame, [612, 676], [0, 120], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), opacity: interpolate(frame, [612, 642], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), transform: "translateX(-50%)", background: `linear-gradient(180deg, ${colors.hcCyanBright}, transparent)`, boxShadow: "0 0 32px rgba(111,227,245,0.72)" }} />
-    <div style={{ position: "absolute", left: "50%", top: "50%", width: 278, height: 278, opacity: interpolate(frame, [654, 690, 720], [0, 1, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), transform: `translate(-50%, -50%) scale(${interpolate(frame, [654, 696], [0.72, 1], { easing: Easing.out(Easing.back(1.0)), extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`, borderRadius: "50%", background: `linear-gradient(145deg, ${colors.hcBlue}, ${colors.hcCyan})`, boxShadow: "0 30px 120px rgba(33,81,245,0.42), 0 0 90px rgba(111,227,245,0.35)", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }}>
+    <div style={{ position: "absolute", left: "50%", bottom: 2, width: 6, height: interpolate(frame, [612, 676], [0, 120], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), opacity: interpolate(frame, [612, 642], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), transform: "translateX(-50%)", background: `linear-gradient(180deg, ${colors.hcCyanBright}, transparent)`, boxShadow: "0 0 32px rgba(111,227,245,0.72)" }} />
+    <div style={{ position: "absolute", left: "50%", top: 660, width: 278, height: 278, opacity: interpolate(frame, [654, 690], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), transform: `translate(-50%, -50%) scale(${interpolate(frame, [654, 696], [0.72, 1], { easing: Easing.out(Easing.back(1.0)), extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`, borderRadius: "50%", background: `linear-gradient(145deg, ${colors.hcBlue}, ${colors.hcCyan})`, boxShadow: "0 30px 120px rgba(33,81,245,0.42), 0 0 90px rgba(111,227,245,0.35)", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }}>
       <div style={{ fontFamily: fonts.mono, fontSize: 98, fontWeight: 900, letterSpacing: "-0.08em", lineHeight: 0.9 }}>FIT</div>
     </div>
   </AbsoluteFill>;
@@ -483,33 +493,65 @@ const FingerprintResults: React.FC = () => {
 
 const ScienceClose: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 4, 228, 240);
-  const flash = interpolate(frame, [34, 48, 66], [0, 0.72, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const stamp = interpolate(frame, [0, 54], [0, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  // Bypass the entry animation of momentAnim so the scene starts perfectly at scale 1.0 (no jumping)
+  const exitOp = interpolate(frame, [228, 240], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const exitScale = interpolate(frame, [228, 240], [1, 0.96], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  
+  // Smoothly fade in the white background over the dark one
+  const bgOp = interpolate(frame, [0, 35], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  
+  // Legacy text from previous scene gracefully fades out
+  const oldTextOp = interpolate(frame, [0, 20], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  
+  // Morph the circle from B3PxE exactly
+  const circleSize = interpolate(frame, [10, 45], [278, 230], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const circleY = interpolate(frame, [10, 45], [120, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  
+  // Perfectly match the shadow of FingerprintResults at frame 0
+  const shadow1 = interpolate(frame, [10, 45], [120, 110], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const shadow1A = interpolate(frame, [10, 45], [0.42, 0.30], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const shadow2 = interpolate(frame, [10, 45], [90, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const shadow2A = interpolate(frame, [10, 45], [0.35, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const boxShadow = `0 30px ${shadow1}px rgba(33,81,245,${shadow1A})${shadow2 > 0 ? `, 0 0 ${shadow2}px rgba(111,227,245,${shadow2A})` : ""}`;
+
+  const fitFontSize = interpolate(frame, [10, 45], [98, 80], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const fitY = interpolate(frame, [10, 45], [0, -16], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  
+  const calcOp = interpolate(frame, [25, 45], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const calcY = interpolate(frame, [25, 45], [20, 24], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
   const iconShift = interpolate(frame, [104, 148], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const quoteOp = interpolate(frame, [126, 164, 224, 238], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const quoteY = interpolate(frame, [126, 166], [66, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const iconX = interpolate(iconShift, [0, 1], [0, -470], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const iconY = interpolate(iconShift, [0, 1], [0, -18], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const iconScale = interpolate(iconShift, [0, 1], [1, 0.62], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, overflow: "hidden" }}>
-    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, #FFFFFF 0%, #F7F8FB 62%, #EAF0FF 100%)" }} />
-    <div style={{ position: "absolute", inset: 0, opacity: 0.22, backgroundImage: "radial-gradient(circle, rgba(33,81,245,0.18) 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
-    <div style={{ position: "absolute", inset: 0, opacity: interpolate(frame, [0, 38], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), background: "linear-gradient(135deg, #05070C 0%, #101521 54%, #071D32 100%)" }} />
-    <div style={{ position: "absolute", inset: 0, opacity: flash, background: "#FFFFFF", boxShadow: "0 0 180px rgba(111,227,245,0.9)" }} />
+  
+  return <AbsoluteFill style={{ opacity: exitOp, transform: `scale(${exitScale})`, overflow: "hidden" }}>
+    <div style={{ position: "absolute", inset: 0, opacity: bgOp, background: "linear-gradient(180deg, #FFFFFF 0%, #F7F8FB 62%, #EAF0FF 100%)" }} />
+    <div style={{ position: "absolute", inset: 0, opacity: bgOp * 0.22, backgroundImage: "radial-gradient(circle, rgba(33,81,245,0.18) 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
+
+    <div style={{ position: "absolute", left: 0, right: 0, top: 320, opacity: oldTextOp, textAlign: "center" }}>
+      <div style={{ color: "#FFFFFF", fontSize: 82, fontWeight: 920, letterSpacing: "-0.06em", lineHeight: 0.98, textShadow: "0 28px 110px rgba(0,0,0,0.60)" }}>
+        Behavior Data <span style={{ color: colors.hcCyanBright }}>→</span> P × E Fit Model
+      </div>
+      <div style={{ marginTop: 26, color: colors.dimWhite, fontSize: 34, fontWeight: 760, letterSpacing: "-0.025em" }}>
+        AI 先建立行為基準，不用等內部歷史數據
+      </div>
+    </div>
 
     <div style={{ position: "absolute", left: "50%", top: "50%", width: 620, height: 430, transform: `translate(-50%, -50%) translate(${iconX}px, ${iconY}px) scale(${iconScale})`, transformOrigin: "center center" }}>
-      <svg width="620" height="430" viewBox="0 0 620 430" style={{ position: "absolute", inset: 0, overflow: "visible" }}>
+      <svg width="620" height="430" viewBox="0 0 620 430" style={{ position: "absolute", inset: 0, overflow: "visible", opacity: interpolate(frame, [15, 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
         {[0, 1, 2].map((i) => {
-          const draw = interpolate(frame, [14 + i * 10, 76 + i * 14], [0, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+          const draw = interpolate(frame, [25 + i * 10, 85 + i * 14], [0, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
           const y = 148 + i * 54;
           const d = `M 64 ${y} C 188 ${y - 68}, 314 ${y + 56}, 476 ${y - 8}`;
           return <path key={i} d={d} fill="none" stroke={[colors.hcCyan, colors.hcBlue, colors.hcRisk][i]} strokeWidth={4} strokeLinecap="round" strokeDasharray="640" strokeDashoffset={640 * (1 - draw)} opacity={0.55} />;
         })}
       </svg>
-      <div style={{ position: "absolute", left: "50%", top: "50%", width: 278, height: 278, transform: `translate(-50%, -50%) scale(${interpolate(stamp, [0, 1], [1, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}) rotate(${interpolate(stamp, [0, 1], [0, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}deg)`, borderRadius: "50%", background: `linear-gradient(145deg, ${colors.hcBlue}, ${colors.hcCyan})`, boxShadow: "0 30px 110px rgba(33,81,245,0.30)", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", color: "#FFFFFF" }}>
-        <div style={{ fontFamily: fonts.mono, fontSize: 98, fontWeight: 900, letterSpacing: "-0.08em", lineHeight: 0.9 }}>FIT</div>
-        <div style={{ marginTop: 8, fontSize: 22, fontWeight: 800, letterSpacing: "0.03em" }}>CALCULATED</div>
+      <div style={{ position: "absolute", left: "50%", top: "50%", width: circleSize, height: circleSize, transform: `translate(-50%, -50%) translateY(${circleY}px)`, borderRadius: "50%", background: `linear-gradient(145deg, ${colors.hcBlue}, ${colors.hcCyan})`, boxShadow, display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }}>
+        <div style={{ position: "absolute", left: "50%", top: "50%", transform: `translate(-50%, -50%) translateY(${fitY}px)`, fontFamily: fonts.mono, fontSize: fitFontSize, fontWeight: 900, letterSpacing: "-0.08em", lineHeight: 0.9 }}>FIT</div>
+        <div style={{ position: "absolute", left: "50%", top: "50%", transform: `translate(-50%, -50%) translateY(${calcY}px)`, fontSize: 18, fontWeight: 800, letterSpacing: "0.15em", opacity: calcOp, whiteSpace: "nowrap" }}>CALCULATED</div>
       </div>
     </div>
 
@@ -520,16 +562,20 @@ const ScienceClose: React.FC = () => {
   </AbsoluteFill>;
 };
 
-export const S2_Science: React.FC = () => <AbsoluteFill>
-  <Sequence from={0} durationInFrames={720} layout="none"><AbsoluteFill><BgCalm theme="light" tint="blue" /></AbsoluteFill></Sequence>
-  <Sequence from={720} durationInFrames={2700} layout="none"><AbsoluteFill><BgCalm theme="dark" tint="blue" /></AbsoluteFill></Sequence>
-  <Sequence from={0} durationInFrames={240} layout="none"><BigBeat text="MBTI" sub="Personality signal，不是錄用結論" size={230} /></Sequence>
-  <Sequence from={240} durationInFrames={240} layout="none"><BigBeat text="P × E Interaction" sub="同一人格，在不同壓力結構下會有不同表現" size={156} wipe="ripple" /></Sequence>
-  <Sequence from={480} durationInFrames={240} layout="none"><Brand /></Sequence>
-  <Sequence from={720} durationInFrames={360} layout="none"><Formula /></Sequence>
-  <Sequence from={1080} durationInFrames={360} layout="none"><PE /></Sequence>
-  <Sequence from={1440} durationInFrames={420} layout="none"><MBTIInjection /></Sequence>
-  <Sequence from={1860} durationInFrames={600} layout="none"><OvercookedPlay /></Sequence>
-  <Sequence from={2460} durationInFrames={720} layout="none"><FingerprintResults /></Sequence>
-  <Sequence from={3180} durationInFrames={240} layout="none"><ScienceClose /></Sequence>
-</AbsoluteFill>;
+export const S2_Science: React.FC = () => {
+  const frame = useCurrentFrame();
+  return <AbsoluteFill>
+    {/* Actual S2 contents wiping in over the previous scene */}
+    <AbsoluteFill style={{ clipPath: slashWipe(frame, 0, 36) }}>
+      <Sequence from={0} durationInFrames={240} layout="none"><AbsoluteFill><BgCalm theme="light" tint="blue" /></AbsoluteFill></Sequence>
+      <Sequence from={240} durationInFrames={2640} layout="none"><AbsoluteFill><BgCalm theme="dark" tint="blue" /></AbsoluteFill></Sequence>
+      <Sequence from={0} durationInFrames={240} layout="none"><BigBeat text="MBTI" sub="Personality signal，不是錄用結論，是模擬輸入" size={214} /></Sequence>
+      <Sequence from={240} durationInFrames={360} layout="none"><Formula /></Sequence>
+      <Sequence from={600} durationInFrames={360} layout="none"><PE /></Sequence>
+      <Sequence from={960} durationInFrames={420} layout="none"><MBTIInjection /></Sequence>
+      <Sequence from={1380} durationInFrames={600} layout="none"><OvercookedPlay /></Sequence>
+      <Sequence from={1920} durationInFrames={720} layout="none"><FingerprintResults /></Sequence>
+      <Sequence from={2640} durationInFrames={240} layout="none"><ScienceClose /></Sequence>
+    </AbsoluteFill>
+  </AbsoluteFill>;
+};

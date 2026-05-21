@@ -106,3 +106,24 @@ export const circleWipe = (frame: number, startFrame: number, duration = 30): st
   });
   return `circle(${progress}% at 50% 50%)`;
 };
+
+// A sharp, dynamic 45-degree diagonal wipe
+export const slashWipe = (frame: number, startFrame: number, duration = 28): string => {
+  const progress = interpolate(frame, [startFrame, startFrame + duration], [-50, 150], {
+    easing: Easing.inOut(Easing.cubic),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  // A polygon that starts top-left and sweeps to bottom-right
+  return `polygon(-50% -50%, ${progress}% -50%, ${progress - 50}% 150%, -50% 150%)`;
+};
+
+// An extremely aggressive, massive ripple burst that scales up fast with a spring feel
+export const rippleBurst = (frame: number, startFrame: number, duration = 34): string => {
+  const progress = interpolate(frame, [startFrame, startFrame + duration], [0, 150], {
+    easing: Easing.out(Easing.back(1.8)),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  return `circle(${progress}% at 50% 50%)`;
+};

@@ -24,7 +24,9 @@ type ColorScheme =
   | "purple"
   | "white-to-blue"
   | "orange"
-  | "plum-to-pink";
+  | "plum-to-pink"
+  | "blue"
+  | "blue-to-cyan";
 
 interface TypewriterTextProps {
   text: string;
@@ -69,6 +71,8 @@ export const TypewriterText: React.FC<TypewriterTextProps> = ({
         return colors.pureWhite;
       case "purple":
         return "#2151F5";
+      case "blue":
+        return colors.hcBlueDark;
       case "orange":
         return colors.alertOrange;
       case "white-to-purple":
@@ -80,6 +84,9 @@ export const TypewriterText: React.FC<TypewriterTextProps> = ({
       case "white-to-cyan":
         if (ratio < 0.45) return colors.pureWhite;
         return lerpColor("#FFFFFF", "#00B4D8", (ratio - 0.45) / 0.55);
+      case "blue-to-cyan":
+        if (ratio < 0.45) return colors.hcBlueDark;
+        return lerpColor(colors.hcBlueDark, colors.hcCyanBright, (ratio - 0.45) / 0.55);
       case "plum-to-pink":
         if (ratio < 0.5) return lerpColor("#09173A", "#2151F5", ratio * 2);
         return lerpColor("#2151F5", "#00B4D8", (ratio - 0.5) * 2);

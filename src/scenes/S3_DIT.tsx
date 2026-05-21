@@ -1256,7 +1256,7 @@ const B4Interact: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
-  const m = momentAnim(frame, 0, 8, 1452, 1464);
+  const m = momentAnim(frame, 0, 8, 1212, 1224);
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
   // ── 120f candidate-perspective opener before Q1 ───────────────────────────
@@ -1271,30 +1271,30 @@ const B4Interact: React.FC = () => {
 
   // ── Q-phase flags (all shifted by O) ─────────────────────────────────────
   const qFrame      = Math.max(0, frame - O);   // local frame within Q phases
-  const showQ1      = frame >= O && frame < O + 600;
-  const showQ2      = frame >= O + 600 && frame < O + 900;
-  const showLoading = frame >= O + 900 && frame < O + 1080;
-  const showScore   = frame >= O + 1080;
+  const showQ1      = frame >= O && frame < O + 450;
+  const showQ2      = frame >= O + 450 && frame < O + 660;
+  const showLoading = frame >= O + 660 && frame < O + 840;
+  const showScore   = frame >= O + 840;
 
   // Q1: click A at qFrame 400
   const q1LocalFrame = qFrame;
   const q1selected   = qFrame >= 400 ? "A" : null;
 
   // Q2: click B at q2LocalFrame 160
-  const q2LocalFrame = Math.max(0, qFrame - 600);
-  const q2selected   = qFrame >= 760 ? "B" : null;
+  const q2LocalFrame = Math.max(0, qFrame - 450);
+  const q2selected   = qFrame >= 610 ? "B" : null;
 
   // Loading bar
-  const loadProg = interpolate(frame, [O + 910, O + 1070], [0, 100], {
+  const loadProg = interpolate(frame, [O + 670, O + 830], [0, 100], {
     easing: Easing.out(Easing.cubic), ...cl,
   });
 
   // Score card
-  const scoreSc = interpolate(frame, [O + 1080, O + 1098], [0.82, 1], {
+  const scoreSc = interpolate(frame, [O + 840, O + 858], [0.82, 1], {
     easing: Easing.out(Easing.back(1.25)), ...cl,
   });
-  const scoreOp = interpolate(frame, [O + 1080, O + 1094], [0, 1], cl);
-  const scoreVal = interpolate(frame, [O + 1100, O + 1180], [0, 88.5], {
+  const scoreOp = interpolate(frame, [O + 840, O + 854], [0, 1], cl);
+  const scoreVal = interpolate(frame, [O + 860, O + 940], [0, 88.5], {
     easing: Easing.out(Easing.cubic), ...cl,
   });
 
@@ -1314,12 +1314,12 @@ const B4Interact: React.FC = () => {
   const floatA = floatY(t, 0.68, 8, 0.4);
 
   // ── Q1 → Q2 swipe transition ──
-  const q1ExitX  = interpolate(frame, [O + 552, O + 596], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
-  const q1ExitOp = interpolate(frame, [O + 544, O + 596], [1, 0], cl);
-  const q1ExitSc = interpolate(frame, [O + 552, O + 596], [1, 0.90], { easing: Easing.in(Easing.quad), ...cl });
-  const q2EnterX = interpolate(frame, [O + 596, O + 652], [64, 0], { easing: Easing.out(Easing.cubic), ...cl });
-  const q2EnterOp = interpolate(frame, [O + 596, O + 636], [0, 1], cl);
-  const q2EnterSc = interpolate(frame, [O + 596, O + 652], [0.90, 1], { easing: Easing.out(Easing.cubic), ...cl });
+  const q1ExitX  = interpolate(frame, [O + 426, O + 460], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
+  const q1ExitOp = interpolate(frame, [O + 420, O + 460], [1, 0], cl);
+  const q1ExitSc = interpolate(frame, [O + 426, O + 460], [1, 0.90], { easing: Easing.in(Easing.quad), ...cl });
+  const q2EnterX = interpolate(frame, [O + 440, O + 480], [64, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  const q2EnterOp = interpolate(frame, [O + 440, O + 470], [0, 1], cl);
+  const q2EnterSc = interpolate(frame, [O + 440, O + 480], [0.90, 1], { easing: Easing.out(Easing.cubic), ...cl });
 
   // Hover pre-click: candidate's cursor lingers before clicking
   const q1HoverLetter = q1LocalFrame >= 340 && q1LocalFrame < 400 ? "A" : null;
@@ -1714,31 +1714,35 @@ const B7Tailor: React.FC = () => {
   const radarProg = interpolate(lf, [40, 180], [0, 1], { easing: Easing.out(Easing.cubic), ...cl });
 
   // ── Camera tour stops ──
-  type B7Stop = { k: [number,number,number,number]; ox: number; oy: number; z: number; sect: "kpi"|"pemap"|"xai"|"recs" };
+  type B7Stop = { k: [number,number,number,number]; ox: number; oy: number; z: number; sect: "kpi"|"pemap"|"xai"|"recs"; n: string; title: string; desc: string; calloutPos: "bottom"|"right"|"left"|"top" };
   const b7Stops: B7Stop[] = [
-    { k: [200, 228, 340, 368], ox: 50, oy: 11, z: 1.44, sect: "kpi"   },
-    { k: [368, 396, 520, 548], ox: 19, oy: 55, z: 1.56, sect: "pemap" },
-    { k: [548, 576, 700, 728], ox: 73, oy: 55, z: 1.56, sect: "xai"   },
-    { k: [728, 756, 880, 908], ox: 50, oy: 84, z: 1.44, sect: "recs"  },
+    { k: [200, 228, 340, 368], ox: 50, oy: 15, z: 1.28, sect: "kpi",   n: "①", title: "P×E 預測結果", desc: "結合環境與行為，直接預測留任率與錯配成本。", calloutPos: "bottom" },
+    { k: [368, 396, 520, 548], ox: 24, oy: 54, z: 1.34, sect: "pemap", n: "②", title: "雷達疊合分析", desc: "視覺化比對雙方落差，找出隱藏的摩擦風險點。", calloutPos: "right" },
+    { k: [548, 576, 700, 728], ox: 76, oy: 54, z: 1.34, sect: "xai",   n: "③", title: "行為驅動因子", desc: "XAI 解釋為什麼適合，給予高信心度的背後原因。", calloutPos: "left" },
+    { k: [728, 756, 880, 908], ox: 50, oy: 85, z: 1.28, sect: "recs",  n: "④", title: "專屬管理建議", desc: "直接給主管第一天的具體帶人指南，避免磨合失敗。", calloutPos: "top" },
   ];
   const b7Active = b7Stops.find(s => lf >= s.k[0] && lf < s.k[3]);
-  const camZ  = b7Active
-    ? interpolate(lf, b7Active.k, [1, b7Active.z, b7Active.z, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
-    : 1;
-  const camOx = b7Active ? b7Active.ox : 50;
-  const camOy = b7Active ? b7Active.oy : 50;
+  
+  // Static camera - discard zoom, keep the whole dashboard visible
+  const camZ = 1;
+  const camOx = 50;
+  const camOy = 50;
 
   // Section highlight / dim helpers
   const sOp = (sect: string): number => {
     if (!b7Active) return 1;
     if (b7Active.sect === sect) return 1;
-    return interpolate(lf, [b7Active.k[0], b7Active.k[0] + 22], [1, 0.28], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+    return interpolate(lf, [b7Active.k[0], b7Active.k[0] + 22], [1, 0.28], cl);
   };
   const sRing = (sect: string): string => {
     if (!b7Active || b7Active.sect !== sect) return "none";
-    const p = interpolate(lf, [b7Active.k[0], b7Active.k[0] + 24], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+    const p = interpolate(lf, [b7Active.k[0], b7Active.k[0] + 24], [0, 1], cl);
     return `inset 0 0 0 2.5px rgba(33,81,245,${(p * 0.60).toFixed(2)}), 0 0 0 5px rgba(33,81,245,${(p * 0.09).toFixed(2)})`;
   };
+
+  // Big floating explanation logic
+  const calloutOp = b7Active ? interpolate(lf, [b7Active.k[0] + 6, b7Active.k[0] + 28, b7Active.k[2] - 8, b7Active.k[2] + 12], [0, 1, 1, 0], cl) : 0;
+  const calloutRise = b7Active ? interpolate(lf, [b7Active.k[0] + 6, b7Active.k[0] + 30], [26, 0], { easing: Easing.out(Easing.cubic), ...cl }) : 0;
 
   // Data
   const drivers = [
@@ -1930,6 +1934,31 @@ const B7Tailor: React.FC = () => {
                 </div>
               </div>
             </div>
+
+            {/* ── Explanation Callout Overlay ── */}
+            <AbsoluteFill style={{ zIndex: 30, opacity: calloutOp * m.opacity, pointerEvents: "none" }}>
+              {b7Active && (
+                <div style={{
+                  position: "absolute",
+                  top: b7Active.calloutPos === "bottom" ? "auto" : b7Active.calloutPos === "top" ? "12%" : "50%",
+                  bottom: b7Active.calloutPos === "bottom" ? "10%" : "auto",
+                  left: b7Active.calloutPos === "left" ? "8%" : b7Active.calloutPos === "top" || b7Active.calloutPos === "bottom" ? "50%" : "auto",
+                  right: b7Active.calloutPos === "right" ? "8%" : "auto",
+                  transform: b7Active.calloutPos === "top" || b7Active.calloutPos === "bottom"
+                    ? `translateX(-50%) translateY(${calloutRise}px)`
+                    : `translateY(calc(-50% + ${calloutRise}px))`,
+                  width: 440,
+                  display: "flex", flexDirection: "column", gap: 14,
+                }}>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: ds.fit, color: "#FFF", fontSize: 13, fontFamily: fonts.mono, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>{b7Active.n}</div>
+                    <span style={{ fontSize: 13, fontFamily: fonts.mono, color: ds.fit, letterSpacing: "0.15em", textTransform: "uppercase" as const }}>T · Target</span>
+                  </div>
+                  <div style={{ fontSize: 44, fontWeight: 800, color: ds.fgPrimary, fontFamily: fonts.display, letterSpacing: "-1.5px", lineHeight: 1.1 }}>{b7Active.title}</div>
+                  <div style={{ fontSize: 20, color: ds.fgSecondary, fontFamily: fonts.display, lineHeight: 1.5, letterSpacing: "-0.2px" }}>{b7Active.desc}</div>
+                </div>
+              )}
+            </AbsoluteFill>
           </AbsoluteFill>
         )}
       </AbsoluteFill>
@@ -1941,15 +1970,15 @@ const B7Tailor: React.FC = () => {
 export const S3_DIT: React.FC = () => {
   return (
     <AbsoluteFill>
-      {/* S3 total: 5040f (84s @ 60fps).  Each Sequence overlaps ~24f with previous → crossfade, no flash.
-          B0:372  B2:1284  B3:150  B4:1404(+120 opener)  B5:264  B6:150  B7:1560(+90 opener) */}
+      {/* S3 total: 4800f (80s @ 60fps).  Each Sequence overlaps ~24f with previous → crossfade, no flash.
+          B0:372  B2:1284  B3:150  B4:1104(+120 opener)  B5:264  B6:150  B7:1560(+90 opener) */}
       <Sequence from={0}    durationInFrames={600}  layout="none"><B0Overview /></Sequence>
       <Sequence from={576}  durationInFrames={1284} layout="none"><B2Define /></Sequence>
       <Sequence from={1836} durationInFrames={150}  layout="none"><B3Bridge /></Sequence>
-      <Sequence from={1962} durationInFrames={1464} layout="none"><B4Interact /></Sequence>
-      <Sequence from={3402} durationInFrames={264}  layout="none"><B5Capture /></Sequence>
-      <Sequence from={3642} durationInFrames={150}  layout="none"><B6Bridge /></Sequence>
-      <Sequence from={3768} durationInFrames={1560} layout="none"><B7Tailor /></Sequence>
+      <Sequence from={1962} durationInFrames={1224} layout="none"><B4Interact /></Sequence>
+      <Sequence from={3162} durationInFrames={264}  layout="none"><B5Capture /></Sequence>
+      <Sequence from={3402} durationInFrames={150}  layout="none"><B6Bridge /></Sequence>
+      <Sequence from={3528} durationInFrames={1560} layout="none"><B7Tailor /></Sequence>
     </AbsoluteFill>
   );
 };

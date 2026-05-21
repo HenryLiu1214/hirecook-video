@@ -162,7 +162,7 @@ const StatsTogether: React.FC = () => {
   ];
   return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 34 }}>
     <div style={{ transform: `rotate(${rotZIn(frame, 8, 26, -5)}deg) rotateX(${rotXSettle(frame, 8, 30)}deg)` }}>
-      <TypewriterText text="招募錯誤，直接燒錢" startFrame={8} charStagger={3} fontSize={98} fontWeight={850} letterSpacing="-0.055em" colorScheme="plum-to-pink" />
+      <TypewriterText text="直覺決策的真實代價" startFrame={8} charStagger={3} fontSize={98} fontWeight={850} letterSpacing="-0.055em" colorScheme="plum-to-pink" />
     </div>
     <div style={{ display: "flex", gap: 18 }}>
       {items.map((it, i) => {
@@ -306,9 +306,9 @@ const Hidden: React.FC = () => {
     </div>
     <div style={{ opacity: aboveGroupOp }}>
       <div style={{ position: "absolute", top: 56, left: 92, color: colors.hcBlue, fontFamily: fonts.mono, fontSize: 24, fontWeight: 800, letterSpacing: "0.13em" }}>ABOVE THE WATER</div>
-      {infoCard("履歷包裝", "學歷經歷、工作年資、面試技巧", 28, 150, colors.hcBlueDark, false, 28, 214)}
-      {infoCard("MBTI / 靜態測驗", "Personality label、測驗分數、標準化答案", 84, 344, colors.hcBlue, false, 28, 184)}
-      {infoCard("主管直覺", "「我看人很準」、面試印象、偏好投射", 140, 538, colors.hcWatch, false, 28, 160)}
+      {infoCard("靜態職能", "學歷經歷、專業技能、修飾過的履歷", 28, 150, colors.hcBlueDark, false, 28, 214)}
+      {infoCard("自陳式測驗", "人格標籤、容易被偽裝的標準化答案", 84, 344, colors.hcBlue, false, 28, 184)}
+      {infoCard("主管直覺", "「我看人很準」、基於偏好的主觀印象", 140, 538, colors.hcWatch, false, 28, 160)}
       <div style={{
         position: "absolute",
         left: 804,
@@ -323,9 +323,9 @@ const Hidden: React.FC = () => {
     <div style={{ opacity: bridgeOp, position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", color: "#FFFFFF", fontSize: 128, fontWeight: 900, letterSpacing: "-0.06em", textShadow: "0 24px 80px rgba(0,0,0,0.35)" }}>水面下</div>
     <div style={{ opacity: belowGroupOp }}>
       <div style={{ position: "absolute", top: 56, left: 92, color: colors.hcCyanBright, fontFamily: fonts.mono, fontSize: 24, fontWeight: 800, letterSpacing: "0.13em" }}>BELOW THE WATER</div>
-      {infoCard("P-E Fit", "Personality × Environment 的交互作用", 402, 150, colors.hcCyanBright, true, 402, 196)}
-      {infoCard("壓力反應", "時間壓力、衝突情境、模糊資訊下的選擇", 480, 350, "#FFFFFF", true, 402, 176)}
-      {infoCard("Social Friction", "協作需求與行為傾向產生結構性衝突", 558, 550, colors.hcCyanBright, true, 402, 158)}
+      {infoCard("P-E Fit 動態適配", "個人特質如何適應整個職務與團隊生態", 402, 150, colors.hcCyanBright, true, 402, 196)}
+      {infoCard("行為決策軌跡", "時間壓力、衝突情境與模糊資訊下的反應", 480, 350, "#FFFFFF", true, 402, 176)}
+      {infoCard("社交摩擦", "個人行為傾向與環境協作需求的結構性衝突", 558, 550, colors.hcCyanBright, true, 402, 158)}
       <div style={{
         position: "absolute",
         left: 804,
@@ -335,7 +335,7 @@ const Hidden: React.FC = () => {
         fontSize: 62,
         fontWeight: 900,
         letterSpacing: "-0.055em",
-      }}>留任風險，藏在 P × E 交互作用</div>
+      }}>離職風險的真正來源：社交摩擦</div>
     </div>
   </AbsoluteFill>;
 };

@@ -22,41 +22,24 @@ const Vision: React.FC = () => {
     <AbsoluteFill style={{ opacity, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
       <div style={{ position: "relative", display: "flex", justifyContent: "center", alignItems: "center" }}>
         
-        {/* The SDG Image sliding down */}
+        {/* The SDG Image scaling up */}
         <div style={{ 
-          position: "absolute",
-          transform: `translateY(${imgY}px) scale(0.6)`,
-          opacity: imgOp,
-          zIndex: 1,
-          boxShadow: "0 24px 80px rgba(0,0,0,0.6)",
+          transform: `scale(${interpolate(frame, [10, 40], [0, 1], { easing: Easing.out(Easing.back(1.5)), extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`,
+          boxShadow: "0 24px 80px rgba(8,16,40,0.15)",
           borderRadius: 12,
           overflow: "hidden",
           background: "#FFF",
         }}>
-          <Img src={staticFile("sdg8.png")} style={{ width: 220, height: 220, objectFit: "cover" }} />
-        </div>
-
-        {/* Giant SDG text over top */}
-        <div style={{ 
-          zIndex: 2,
-          transform: `scale(${textScale})`,
-          fontFamily: fonts.display,
-          fontSize: 140,
-          fontWeight: 900,
-          color: colors.pureWhite,
-          letterSpacing: "-0.02em",
-          textShadow: "0 20px 40px rgba(0,0,0,0.5)"
-        }}>
-          SDG 8: DECENT WORK
+          <Img src={staticFile("sdg8.png")} style={{ width: 360, height: 360, objectFit: "cover" }} />
         </div>
 
       </div>
 
       <div style={{ 
-        marginTop: 220,
+        marginTop: 60,
         opacity: interpolate(frame, [80, 100], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
         transform: `translateY(${interpolate(frame, [80, 100], [20, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`,
-        color: colors.hcCyanBright, 
+        color: colors.hcBlue, // Adjusted for light mode 
         fontSize: 42, 
         fontWeight: 700, 
         letterSpacing: "0.05em",
@@ -86,7 +69,7 @@ const BrandCore: React.FC = () => {
         fontFamily: fonts.display, 
         fontSize: 100, 
         fontWeight: 850, 
-        color: colors.pureWhite, 
+        color: colors.hcFgPrimary, // Dark ink 
         opacity: text1Op 
       }}>
         能力決定錄取
@@ -96,9 +79,9 @@ const BrandCore: React.FC = () => {
         fontFamily: fonts.display, 
         fontSize: 110, 
         fontWeight: 900, 
-        color: colors.hcCyanBright, 
+        color: colors.hcBlue, // Dark blue for contrast
         opacity: text2Op,
-        textShadow: `0 0 40px ${colors.hcBlue}`
+        textShadow: `0 10px 40px rgba(33,81,245,0.2)`
       }}>
         性格決定留任
       </div>
@@ -127,16 +110,16 @@ const CTA: React.FC = () => {
       {/* Metric 1 */}
       {frame >= 10 && frame < 170 && (
         <div style={{ position: "absolute", clipPath: m1Clip, opacity: m1Op, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div style={{ fontFamily: fonts.display, fontSize: 40, fontWeight: 700, color: colors.dimWhite, marginBottom: 10 }}>防堵錯配</div>
-          <div style={{ fontFamily: fonts.mono, fontSize: 130, fontWeight: 800, color: colors.pureWhite, fontVariantNumeric: "tabular-nums" }}>回本 6 倍</div>
+          <div style={{ fontFamily: fonts.display, fontSize: 40, fontWeight: 700, color: colors.hcFgMuted, marginBottom: 10 }}>防堵錯配</div>
+          <div style={{ fontFamily: fonts.mono, fontSize: 130, fontWeight: 800, color: colors.hcBlueDark, fontVariantNumeric: "tabular-nums" }}>回本 6 倍</div>
         </div>
       )}
 
       {/* Metric 2 */}
       {frame >= 150 && frame < 290 && (
         <div style={{ position: "absolute", clipPath: m2Clip, opacity: m2Op, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div style={{ fontFamily: fonts.display, fontSize: 40, fontWeight: 700, color: colors.dimWhite, marginBottom: 10 }}>政府專案補助</div>
-          <div style={{ fontFamily: fonts.mono, fontSize: 130, fontWeight: 800, color: colors.hcCyanBright, fontVariantNumeric: "tabular-nums" }}>首年 0 成本</div>
+          <div style={{ fontFamily: fonts.display, fontSize: 40, fontWeight: 700, color: colors.hcFgMuted, marginBottom: 10 }}>政府專案補助</div>
+          <div style={{ fontFamily: fonts.mono, fontSize: 130, fontWeight: 800, color: colors.hcBlue, fontVariantNumeric: "tabular-nums" }}>首年 0 成本</div>
         </div>
       )}
 
@@ -145,20 +128,19 @@ const CTA: React.FC = () => {
         <div style={{ position: "absolute", display: "flex", flexDirection: "column", alignItems: "center", transform: `scale(${finalScale})` }}>
           <div style={{ display: "flex", alignItems: "center", gap: 30, marginBottom: 60 }}>
             <HcLogoMark size={110} />
-            <div style={{ fontFamily: fonts.display, fontSize: 140, fontWeight: 900, color: colors.pureWhite, letterSpacing: "-0.04em" }}>HireCook</div>
+            <div style={{ fontFamily: fonts.display, fontSize: 140, fontWeight: 900, color: colors.hcBlueDark, letterSpacing: "-0.04em" }}>HireCook</div>
           </div>
 
           <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ position: "absolute", width: ripple, height: ripple, borderRadius: "50%", border: `2px solid ${colors.hcCyanBright}`, opacity: rippleOp }} />
+            <div style={{ position: "absolute", width: ripple, height: ripple, borderRadius: "50%", border: `2px solid ${colors.hcCyan}`, opacity: rippleOp }} />
             <div style={{ 
               padding: "24px 60px", 
               borderRadius: 999, 
-              background: colors.hcBlue, 
-              border: `1px solid ${colors.hcCyanBright}`,
+              background: `linear-gradient(135deg, ${colors.hcBlue}, ${colors.hcCyan})`, 
               color: colors.pureWhite, 
               fontSize: 36, 
               fontWeight: 800, 
-              boxShadow: `0 0 30px ${colors.hcBlue}, inset 0 1px 0 rgba(255,255,255,0.2)`,
+              boxShadow: `0 18px 40px rgba(33,81,245,0.3), inset 0 1px 0 rgba(255,255,255,0.3)`,
               fontFamily: fonts.display,
               zIndex: 2
             }}>
@@ -168,7 +150,7 @@ const CTA: React.FC = () => {
           
           <div style={{ 
             opacity: interpolate(frame, [300, 320], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
-            color: colors.dimWhite, 
+            color: colors.hcFgMuted, 
             fontFamily: fonts.mono, 
             fontSize: 16, 
             letterSpacing: "0.15em", 
@@ -186,7 +168,7 @@ const CTA: React.FC = () => {
 export const S5_CTA: React.FC = () => {
   return (
     <AbsoluteFill>
-      <BgCalm theme="dark" tint="blue" />
+      <BgCalm theme="light" tint="blue" />
       <Sequence from={0} durationInFrames={240} layout="none"><Vision /></Sequence>
       <Sequence from={240} durationInFrames={240} layout="none"><BrandCore /></Sequence>
       <Sequence from={480} durationInFrames={372} layout="none"><CTA /></Sequence>

@@ -334,27 +334,32 @@ const MBTIInjection: React.FC = () => {
 const OvercookedPlay: React.FC = () => {
   const frame = useCurrentFrame();
   const cover = interpolate(frame, [0, 72], [1, 0], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const playsPunch = interpolate(frame, [84, 106, 128], [0.92, 1.08, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const pressurePunch = interpolate(frame, [136, 158, 180], [0.90, 1.08, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const scanY = interpolate(frame, [190, 382], [0, 226], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const frameDraw = interpolate(frame, [118, 292], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const traceDraw = interpolate(frame, [430, 510], [0, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const tags = [
     { en: "TIME PRESSURE", zh: "倒數壓力", c: colors.hcCyanBright },
     { en: "ROLE HANDOFF", zh: "角色交接", c: colors.hcBlue },
     { en: "RESOURCE CONFLICT", zh: "資源衝突", c: colors.hcRisk },
   ];
   return <AbsoluteFill style={{ overflow: "hidden", background: "#F7F8FB" }}>
-    <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 72% 46%, rgba(111,227,245,0.16), transparent 38%), linear-gradient(112deg, #071D32 0%, #0D1430 39%, #F7F8FB 39.2%, #EEF4FF 100%)" }} />
+    <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 71% 46%, rgba(111,227,245,0.18), transparent 36%), linear-gradient(112deg, #071D32 0%, #0D1430 39%, #F7F8FB 39.2%, #EEF4FF 100%)" }} />
     <div style={{ position: "absolute", inset: 0, opacity: 0.16, backgroundImage: "radial-gradient(circle, rgba(111,227,245,0.42) 1px, transparent 1px)", backgroundSize: "34px 34px" }} />
 
-    <div style={{ position: "absolute", left: 72, top: 90, width: 610, opacity: interpolate(frame, [540, 590], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+    <div style={{ position: "absolute", left: 70, top: 92, width: 580, opacity: interpolate(frame, [540, 590], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
       <div style={{ color: colors.hcCyanBright, fontFamily: fonts.mono, fontSize: 25, fontWeight: 900, letterSpacing: "0.22em" }}>AI AGENT</div>
-      <div style={{ marginTop: 18, color: "#FFFFFF", fontSize: 132, fontWeight: 950, letterSpacing: "-0.085em", lineHeight: 0.80 }}>PLAYS</div>
-      <div style={{ color: colors.hcCyanBright, fontSize: 122, fontWeight: 950, letterSpacing: "-0.085em", lineHeight: 0.80 }}>PRESSURE</div>
-      <div style={{ marginTop: 30, color: colors.dimWhite, fontSize: 37, fontWeight: 800, lineHeight: 1.14, letterSpacing: "-0.04em" }}>遊戲行為<br />轉成可建模訊號</div>
-      <div style={{ marginTop: 38, display: "flex", alignItems: "center", gap: 14, color: colors.dimWhite, fontFamily: fonts.mono, fontSize: 20, fontWeight: 850, letterSpacing: "0.12em" }}>
+      <div style={{ marginTop: 18, color: "#FFFFFF", fontSize: 124, fontWeight: 950, letterSpacing: "-0.078em", lineHeight: 0.82, transform: `scale(${playsPunch})`, transformOrigin: "left center", textShadow: `0 0 ${interpolate(frame, [84, 108, 150], [0, 34, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px rgba(255,255,255,0.42)` }}>PLAYS</div>
+      <div style={{ color: colors.hcCyanBright, fontSize: 114, fontWeight: 950, letterSpacing: "-0.078em", lineHeight: 0.82, transform: `scale(${pressurePunch})`, transformOrigin: "left center", textShadow: `0 0 ${interpolate(frame, [136, 160, 204], [0, 40, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px rgba(111,227,245,0.55)` }}>PRESSURE</div>
+      <div style={{ marginTop: 30, color: colors.dimWhite, fontSize: 35, fontWeight: 820, lineHeight: 1.16, letterSpacing: "-0.04em" }}>遊戲行為<br />轉成可建模訊號</div>
+      <div style={{ marginTop: 40, display: "flex", alignItems: "center", gap: 14, color: colors.dimWhite, fontFamily: fonts.mono, fontSize: 19, fontWeight: 850, letterSpacing: "0.13em" }}>
         <span style={{ width: 120, height: 2, background: `linear-gradient(90deg, ${colors.hcCyanBright}, transparent)`, boxShadow: "0 0 22px rgba(111,227,245,0.42)" }} />
         WORK-SIM SIGNALS
       </div>
     </div>
 
-    <div style={{ position: "absolute", right: 82, top: 138, width: 1110, height: 694, borderRadius: 28, overflow: "hidden", background: "#FFFFFF", border: "1px solid rgba(111,227,245,0.22)", boxShadow: "0 34px 100px rgba(5,7,12,0.26)" }}>
+    <div style={{ position: "absolute", right: 94, top: 148, width: 1080, height: 675, borderRadius: 26, overflow: "hidden", background: "#FFFFFF", border: "1px solid rgba(111,227,245,0.24)", boxShadow: "0 34px 100px rgba(5,7,12,0.24)" }}>
       <Video
         src={staticFile("overcooked-worksim.mp4")}
         muted
@@ -368,21 +373,32 @@ const OvercookedPlay: React.FC = () => {
         }}
       />
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, rgba(5,7,12,0.18) 0%, transparent 22%, transparent 76%, rgba(5,7,12,0.10) 100%)" }} />
+      <svg width="1080" height="675" viewBox="0 0 1080 675" style={{ position: "absolute", inset: 0, overflow: "visible", pointerEvents: "none" }}>
+        <path d="M 26 2 H 1054 Q 1078 2 1078 26 V 649 Q 1078 673 1054 673 H 26 Q 2 673 2 649 V 26 Q 2 2 26 2" fill="none" stroke={colors.hcCyanBright} strokeWidth={3} strokeLinecap="round" strokeDasharray="3440" strokeDashoffset={3440 * (1 - frameDraw)} opacity={0.70} filter="drop-shadow(0 0 18px rgba(111,227,245,0.58))" />
+      </svg>
     </div>
 
-    <div style={{ position: "absolute", left: 74, bottom: 132, width: 600, height: 226, opacity: interpolate(frame, [540, 590], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+    <div style={{ position: "absolute", left: 72, bottom: 124, width: 530, height: 244, opacity: interpolate(frame, [540, 590], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
       {tags.map((tag) => {
-        return <div key={tag.en} style={{ position: "absolute", left: 0, top: tags.indexOf(tag) * 72, display: "grid", gridTemplateColumns: "22px 1fr", columnGap: 16, alignItems: "center" }}>
-          <div style={{ width: 11, height: 11, borderRadius: "50%", background: tag.c, boxShadow: `0 0 24px ${tag.c}` }} />
+        const i = tags.indexOf(tag);
+        const glow = interpolate(frame, [190 + i * 42, 218 + i * 42, 250 + i * 42], [0, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+        return <div key={tag.en} style={{ position: "absolute", left: 0, top: i * 76, width: 452, padding: "9px 0 10px 0", display: "grid", gridTemplateColumns: "20px 1fr", columnGap: 16, alignItems: "center", borderBottom: "1px solid rgba(111,227,245,0.12)", filter: `brightness(${1 + glow * 0.45})` }}>
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: tag.c, boxShadow: `0 0 24px ${tag.c}` }} />
           <div>
-            <div style={{ color: tag.c, fontFamily: fonts.mono, fontSize: 28, fontWeight: 900, letterSpacing: "0.04em" }}>{tag.en}</div>
-            <div style={{ marginTop: 4, color: "#FFFFFF", fontSize: 25, fontWeight: 780 }}>{tag.zh}</div>
+            <div style={{ color: tag.c, fontFamily: fonts.mono, fontSize: 25, fontWeight: 900, letterSpacing: "0.035em" }}>{tag.en}</div>
+            <div style={{ marginTop: 4, color: "#FFFFFF", fontSize: 25, fontWeight: 800, letterSpacing: "-0.02em" }}>{tag.zh}</div>
           </div>
         </div>;
       })}
+      <div style={{ position: "absolute", left: -12, top: scanY, width: 476, height: 2, opacity: interpolate(frame, [188, 210, 382, 406], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), background: `linear-gradient(90deg, transparent, ${colors.hcCyanBright}, transparent)`, boxShadow: "0 0 26px rgba(111,227,245,0.70)" }} />
     </div>
 
-    <div style={{ position: "absolute", left: 74, bottom: 64, opacity: interpolate(frame, [470, 510, 576, 600], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), color: colors.hcCyanBright, fontFamily: fonts.mono, fontSize: 28, fontWeight: 900, letterSpacing: "0.10em", textShadow: "0 0 28px rgba(111,227,245,0.36)" }}>
+    <svg width="1920" height="1080" viewBox="0 0 1920 1080" style={{ position: "absolute", inset: 0, overflow: "visible", pointerEvents: "none", opacity: interpolate(frame, [430, 456, 540, 580], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+      <path d="M 788 834 C 648 880, 468 922, 284 994" fill="none" stroke={colors.hcCyanBright} strokeWidth={3} strokeLinecap="round" strokeDasharray="620" strokeDashoffset={620 * (1 - traceDraw)} opacity={0.66} filter="drop-shadow(0 0 16px rgba(111,227,245,0.52))" />
+      <circle cx={788} cy={834} r={7} fill={colors.hcCyanBright} opacity={traceDraw} filter="drop-shadow(0 0 18px rgba(111,227,245,0.75))" />
+    </svg>
+
+    <div style={{ position: "absolute", left: 72, bottom: 62, opacity: interpolate(frame, [470, 510, 576, 600], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), color: colors.hcCyanBright, fontFamily: fonts.mono, fontSize: 28, fontWeight: 900, letterSpacing: "0.10em", textShadow: "0 0 28px rgba(111,227,245,0.36)" }}>
       TRACE CAPTURED →
     </div>
 

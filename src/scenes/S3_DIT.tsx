@@ -1102,7 +1102,8 @@ const SJTCard: React.FC<{
   totalQ: string;
   floatOffset: number;
   focusKey?: string;        // "scenario" | "options" | "selected" | "none"
-}> = ({ questionNum, tag, scenario, prompt, options, selectedLetter, revealStart, clickFrame, localFrame, progressPct, totalQ, floatOffset, focusKey = "none" }) => {
+  hoverLetter?: string | null;
+}> = ({ questionNum, tag, scenario, prompt, options, selectedLetter, revealStart, clickFrame, localFrame, progressPct, totalQ, floatOffset, focusKey = "none", hoverLetter = null }) => {
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
   const cardOp = interpolate(localFrame, [0, 14], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const cardSc = interpolate(localFrame, [0, 16], [0.93, 1], {
@@ -1161,6 +1162,7 @@ const SJTCard: React.FC<{
           const revF = revealStart + i * 14;
           const optOp = interpolate(localFrame, [revF, revF + 14], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
           const selected = opt.letter === selectedLetter;
+          const hovered = !selected && opt.letter === hoverLetter;
           const pop = selected
             ? interpolate(localFrame, [clickFrame, clickFrame + 4, clickFrame + 12], [1, 1.024, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
             : 1;
@@ -1175,9 +1177,9 @@ const SJTCard: React.FC<{
             <div key={opt.letter} style={{
               opacity: optOp * dimUnchosen, transform: `scale(${pop})`,
               display: "flex", alignItems: "center", gap: 14, padding: "15px 18px", borderRadius: 10,
-              background: selected ? "rgba(33,81,245,0.18)" : "rgba(255,255,255,0.03)",
-              border: `1.5px solid ${selected ? "#2151F5AA" : "rgba(255,255,255,0.06)"}`,
-              boxShadow: selected ? "0 0 0 3px rgba(33,81,245,0.10)" : "none",
+              background: selected ? "rgba(33,81,245,0.18)" : hovered ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.03)",
+              border: `1.5px solid ${selected ? "#2151F5AA" : hovered ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.06)"}`,
+              boxShadow: selected ? "0 0 0 3px rgba(33,81,245,0.10)" : hovered ? "0 0 0 1px rgba(255,255,255,0.07)" : "none",
               position: "relative" as const, overflow: "hidden" as const,
             }}>
               {selected && (
@@ -1322,55 +1324,55 @@ const B4Interact: React.FC = () => {
 
 
       <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform }}>
-        {/* Q1 + Q2 — wrapped in B2-style camera zoom ── */}
+        {/* Q1 + Q2 */}
         {(showQ1 || showQ2) && (
           <AbsoluteFill style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ transformOrigin: `${b4Ox}% ${b4Oy}%`, transform: `scale(${b4Zoom})` }}>
-              {showQ1 && (
-                <div style={{ transform: `translateX(${q1ExitX}px)`, opacity: q1ExitOp }}>
-                <SJTCard
-                  questionNum="07" totalQ="15" tag="情境 07 · 廚房 · 截止日碰撞"
-                  scenario="你負責備餐，傳菜員已在出餐口等待。配菜那端的隊友突然發現食材不夠，開始重備，但沒有開口說。廚師長正在計時，三分鐘後這桌就超時了。"
-                  prompt="你第一個動作是——"
-                  options={[
-                    { letter: "A", text: "直接接手配菜工作，自己同時備兩個位置。" },
-                    { letter: "B", text: "大聲告訴隊友食材不夠，請他去通知廚師長。" },
-                    { letter: "C", text: "先出一個可以先上的菜穩住桌況，配菜再想辦法。" },
-                    { letter: "D", text: "向廚師長報告有問題，請他決定怎麼調度。" },
-                  ]}
-                  selectedLetter={q1selected}
-                  revealStart={70}
-                  clickFrame={400}
-                  localFrame={q1LocalFrame}
-                  progressPct={46}
-                  floatOffset={floatA}
-                  focusKey={focusStage.key}
-                />
-                </div>
-              )}
-              {showQ2 && (
-                <div style={{ transform: `translateX(${q2EnterX}px)` }}>
-                <SJTCard
-                  questionNum="08" totalQ="15" tag="情境 08 · 遠端會議 · 技術分歧"
-                  scenario="你在跨時區的視訊設計評審中，提出的架構方案遭到資深工程師當場否決，理由簡短且缺乏解釋。其他人保持沉默，主持人正準備繼續下一議題。"
-                  prompt="你會——"
-                  options={[
-                    { letter: "A", text: "接受否決，先記下來會後私下溝通。" },
-                    { letter: "B", text: "當下禮貌請對方說明具體技術顧慮。" },
-                    { letter: "C", text: "提議先暫停議程，開個小組釐清分歧。" },
-                    { letter: "D", text: "調整方案，提出折衷版本讓討論繼續。" },
-                  ]}
-                  selectedLetter={q2selected}
-                  revealStart={10}
-                  clickFrame={160}
-                  localFrame={q2LocalFrame}
-                  progressPct={53}
-                  floatOffset={floatY(t, 0.74, 8, 0.5)}
-                  focusKey={focusStage.key}
-                />
-                </div>
-              )}
-            </div>
+            {showQ1 && (
+              <div style={{ transform: `translateX(${q1ExitX}px) scale(${q1ExitSc})`, opacity: q1ExitOp }}>
+              <SJTCard
+                questionNum="07" totalQ="15" tag="情境 07 · 廚房 · 截止日碰撞"
+                scenario="你負責備餐，傳菜員已在出餐口等待。配菜那端的隊友突然發現食材不夠，開始重備，但沒有開口說。廚師長正在計時，三分鐘後這桌就超時了。"
+                prompt="你第一個動作是——"
+                options={[
+                  { letter: "A", text: "直接接手配菜工作，自己同時備兩個位置。" },
+                  { letter: "B", text: "大聲告訴隊友食材不夠，請他去通知廚師長。" },
+                  { letter: "C", text: "先出一個可以先上的菜穩住桌況，配菜再想辦法。" },
+                  { letter: "D", text: "向廚師長報告有問題，請他決定怎麼調度。" },
+                ]}
+                selectedLetter={q1selected}
+                revealStart={70}
+                clickFrame={400}
+                localFrame={q1LocalFrame}
+                progressPct={46}
+                floatOffset={floatA}
+                focusKey={focusStage.key}
+                hoverLetter={q1HoverLetter}
+              />
+              </div>
+            )}
+            {showQ2 && (
+              <div style={{ transform: `translateX(${q2EnterX}px) scale(${q2EnterSc})`, opacity: q2EnterOp }}>
+              <SJTCard
+                questionNum="08" totalQ="15" tag="情境 08 · 遠端會議 · 技術分歧"
+                scenario="你在跨時區的視訊設計評審中，提出的架構方案遭到資深工程師當場否決，理由簡短且缺乏解釋。其他人保持沉默，主持人正準備繼續下一議題。"
+                prompt="你會——"
+                options={[
+                  { letter: "A", text: "接受否決，先記下來會後私下溝通。" },
+                  { letter: "B", text: "當下禮貌請對方說明具體技術顧慮。" },
+                  { letter: "C", text: "提議先暫停議程，開個小組釐清分歧。" },
+                  { letter: "D", text: "調整方案，提出折衷版本讓討論繼續。" },
+                ]}
+                selectedLetter={q2selected}
+                revealStart={10}
+                clickFrame={160}
+                localFrame={q2LocalFrame}
+                progressPct={53}
+                floatOffset={floatY(t, 0.74, 8, 0.5)}
+                focusKey={focusStage.key}
+                hoverLetter={q2HoverLetter}
+              />
+              </div>
+            )}
           </AbsoluteFill>
         )}
 
@@ -1647,65 +1649,79 @@ const B7TailorTerminal: React.FC<{ lf: number }> = ({ lf }) => {
 
 const B7Tailor: React.FC = () => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const t = frame / fps;
   const m = momentAnim(frame, 0, 8, 1548, 1560);
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
-  // Phase 0: T·TARGET opener (0–90f)
-  // Phase A: terminal (90–450f)
-  // Phase B: playbook (450f+)
+  // Phase gates
   const showOpener   = frame < 90;
   const showTerminal = frame >= 90 && frame < 450;
-  const terminalLF   = Math.max(0, frame - 90);   // local frame for terminal (0-based)
-  const playbookLocalFrame = Math.max(0, frame - 450);
+  const terminalLF   = Math.max(0, frame - 90);
+  const lf = Math.max(0, frame - 450); // playbook local frame
 
-  const lf = playbookLocalFrame; // shorthand — local frame within the playbook phase
+  // ── Opener ──
+  const openerOp = interpolate(frame, [0, 12, 76, 90], [0, 1, 1, 0], cl);
+  const opBigSc  = interpolate(frame, [10, 32], [0.2, 1], { easing: Easing.out(Easing.back(1.4)), ...cl });
+  const opBigOp  = interpolate(frame, [10, 24], [0, 1], cl);
+  const opSubOp  = interpolate(frame, [36, 52], [0, 1], cl);
+  const opSubY   = interpolate(frame, [36, 54], [18, 0], { easing: Easing.out(Easing.cubic), ...cl });
 
-  // Opener animations
-  const openerOp  = interpolate(frame, [0, 12, 76, 90], [0, 1, 1, 0], cl);
-  const opBigSc   = interpolate(frame, [10, 32], [0.2, 1], { easing: Easing.out(Easing.back(1.4)), ...cl });
-  const opBigOp   = interpolate(frame, [10, 24], [0, 1], cl);
-  const opSubOp   = interpolate(frame, [36, 52], [0, 1], cl);
-  const opSubY    = interpolate(frame, [36, 54], [18, 0], { easing: Easing.out(Easing.cubic), ...cl });
-  const peProg = interpolate(lf, [100, 240], [0, 1], {
-    easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
-  const headerOp = interpolate(lf, [0, 13], [0, 1], {
-    easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
+  // ── Dashboard reveal ──
+  const dashOp = interpolate(lf, [0, 28], [0, 1], { easing: Easing.out(Easing.cubic), ...cl });
+  const dashY  = interpolate(lf, [0, 32], [28, 0], { easing: Easing.out(Easing.cubic), ...cl });
 
-  // ── Playbook region focus pass (after everything reveals, lf ≈ 290+) ──
-  // Each region brightens in its window, dims otherwise; all restore at the end.
-  const fOpts = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
-  const dimKpi   = interpolate(lf, [410, 432, 878, 900], [1, 0.4, 0.4, 1], fOpts);
-  const dimPemap = interpolate(lf, [300, 322, 440, 462, 600, 622, 878, 900], [1, 0.4, 0.4, 1, 1, 0.4, 0.4, 1], fOpts);
-  const dimXai   = interpolate(lf, [300, 322, 600, 622, 740, 762, 878, 900], [1, 0.4, 0.4, 1, 1, 0.4, 0.4, 1], fOpts);
-  const dimRecs  = interpolate(lf, [300, 322, 740, 762], [1, 0.4, 0.4, 1], fOpts);
-  const glowKpi   = lf >= 300 && lf < 440;
-  const glowPemap = lf >= 440 && lf < 600;
-  const glowXai   = lf >= 600 && lf < 740;
-  const glowRecs  = lf >= 740 && lf < 880;
-  const greenRing = (on: boolean) => on ? "0 0 0 2px rgba(27,122,77,0.45), 0 0 30px rgba(27,122,77,0.18)" : "0 4px 24px rgba(8,16,40,0.06)";
-  const pbCallout = lf < 300 ? null
-    : lf < 440 ? { n: "①", title: "三個關鍵預測", desc: "適配分數、留任率、成本節省，一眼看完。" }
-    : lf < 600 ? { n: "②", title: "P × E 疊合圖", desc: "人格輪廓與環境需求的吻合程度。" }
-    : lf < 740 ? { n: "③", title: "可解釋驅動因子", desc: "不是黑箱分數——告訴你為什麼適配。" }
-    : lf < 880 ? { n: "④", title: "可執行管理建議", desc: "主管拿到就能用的前 90 天行動指南。" }
-    : null;
-  const pbCalloutOp = pbCallout
-    ? interpolate(lf, [
-        (lf < 440 ? 300 : lf < 600 ? 440 : lf < 740 ? 600 : 740),
-        (lf < 440 ? 320 : lf < 600 ? 460 : lf < 740 ? 620 : 760),
-      ] as [number, number], [0, 1], fOpts)
-    : 0;
+  // KPI counters
+  const fitScore = interpolate(lf, [10, 120], [0, 88.5], { easing: Easing.out(Easing.cubic), ...cl });
+  const retPct   = interpolate(lf, [20, 132], [0, 84], { easing: Easing.out(Easing.cubic), ...cl });
+  const costVal  = interpolate(lf, [32, 144], [0, 22], { easing: Easing.out(Easing.cubic), ...cl });
+  const radarProg = interpolate(lf, [40, 180], [0, 1], { easing: Easing.out(Easing.cubic), ...cl });
+
+  // ── Camera tour stops ──
+  type B7Stop = { k: [number,number,number,number]; ox: number; oy: number; z: number; sect: "kpi"|"pemap"|"xai"|"recs" };
+  const b7Stops: B7Stop[] = [
+    { k: [200, 228, 340, 368], ox: 50, oy: 11, z: 1.44, sect: "kpi"   },
+    { k: [368, 396, 520, 548], ox: 19, oy: 55, z: 1.56, sect: "pemap" },
+    { k: [548, 576, 700, 728], ox: 73, oy: 55, z: 1.56, sect: "xai"   },
+    { k: [728, 756, 880, 908], ox: 50, oy: 84, z: 1.44, sect: "recs"  },
+  ];
+  const b7Active = b7Stops.find(s => lf >= s.k[0] && lf < s.k[3]);
+  const camZ  = b7Active
+    ? interpolate(lf, b7Active.k, [1, b7Active.z, b7Active.z, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
+    : 1;
+  const camOx = b7Active ? b7Active.ox : 50;
+  const camOy = b7Active ? b7Active.oy : 50;
+
+  // Section highlight / dim helpers
+  const sOp = (sect: string): number => {
+    if (!b7Active) return 1;
+    if (b7Active.sect === sect) return 1;
+    return interpolate(lf, [b7Active.k[0], b7Active.k[0] + 22], [1, 0.28], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  };
+  const sRing = (sect: string): string => {
+    if (!b7Active || b7Active.sect !== sect) return "none";
+    const p = interpolate(lf, [b7Active.k[0], b7Active.k[0] + 24], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+    return `inset 0 0 0 2.5px rgba(33,81,245,${(p * 0.60).toFixed(2)}), 0 0 0 5px rgba(33,81,245,${(p * 0.09).toFixed(2)})`;
+  };
+
+  // Data
+  const drivers = [
+    { label: "決策自主性",   score: 94, desc: "在高壓情境下獨立決策，優於基準組 22%",    top: true  },
+    { label: "高協作密度",   score: 88, desc: "高頻協作環境下效能顯著提升",             top: false },
+    { label: "快速節奏適應", score: 85, desc: "時間壓力下維持穩定決策品質",             top: false },
+    { label: "衝突直接處理", score: 79, desc: "面對分歧直接表達，適合開放討論文化",     top: false },
+    { label: "模糊容忍度",   score: 73, desc: "可接受非結構任務，但需明確最終目標",     top: false },
+  ];
+  const recs = [
+    { n: "01", text: "設定清晰自主邊界，避免過度微觀管理", detail: "此人決策自主性強——限制空間反而降低效能" },
+    { n: "02", text: "多任務超載時提前介入",               detail: "壓力臨界點明確：同時處理 3+ 任務時留意品質" },
+    { n: "03", text: "動機誘因：自主探索 + 清晰成果邊界", detail: "內部驅動型——外部物質激勵效果有限" },
+  ];
 
   return (
     <AbsoluteFill>
-      <BgCalm theme="dark" tint={(showOpener || showTerminal || lf < 670) ? "blue" : "green"} />
+      <BgCalm theme={!showOpener && !showTerminal ? "light" : "dark"} tint={!showOpener && !showTerminal ? "blue" : "blue"} />
       <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform }}>
 
-        {/* ── Phase 0: T·TARGET cinematic opener (0–90f) ── */}
+        {/* ── Phase 0: T·TARGET opener ── */}
         {showOpener && (
           <AbsoluteFill style={{ opacity: openerOp, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 0 }}>
             <div style={{ position: "absolute", fontSize: 560, fontWeight: 900, fontFamily: fonts.mono, color: ds.fit, opacity: 0.05, lineHeight: 1, letterSpacing: "-24px", userSelect: "none" as const }}>T</div>
@@ -1720,14 +1736,10 @@ const B7Tailor: React.FC = () => {
           </AbsoluteFill>
         )}
 
-        {/* ── Phase A: terminal (90–450f) ── */}
+        {/* ── Phase A: terminal ── */}
         {showTerminal && (
           <>
-            <div style={{
-              position: "absolute", top: 70, left: 0, right: 0, zIndex: 6,
-              display: "flex", flexDirection: "column", alignItems: "center", gap: 11,
-              opacity: interpolate(terminalLF, [0, 15], [0, 1], cl),
-            }}>
+            <div style={{ position: "absolute", top: 70, left: 0, right: 0, zIndex: 6, display: "flex", flexDirection: "column", alignItems: "center", gap: 11, opacity: interpolate(terminalLF, [0, 15], [0, 1], cl) }}>
               <div style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(0,180,216,0.35)", background: "rgba(0,180,216,0.07)" }}>
                 <span style={{ width: 6, height: 6, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 ${4 + 5 * (0.5 + 0.5 * Math.sin(frame * 0.18))}px ${ds.cyan}` }} />
                 <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#6FE3F5", letterSpacing: "0.18em" }}>T · TARGET — AI 生成中</span>
@@ -1741,130 +1753,145 @@ const B7Tailor: React.FC = () => {
           </>
         )}
 
-        {/* ── Phase B: cinematic playbook beats ── */}
-        {!showTerminal && (
-          <AbsoluteFill>
-            {/* Candidate eyebrow — persists across all beats */}
-            <div style={{
-              position: "absolute", top: 52, left: 0, right: 0, zIndex: 5,
-              display: "flex", justifyContent: "center",
-              opacity: interpolate(lf, [14, 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
-            }}>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.14)", background: "rgba(255,255,255,0.05)" }}>
-                <div style={{ width: 5, height: 5, borderRadius: "50%", background: ds.fit, boxShadow: `0 0 8px ${ds.fit}` }} />
-                <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "rgba(255,255,255,0.45)", letterSpacing: "0.14em" }}>TAT PLAYBOOK · CHD-047 · 陳威宇 · 後端工程師 L3</span>
+        {/* ── Phase B: Full HC dashboard + camera tour ── */}
+        {!showOpener && !showTerminal && (
+          <AbsoluteFill style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            {/* Camera zoom wrapper */}
+            <div style={{ transformOrigin: `${camOx}% ${camOy}%`, transform: `scale(${camZ})` }}>
+              {/* Dashboard shell */}
+              <div style={{
+                width: 1680, borderRadius: 16, overflow: "hidden" as const,
+                background: "#FFFFFF",
+                boxShadow: "0 24px 80px rgba(8,16,40,0.11), 0 1px 0 rgba(8,16,40,0.06)",
+                opacity: dashOp, transform: `translateY(${dashY}px)`,
+                display: "flex", flexDirection: "column" as const,
+              }}>
+
+                {/* ── Header ───────────────────────────────────── */}
+                <div style={{ height: 52, padding: "0 24px", display: "flex", alignItems: "center", gap: 12, borderBottom: "1px solid rgba(8,16,40,0.06)", flexShrink: 0 }}>
+                  <div style={{ width: 26, height: 26, borderRadius: 6, background: "linear-gradient(135deg,#1430A0,#2151F5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: 10, fontFamily: fonts.mono, fontWeight: 700, color: "#FFF" }}>HC</span>
+                  </div>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display }}>HireCook</span>
+                  <div style={{ width: 1, height: 16, background: "rgba(8,16,40,0.08)", margin: "0 2px" }} />
+                  <span style={{ fontSize: 12, color: ds.fgMuted, fontFamily: fonts.mono }}>後端工程師 L3 · Aurora Robotics</span>
+                  <div style={{ width: 1, height: 16, background: "rgba(8,16,40,0.08)", margin: "0 2px" }} />
+                  <span style={{ fontSize: 13, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display }}>陳威宇</span>
+                  <span style={{ fontSize: 11, color: ds.fgFaint, fontFamily: fonts.mono, marginLeft: 2 }}>#CHD-047</span>
+                  <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
+                    <div style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "3px 10px", borderRadius: 5, background: "#E6F5EC", border: "1px solid rgba(27,122,77,0.22)" }}>
+                      <div style={{ width: 5, height: 5, borderRadius: "50%", background: ds.fit }} />
+                      <span style={{ fontSize: 11, fontWeight: 600, color: "#146F3E", fontFamily: fonts.mono }}>適配</span>
+                    </div>
+                    <div style={{ padding: "3px 12px", borderRadius: 5, border: "1px solid rgba(8,16,40,0.08)", fontSize: 11, color: ds.fgMuted, fontFamily: fonts.mono }}>匯出報告</div>
+                    <div style={{ padding: "3px 12px", borderRadius: 5, background: ds.blue, fontSize: 11, fontWeight: 600, color: "#FFF", fontFamily: fonts.mono }}>指派面試官</div>
+                  </div>
+                </div>
+
+                {/* ── KPI row ─────────────────────────────────── */}
+                <div style={{ display: "flex", borderBottom: "1px solid rgba(8,16,40,0.06)", flexShrink: 0, opacity: sOp("kpi"), boxShadow: sRing("kpi") }}>
+                  {/* Fit Score */}
+                  <div style={{ flex: 1, padding: "18px 24px", borderRight: "1px solid rgba(8,16,40,0.06)", position: "relative" as const }}>
+                    <div style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, background: ds.fit, borderRadius: "0 2px 2px 0" }} />
+                    <div style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.fgFaint, letterSpacing: "0.08em", marginBottom: 5 }}>P×E 適配分數</div>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 3 }}>
+                      <span style={{ fontSize: 44, fontFamily: fonts.mono, fontWeight: 800, color: ds.fit, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{fitScore.toFixed(1)}</span>
+                      <span style={{ fontSize: 16, fontFamily: fonts.mono, color: ds.fgFaint }}>/100</span>
+                    </div>
+                    <div style={{ marginTop: 5, fontSize: 11, color: "#146F3E", fontFamily: fonts.mono }}>↑ 高出基準組 +18.2 分</div>
+                  </div>
+                  {/* Retention */}
+                  <div style={{ flex: 1, padding: "18px 24px", borderRight: "1px solid rgba(8,16,40,0.06)", position: "relative" as const }}>
+                    <div style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, background: ds.blue, borderRadius: "0 2px 2px 0" }} />
+                    <div style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.fgFaint, letterSpacing: "0.08em", marginBottom: 5 }}>6 個月留任率預測</div>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 3 }}>
+                      <span style={{ fontSize: 44, fontFamily: fonts.mono, fontWeight: 800, color: ds.fgPrimary, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{Math.round(retPct)}</span>
+                      <span style={{ fontSize: 16, fontFamily: fonts.mono, color: ds.fgFaint }}>%</span>
+                    </div>
+                    <div style={{ marginTop: 5, fontSize: 11, color: ds.blue, fontFamily: fonts.mono }}>對照基準 65.4% · ↑ +18.6pp</div>
+                  </div>
+                  {/* Cost */}
+                  <div style={{ flex: 1, padding: "18px 24px", position: "relative" as const }}>
+                    <div style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, background: ds.cyan, borderRadius: "0 2px 2px 0" }} />
+                    <div style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.fgFaint, letterSpacing: "0.08em", marginBottom: 5 }}>錯配成本節省（預期）</div>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 3 }}>
+                      <span style={{ fontSize: 20, fontFamily: fonts.mono, color: ds.fgFaint, alignSelf: "flex-end", marginBottom: 5 }}>NT$</span>
+                      <span style={{ fontSize: 44, fontFamily: fonts.mono, fontWeight: 800, color: ds.fgPrimary, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{Math.round(costVal)}</span>
+                      <span style={{ fontSize: 20, fontFamily: fonts.mono, color: ds.fgFaint }}>萬</span>
+                    </div>
+                    <div style={{ marginTop: 5, fontSize: 11, color: ds.fgMuted, fontFamily: fonts.mono }}>基於歷史錯配率 × 重招成本模型</div>
+                  </div>
+                </div>
+
+                {/* ── Middle row: P×E map + XAI drivers ──────── */}
+                <div style={{ display: "flex", flex: 1, minHeight: 360, overflow: "hidden" as const }}>
+                  {/* P×E radar */}
+                  <div style={{ width: "38%", padding: "22px 24px", borderRight: "1px solid rgba(8,16,40,0.06)", display: "flex", flexDirection: "column" as const, gap: 12, opacity: sOp("pemap"), boxShadow: sRing("pemap") }}>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display }}>P × E 人格環境疊合</div>
+                      <div style={{ fontSize: 11, color: ds.fgMuted, fontFamily: fonts.mono, marginTop: 2 }}>高度吻合 · 適配信心 92%</div>
+                    </div>
+                    <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <PEMapRadar size={270} pVals={pVals} eVals={eVals} prog={radarProg} />
+                    </div>
+                    <div style={{ display: "flex", gap: 18 }}>
+                      {[{ color: ds.cyan, label: "P · 人格向量" }, { color: ds.blue, label: "E · 環境模型" }].map((leg) => (
+                        <div key={leg.label} style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                          <div style={{ width: 18, height: 2.5, background: leg.color, borderRadius: 2 }} />
+                          <span style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.fgMuted }}>{leg.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* XAI drivers */}
+                  <div style={{ flex: 1, padding: "22px 24px", display: "flex", flexDirection: "column" as const, opacity: sOp("xai"), boxShadow: sRing("xai") }}>
+                    <div style={{ marginBottom: 14 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display }}>行為驅動因子解析</div>
+                      <div style={{ fontSize: 11, color: ds.fgMuted, fontFamily: fonts.mono, marginTop: 2 }}>XAI 可解釋因子 · 驅動本次適配評估</div>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" as const, flex: 1, justifyContent: "space-between" }}>
+                      {drivers.map((d, i) => {
+                        const dOp  = interpolate(lf, [60 + i * 12, 76 + i * 12], [0, 1], cl);
+                        const barW = interpolate(lf, [82 + i * 12, 170 + i * 12], [0, d.score], { easing: Easing.out(Easing.cubic), ...cl });
+                        return (
+                          <div key={d.label} style={{ opacity: dOp, padding: "8px 0", borderBottom: i < drivers.length - 1 ? "1px solid rgba(8,16,40,0.06)" : "none", display: "flex", gap: 14, alignItems: "center" }}>
+                            <div style={{ width: 110, flexShrink: 0 }}>
+                              <div style={{ fontSize: 12, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display, marginBottom: 5 }}>{d.label}</div>
+                              <div style={{ width: 90, height: 3.5, background: "rgba(8,16,40,0.06)", borderRadius: 2 }}>
+                                <div style={{ width: `${barW}%`, height: "100%", background: d.top ? ds.fit : ds.blue, borderRadius: 2 }} />
+                              </div>
+                            </div>
+                            <span style={{ fontSize: 20, fontFamily: fonts.mono, fontWeight: 700, color: d.top ? ds.fit : ds.fgPrimary, flexShrink: 0, minWidth: 32 }}>{d.score}</span>
+                            <span style={{ fontSize: 11, color: ds.fgMuted, fontFamily: fonts.display, lineHeight: 1.45, flex: 1 }}>{d.desc}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── Management recs ──────────────────────────── */}
+                <div style={{ borderTop: "1px solid rgba(8,16,40,0.06)", padding: "18px 24px", flexShrink: 0, opacity: sOp("recs"), boxShadow: sRing("recs") }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display, marginBottom: 12 }}>可執行管理建議 · 前 90 天</div>
+                  <div style={{ display: "flex", gap: 12 }}>
+                    {recs.map((r, i) => {
+                      const rOp = interpolate(lf, [90 + i * 18, 110 + i * 18], [0, 1], cl);
+                      const rY  = interpolate(lf, [90 + i * 18, 114 + i * 18], [16, 0], { easing: Easing.out(Easing.cubic), ...cl });
+                      return (
+                        <div key={r.n} style={{ opacity: rOp, transform: `translateY(${rY}px)`, flex: 1, padding: "14px 16px", background: "#F7F8FB", borderRadius: 10, border: "1px solid rgba(8,16,40,0.06)" }}>
+                          <div style={{ marginBottom: 7 }}>
+                            <span style={{ fontSize: 10, fontFamily: fonts.mono, fontWeight: 700, color: ds.blue, padding: "2px 7px", borderRadius: 4, background: "rgba(33,81,245,0.10)" }}>{r.n}</span>
+                          </div>
+                          <div style={{ fontSize: 14, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display, lineHeight: 1.45, marginBottom: 5 }}>{r.text}</div>
+                          <div style={{ fontSize: 11, color: ds.fgMuted, fontFamily: fonts.display, lineHeight: 1.5 }}>{r.detail}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
-
-            {/* Beat 1: Fit Score (lf 0–240) */}
-            {lf < 256 && (
-              <AbsoluteFill style={{ opacity: interpolate(lf, [0, 22, 232, 256], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                <div style={{ position: "absolute", fontSize: 580, fontWeight: 900, fontFamily: fonts.mono, color: ds.fit, opacity: 0.04, lineHeight: 1, top: "50%", left: "50%", transform: "translate(-50%, -52%)", userSelect: "none" as const }}>FIT</div>
-                <div style={{ fontSize: 16, fontFamily: fonts.mono, color: "rgba(255,255,255,0.36)", letterSpacing: "0.22em", marginBottom: 22 }}>P × E 適配分數</div>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 14, transform: `scale(${interpolate(lf, [0, 28], [0.72, 1], { easing: Easing.out(Easing.back(1.2)), extrapolateLeft: "clamp", extrapolateRight: "clamp" })})` }}>
-                  <span style={{ fontSize: 220, fontFamily: fonts.mono, fontWeight: 800, color: "#FFFFFF", lineHeight: 0.82, fontVariantNumeric: "tabular-nums" }}>
-                    {interpolate(lf, [6, 110], [0, 88.5], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" }).toFixed(1)}
-                  </span>
-                  <span style={{ fontSize: 60, fontFamily: fonts.mono, color: "rgba(255,255,255,0.26)", alignSelf: "flex-end", marginBottom: 20 }}>/100</span>
-                </div>
-                <div style={{ marginTop: 32, opacity: interpolate(lf, [38, 54], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), transform: `scale(${interpolate(lf, [38, 54], [0.5, 1], { easing: Easing.out(Easing.back(1.5)), extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`, display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 32px", borderRadius: 999, background: "#E6F5EC", border: "1px solid rgba(27,122,77,0.28)" }}>
-                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: ds.fit, boxShadow: `0 0 10px ${ds.fit}` }} />
-                  <span style={{ fontSize: 22, fontWeight: 700, color: "#146F3E", fontFamily: fonts.display }}>適配 · P×E FIT</span>
-                </div>
-                <div style={{ opacity: interpolate(lf, [68, 86], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), marginTop: 14, fontSize: 18, color: "rgba(255,255,255,0.36)", fontFamily: fonts.display }}>高出基準組 18.2 分 · model.v4.3</div>
-              </AbsoluteFill>
-            )}
-
-            {/* Beat 2: Retention (lf 232–462) */}
-            {lf >= 222 && lf < 472 && (
-              <AbsoluteFill style={{ opacity: interpolate(lf, [222, 248, 442, 472], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                <div style={{ position: "absolute", fontSize: 480, fontWeight: 900, fontFamily: fonts.mono, color: "#5FC48C", opacity: 0.04, lineHeight: 1, top: "50%", left: "50%", transform: "translate(-50%, -50%)", userSelect: "none" as const }}>%</div>
-                <div style={{ fontSize: 16, fontFamily: fonts.mono, color: "rgba(255,255,255,0.36)", letterSpacing: "0.22em", marginBottom: 22 }}>6 個月留任率預測</div>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 8, transform: `scale(${interpolate(lf, [222, 252], [0.72, 1], { easing: Easing.out(Easing.back(1.2)), extrapolateLeft: "clamp", extrapolateRight: "clamp" })})` }}>
-                  <span style={{ fontSize: 220, fontFamily: fonts.mono, fontWeight: 800, color: "#5FC48C", lineHeight: 0.82, fontVariantNumeric: "tabular-nums" }}>
-                    {Math.round(interpolate(lf, [230, 340], [0, 84], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" }))}
-                  </span>
-                  <span style={{ fontSize: 80, fontFamily: fonts.mono, color: "#5FC48C", opacity: 0.55, alignSelf: "flex-end", marginBottom: 26 }}>%</span>
-                </div>
-                <div style={{ opacity: interpolate(lf, [266, 286], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), marginTop: 16, fontSize: 20, color: "rgba(255,255,255,0.38)", fontFamily: fonts.display }}>
-                  對照基準 65.4% · <span style={{ color: "#5FC48C" }}>↑ +18.6pp</span>
-                </div>
-              </AbsoluteFill>
-            )}
-
-            {/* Beat 3: Cost savings (lf 452–672) */}
-            {lf >= 442 && lf < 682 && (
-              <AbsoluteFill style={{ opacity: interpolate(lf, [442, 468, 652, 682], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                <div style={{ position: "absolute", fontSize: 380, fontWeight: 900, fontFamily: fonts.mono, color: ds.cyan, opacity: 0.04, lineHeight: 1, top: "50%", left: "50%", transform: "translate(-50%, -50%)", userSelect: "none" as const }}>NT$</div>
-                <div style={{ fontSize: 16, fontFamily: fonts.mono, color: "rgba(255,255,255,0.36)", letterSpacing: "0.22em", marginBottom: 22 }}>錯配成本節省（預期效益）</div>
-                <div style={{ display: "flex", alignItems: "flex-end", gap: 10, transform: `scale(${interpolate(lf, [442, 472], [0.72, 1], { easing: Easing.out(Easing.back(1.2)), extrapolateLeft: "clamp", extrapolateRight: "clamp" })})` }}>
-                  <span style={{ fontSize: 72, fontFamily: fonts.mono, color: "rgba(255,255,255,0.28)", marginBottom: 28 }}>NT$</span>
-                  <span style={{ fontSize: 220, fontFamily: fonts.mono, fontWeight: 800, color: "#FFFFFF", lineHeight: 0.82, fontVariantNumeric: "tabular-nums" }}>
-                    {Math.round(interpolate(lf, [450, 560], [0, 22], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" }))}
-                  </span>
-                  <span style={{ fontSize: 80, fontFamily: fonts.mono, color: "rgba(255,255,255,0.28)", marginBottom: 26 }}>萬</span>
-                </div>
-                <div style={{ opacity: interpolate(lf, [490, 510], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), fontSize: 18, color: "rgba(255,255,255,0.36)", fontFamily: fonts.display, marginTop: 12 }}>
-                  基於歷史錯配率 × 重招成本模型
-                </div>
-              </AbsoluteFill>
-            )}
-
-            {/* Beat 4: P×E Match radar (lf 660–870) */}
-            {lf >= 650 && lf < 880 && (
-              <AbsoluteFill style={{ opacity: interpolate(lf, [650, 676, 850, 880], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 20 }}>
-                <div style={{ fontSize: 15, fontFamily: fonts.mono, color: "rgba(255,255,255,0.34)", letterSpacing: "0.22em" }}>人格向量 × 環境模型</div>
-                <div style={{ fontSize: 72, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-2.5px", lineHeight: 1, textAlign: "center" as const }}>
-                  高度吻合
-                </div>
-                <div style={{ marginTop: 4 }}>
-                  <PEMapRadar size={400} pVals={pVals} eVals={eVals} prog={interpolate(lf, [660, 810], [0, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" })} />
-                </div>
-                <div style={{ display: "flex", gap: 40, marginTop: 4, opacity: interpolate(lf, [680, 700], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <div style={{ width: 28, height: 3, background: ds.cyan, borderRadius: 2 }} />
-                    <span style={{ fontSize: 18, fontFamily: fonts.mono, color: "rgba(255,255,255,0.52)" }}>P · 人格向量</span>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <div style={{ width: 28, height: 3, background: ds.blue, borderRadius: 2 }} />
-                    <span style={{ fontSize: 18, fontFamily: fonts.mono, color: "rgba(255,255,255,0.52)" }}>E · 環境模型</span>
-                  </div>
-                </div>
-                <div style={{ opacity: interpolate(lf, [750, 770], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), fontSize: 20, color: "rgba(255,255,255,0.42)", fontFamily: fonts.display, textAlign: "center" as const, maxWidth: 640, lineHeight: 1.55, marginTop: 4 }}>
-                  高協作密度 + 快速決策節奏，與此人格向量高度契合
-                </div>
-              </AbsoluteFill>
-            )}
-
-            {/* Beat 5: Management insights (lf 862–1110) */}
-            {lf >= 852 && (
-              <AbsoluteFill style={{ opacity: interpolate(lf, [852, 878], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 18 }}>
-                <div style={{ fontSize: 15, fontFamily: fonts.mono, color: "rgba(255,255,255,0.36)", letterSpacing: "0.22em", marginBottom: 8 }}>管理建議 · 前 90 天</div>
-                {([
-                  { n: "01", text: "設定清晰自主邊界，避免過度微觀管理", detail: "此人決策自主性強——限制空間反而降低效能", delay: 0 },
-                  { n: "02", text: "多任務超載時提前介入", detail: "壓力臨界點明確：同時處理 3+ 任務時留意品質", delay: 62 },
-                  { n: "03", text: "動機誘因：自主探索 + 清晰成果邊界", detail: "內部驅動型——外部物質激勵效果有限", delay: 124 },
-                ] as {n:string;text:string;detail:string;delay:number}[]).map((item) => {
-                  const itemLF = Math.max(0, lf - 862);
-                  const itemOp = interpolate(itemLF, [item.delay, item.delay + 20], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-                  const itemY  = interpolate(itemLF, [item.delay, item.delay + 24], [34, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-                  return (
-                    <div key={item.n} style={{
-                      opacity: itemOp, transform: `translateY(${itemY}px)`,
-                      width: 900, padding: "24px 30px", background: "rgba(255,255,255,0.06)",
-                      borderRadius: 14, border: "1px solid rgba(255,255,255,0.10)",
-                      display: "flex", gap: 22, alignItems: "flex-start",
-                    }}>
-                      <span style={{ fontSize: 24, fontFamily: fonts.mono, fontWeight: 700, color: ds.cyan, flexShrink: 0, marginTop: 2 }}>{item.n}</span>
-                      <div style={{ display: "flex", flexDirection: "column" as const, gap: 6 }}>
-                        <span style={{ fontSize: 26, fontWeight: 700, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-0.5px" }}>{item.text}</span>
-                        <span style={{ fontSize: 17, color: "rgba(255,255,255,0.50)", fontFamily: fonts.display, lineHeight: 1.5 }}>{item.detail}</span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </AbsoluteFill>
-            )}
           </AbsoluteFill>
         )}
       </AbsoluteFill>
@@ -1872,9 +1899,6 @@ const B7Tailor: React.FC = () => {
   );
 };
 
-// ────────────────────────────────────────────────────────────────────────────
-// Main component
-// ────────────────────────────────────────────────────────────────────────────
 
 export const S3_DIT: React.FC = () => {
   return (
@@ -1884,10 +1908,10 @@ export const S3_DIT: React.FC = () => {
       <Sequence from={0}    durationInFrames={372}  layout="none"><B0Overview /></Sequence>
       <Sequence from={348}  durationInFrames={1284} layout="none"><B2Define /></Sequence>
       <Sequence from={1608} durationInFrames={150}  layout="none"><B3Bridge /></Sequence>
-      <Sequence from={1734} durationInFrames={1404} layout="none"><B4Interact /></Sequence>
-      <Sequence from={3114} durationInFrames={264}  layout="none"><B5Capture /></Sequence>
-      <Sequence from={3354} durationInFrames={150}  layout="none"><B6Bridge /></Sequence>
-      <Sequence from={3480} durationInFrames={1560} layout="none"><B7Tailor /></Sequence>
+      <Sequence from={1734} durationInFrames={1464} layout="none"><B4Interact /></Sequence>
+      <Sequence from={3174} durationInFrames={264}  layout="none"><B5Capture /></Sequence>
+      <Sequence from={3414} durationInFrames={150}  layout="none"><B6Bridge /></Sequence>
+      <Sequence from={3540} durationInFrames={1560} layout="none"><B7Tailor /></Sequence>
     </AbsoluteFill>
   );
 };

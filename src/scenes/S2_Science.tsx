@@ -276,10 +276,7 @@ const MBTIInjection: React.FC = () => {
   const chipColors = [colors.hcBlue, colors.hcCyan, colors.hcFit, colors.hcWatch];
   const swirl = interpolate(frame, [190, 336], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const boot = swirl;
-  const exit = interpolate(frame, [354, 416], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const coreScale = interpolate(exit, [0, 1], [1, 0.2], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const coreX = interpolate(exit, [0, 1], [0, 520], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const coreY = interpolate(exit, [0, 1], [0, 190], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const coreOpacity = interpolate(frame, [112, 146, 392, 416], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const titleOp = interpolate(frame, [10, 36, 170, 220], [0, 1, 1, 0.42], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const titleTop = interpolate(frame, [82, 136], [292, 44], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const titleScale = interpolate(frame, [82, 136], [1, 0.58], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -315,7 +312,7 @@ const MBTIInjection: React.FC = () => {
       return <div key={chip} style={{ position: "absolute", left: x, top: y, width: 118, height: 58, opacity: op, transform: `translate(-50%, -50%) rotate(${swirl * 16 - 8}deg) scale(${scale})`, borderRadius: 13, background: `${c}13`, border: `1px solid ${c}66`, boxShadow: `0 18px 44px ${c}18`, color: c, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: fonts.mono, fontSize: 21, fontWeight: 850 }}>{chip}</div>;
     })}
 
-    <div style={{ position: "absolute", left: 960 + coreX, top: 590 + coreY, width: 340, height: 340, opacity: interpolate(frame, [112, 146], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), transform: `translate(-50%, -50%) scale(${coreScale})`, transformOrigin: "center center" }}>
+    <div style={{ position: "absolute", left: 960, top: 590, width: 340, height: 340, opacity: coreOpacity, transform: "translate(-50%, -50%)", transformOrigin: "center center" }}>
       <RobotAgent size={340} boot={eyeMood} bodyColor="#17339C" />
       <div style={{ position: "absolute", left: 62, right: 62, bottom: 52, height: 12, borderRadius: 999, background: "rgba(255,255,255,0.10)", overflow: "hidden" }}>
         <div style={{ width: `${Math.round(boot * 100)}%`, height: "100%", background: `linear-gradient(90deg, ${colors.hcCyanBright}, #FFFFFF)` }} />

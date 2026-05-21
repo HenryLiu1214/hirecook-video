@@ -220,7 +220,7 @@ const StatsTogether: React.FC = () => {
 
 const Hidden: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 708, 720);
+  const m = momentAnim(frame, 0, 8, 888, 900);
   const dark = interpolate(frame, [280, 360], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const flipY = interpolate(frame, [292, 376], [0, 180], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const entryX = interpolate(frame, [0, 28], [-120, 48], { easing: Easing.out(Easing.back(1.15)), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -229,7 +229,7 @@ const Hidden: React.FC = () => {
   const zoom = interpolate(frame, [0, 28, 292, 376], [0.86, 1.02, 1.02, 1.04], { easing: Easing.out(Easing.back(0.9)), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const aboveGroupOp = interpolate(frame, [16, 42, 258, 292], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const bridgeOp = interpolate(frame, [278, 306, 350, 378], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const belowGroupOp = interpolate(frame, [382, 414, 688, 720], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const belowGroupOp = interpolate(frame, [382, 414, 868, 900], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const bg = dark < 0.5 ? "#FFFFFF" : "#071225";
   const Iceberg = ({ deep }: { deep: boolean }) => (
     <svg width="760" height="860" viewBox="0 0 760 860" style={{ overflow: "visible" }}>
@@ -268,7 +268,7 @@ const Hidden: React.FC = () => {
     top: number,
     accent: string,
     darkMode = false,
-    groupStart: number,
+    leftStart = 28,
     hold = 180,
   ) => {
     const op = interpolate(frame, [start, start + 18], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -351,7 +351,7 @@ export const S1_PainPoints: React.FC = () => <AbsoluteFill>
   {/* light: three stats together */}
   <Sequence from={840}  durationInFrames={360} layout="none"><AbsoluteFill><BgCalm theme="light" tint="blue" /></AbsoluteFill></Sequence>
   {/* iceberg blind spot */}
-  <Sequence from={1200} durationInFrames={720} layout="none"><AbsoluteFill style={{ background: "#FFFFFF" }} /></Sequence>
+  <Sequence from={1200} durationInFrames={900} layout="none"><AbsoluteFill style={{ background: "#FFFFFF" }} /></Sequence>
 
   {/* ── Beats ── */}
   <Sequence from={0}    durationInFrames={180} layout="none"><HiringMistake /></Sequence>
@@ -360,5 +360,5 @@ export const S1_PainPoints: React.FC = () => <AbsoluteFill>
   <Sequence from={540}  durationInFrames={180} layout="none"><Pills /></Sequence>
   <Sequence from={720}  durationInFrames={120} layout="none"><Transition /></Sequence>
   <Sequence from={840}  durationInFrames={360} layout="none"><StatsTogether /></Sequence>
-  <Sequence from={1200} durationInFrames={720} layout="none"><Hidden /></Sequence>
+  <Sequence from={1200} durationInFrames={900} layout="none"><Hidden /></Sequence>
 </AbsoluteFill>;

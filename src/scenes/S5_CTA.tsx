@@ -171,7 +171,7 @@ export const S5_CTA: React.FC = () => {
       <BgCalm theme="light" tint="blue" />
       <Sequence from={0} durationInFrames={240} layout="none"><Vision /></Sequence>
       <Sequence from={240} durationInFrames={240} layout="none"><BrandCore /></Sequence>
-      <Sequence from={480} durationInFrames={372} layout="none"><CTA /></Sequence>
+      <Sequence from={480} durationInFrames={552} layout="none"><CTA /></Sequence>
     </AbsoluteFill>
   );
 };

@@ -5,7 +5,7 @@ import { BgCalm } from "../components/BgCalm";
 import { TypewriterText } from "../components/TypewriterText";
 import { rotZIn, rotXSettle, breathe } from "../anim";
 
-// S0: 240 frames (4s) — HireCook brand + 讓他煮 team intro
+// S0: 360 frames (6s) — HireCook brand + 讓他煮 team intro
 
 export const S0_Intro: React.FC = () => {
   const frame = useCurrentFrame();

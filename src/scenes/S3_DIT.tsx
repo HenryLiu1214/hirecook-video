@@ -1271,9 +1271,9 @@ const B4Interact: React.FC = () => {
 
   // ── Q-phase flags (all shifted by O) ─────────────────────────────────────
   const qFrame      = Math.max(0, frame - O);   // local frame within Q phases
-  const showQ1      = frame >= O && frame < O + 450;
-  const showQ2      = frame >= O + 450 && frame < O + 660;
-  const showLoading = frame >= O + 660 && frame < O + 840;
+  const showQ1      = frame >= O && frame < O + 480;
+  const showQ2      = frame >= O + 420 && frame < O + 680;
+  const showLoading = frame >= O + 640 && frame < O + 840;
   const showScore   = frame >= O + 840;
 
   // Q1: click A at qFrame 400
@@ -1299,27 +1299,31 @@ const B4Interact: React.FC = () => {
   });
 
   // ── Region focus controller (gaze guiding within the SJT card) ──
-  // Uses qFrame (0-based within Q phases) for thresholds — same as before
   const focusStage = (() => {
-    if (showQ1) {
+    if (qFrame < 450) {
       if (qFrame < 70)  return { key: "none",     title: "", desc: "" };
       if (qFrame < 240) return { key: "scenario", title: "① 真實情境", desc: "把人放進一個沒有標準答案的高壓現場。" };
       if (qFrame < 400) return { key: "options",  title: "② 四個選項", desc: "每個選項對應不同的決策風格與壓力反應。" };
       return                   { key: "selected", title: "③ 真實選擇", desc: "選的不是對錯，是這個人實際會怎麼做。" };
     }
-    if (showQ2) return { key: "options", title: "再來一題", desc: "換一個情境，交叉驗證行為的穩定度。" };
+    if (qFrame < 660) return { key: "options", title: "再來一題", desc: "換一個情境，交叉驗證行為的穩定度。" };
     return { key: "none", title: "", desc: "" };
   })();
 
   const floatA = floatY(t, 0.68, 8, 0.4);
 
-  // ── Q1 → Q2 swipe transition ──
+  // ── Transitions ──
   const q1ExitX  = interpolate(frame, [O + 426, O + 460], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
   const q1ExitOp = interpolate(frame, [O + 420, O + 460], [1, 0], cl);
   const q1ExitSc = interpolate(frame, [O + 426, O + 460], [1, 0.90], { easing: Easing.in(Easing.quad), ...cl });
+  
   const q2EnterX = interpolate(frame, [O + 440, O + 480], [64, 0], { easing: Easing.out(Easing.cubic), ...cl });
   const q2EnterOp = interpolate(frame, [O + 440, O + 470], [0, 1], cl);
   const q2EnterSc = interpolate(frame, [O + 440, O + 480], [0.90, 1], { easing: Easing.out(Easing.cubic), ...cl });
+
+  const q2ExitX  = interpolate(frame, [O + 640, O + 670], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
+  const q2ExitOp = interpolate(frame, [O + 640, O + 670], [1, 0], cl);
+  const q2ExitSc = interpolate(frame, [O + 640, O + 670], [1, 0.90], { easing: Easing.in(Easing.quad), ...cl });
 
   // Hover pre-click: candidate's cursor lingers before clicking
   const q1HoverLetter = q1LocalFrame >= 340 && q1LocalFrame < 400 ? "A" : null;
@@ -1389,7 +1393,7 @@ const B4Interact: React.FC = () => {
               </div>
             )}
             {showQ2 && (
-              <div style={{ transform: `translateX(${q2EnterX}px) scale(${q2EnterSc})`, opacity: q2EnterOp }}>
+              <div style={{ transform: `translateX(${q2EnterX + q2ExitX}) scale(${q2EnterSc * q2ExitSc})`, opacity: q2EnterOp * q2ExitOp }}>
               <SJTCard
                 questionNum="08" totalQ="15" tag="情境 08 · 遠端會議 · 技術分歧"
                 scenario="你在跨時區的視訊設計評審中，提出的架構方案遭到資深工程師當場否決，理由簡短且缺乏解釋。其他人保持沉默，主持人正準備繼續下一議題。"
@@ -1416,20 +1420,20 @@ const B4Interact: React.FC = () => {
 
         {/* Loading — large sequential trait reveal */}
         {showLoading && (() => {
-          const loadOp = interpolate(frame, [O + 900, O + 914], [0, 1], cl);
+          const loadOp = interpolate(frame, [O + 640, O + 660], [0, 1], cl);
           const traits = ["壓力反應模式", "協作決策傾向", "模糊容忍度", "衝突處理策略"];
           const traitCycle = 38; // frames per trait
-          const traitProgress = (frame - (O + 920)) / traitCycle;
+          const traitProgress = (frame - (O + 670)) / traitCycle;
           const traitIdx = Math.max(0, Math.min(traits.length - 1, Math.floor(traitProgress)));
-          const traitLocalF = (frame - (O + 920)) - traitIdx * traitCycle;
+          const traitLocalF = (frame - (O + 670)) - traitIdx * traitCycle;
           const traitOp = interpolate(traitLocalF, [0, 10, 28, 38], [0, 1, 1, 0], cl);
           return (
             <AbsoluteFill style={{ opacity: loadOp, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 48 }}>
-              <TypewriterText text="分析行為指紋中…" startFrame={O + 900} charStagger={3} fontSize={64} fontWeight={700} colorScheme="white-to-cyan" />
+              <TypewriterText text="分析行為指紋中…" startFrame={O + 640} charStagger={3} fontSize={64} fontWeight={700} colorScheme="white-to-cyan" />
               <div style={{ width: 560, height: 5, background: "rgba(255,255,255,0.08)", borderRadius: 9999 }}>
                 <div style={{ height: "100%", width: `${loadProg}%`, background: `linear-gradient(90deg,${ds.blue},${ds.cyan})`, borderRadius: 9999, transition: "none" }} />
               </div>
-              {frame >= O + 920 && traitIdx < traits.length && (
+              {frame >= O + 670 && traitIdx < traits.length && (
                 <div style={{ opacity: traitOp, display: "flex", alignItems: "center", gap: 12 }}>
                   <div style={{ width: 8, height: 8, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 10px ${ds.cyan}` }} />
                   <span style={{ fontSize: 28, fontFamily: fonts.mono, color: "rgba(255,255,255,0.60)", letterSpacing: "0.14em" }}>{traits[traitIdx]}</span>
@@ -1452,8 +1456,8 @@ const B4Interact: React.FC = () => {
             </div>
             <div style={{
               marginTop: 32, zIndex: 1,
-              opacity: interpolate(frame, [O + 1094, O + 1110], [0, 1], cl),
-              transform: `scale(${interpolate(frame, [O + 1094, O + 1110], [0.5, 1], { easing: Easing.out(Easing.back(1.5)), ...cl })})`,
+              opacity: interpolate(frame, [O + 854, O + 870], [0, 1], cl),
+              transform: `scale(${interpolate(frame, [O + 854, O + 870], [0.5, 1], { easing: Easing.out(Easing.back(1.5)), ...cl })})`,
               display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 32px", borderRadius: 999,
               background: "#E6F5EC", border: "1px solid rgba(27,122,77,0.28)",
             }}>

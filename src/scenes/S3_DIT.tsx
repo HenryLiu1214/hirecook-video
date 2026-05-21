@@ -569,14 +569,20 @@ const B2RightPanel: React.FC<{
   pressureScore: number;
   sliderProgress: number;
   lB: number;
-}> = ({ liveEnvVals, hexProg, pressureScore, sliderProgress, lB }) => {
+  radarGlow?: boolean;
+  gridGlow?: boolean;
+  radarDim?: number;
+  gridDim?: number;
+}> = ({ liveEnvVals, hexProg, pressureScore, sliderProgress, lB, radarGlow = false, gridGlow = false, radarDim = 1, gridDim = 1 }) => {
+  const radarRing = radarGlow ? "0 0 0 2.5px rgba(0,180,216,0.55), 0 0 40px rgba(0,180,216,0.22)" : "none";
+  const gridRing  = gridGlow  ? "0 0 0 2.5px rgba(0,180,216,0.55), 0 0 40px rgba(0,180,216,0.22)" : "none";
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 14, width: 480, flexShrink: 0 }}>
       {/* Radar card */}
       <div style={{
         background: "#FFFFFF", borderRadius: 12, padding: "20px 24px",
-        border: "1px solid rgba(8,16,40,0.06)", boxShadow: "0 4px 24px rgba(8,16,40,0.08)",
-        display: "flex", flexDirection: "column", gap: 12,
+        border: "1px solid rgba(8,16,40,0.06)", boxShadow: `0 4px 24px rgba(8,16,40,0.08), ${radarRing}`,
+        display: "flex", flexDirection: "column", gap: 12, opacity: radarDim, transition: "none",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
           <div style={{ width: 7, height: 7, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 6px ${ds.cyan}`, flexShrink: 0 }} />
@@ -616,8 +622,8 @@ const B2RightPanel: React.FC<{
       {/* MBTI grid card */}
       <div style={{
         background: "#FFFFFF", borderRadius: 12, padding: "16px 20px",
-        border: "1px solid rgba(8,16,40,0.06)", boxShadow: "0 4px 24px rgba(8,16,40,0.08)",
-        display: "flex", flexDirection: "column", gap: 10,
+        border: "1px solid rgba(8,16,40,0.06)", boxShadow: `0 4px 24px rgba(8,16,40,0.08), ${gridRing}`,
+        display: "flex", flexDirection: "column", gap: 10, opacity: gridDim, transition: "none",
       }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontSize: 12, fontFamily: fonts.mono, color: ds.fgMuted, letterSpacing: "0.10em", textTransform: "uppercase" as const }}>人格適配 · 16 型</span>
@@ -887,12 +893,12 @@ const B2Define: React.FC = () => {
   // ── Camera focus stops: zoom into a region, hold, return to full view ──
   // [inStart, hold, outStart, outEnd], origin %, zoom, which panel to spotlight, text
   // Stop ① uses z:1.0 (no zoom) — callout + glow only; avoids repetitive zooming in Phase A
-  type Stop = { k: number[]; ox: number; oy: number; z: number; panel: "left" | "right" | "none"; n: string; title: string; desc: string };
+  type Stop = { k: number[]; ox: number; oy: number; z: number; panel: "left" | "right" | "radar" | "grid" | "none"; n: string; title: string; desc: string };
   const stops: Stop[] = [
     { k: [90, 130, 210, 250], ox: 30, oy: 35, z: 1.0, panel: "left",  n: "①", title: "描述職位的真實樣貌", desc: "不是理想，是這個位置實際的運作方式。" },
     { k: [480, 520, 602, 640],   ox: 30, oy: 54, z: 1.28, panel: "left",  n: "②", title: "六個維度，拉出壓力場", desc: "每個軸向對應一種真實的工作張力。" },
-    { k: [664, 702, 774, 810],   ox: 80, oy: 40, z: 1.32, panel: "right", n: "③", title: "環境指紋即時生成", desc: "六維壓力分數，量化成一張雷達。" },
-    { k: [832, 868, 942, 976], ox: 80, oy: 70, z: 1.32, panel: "right", n: "④", title: "16 型人格即時適配", desc: "每動一格，預測適配同步重算。" },
+    { k: [664, 702, 774, 810],   ox: 80, oy: 30, z: 1.32, panel: "radar", n: "③", title: "環境指紋即時生成", desc: "六維壓力分數，量化成一張雷達。" },
+    { k: [832, 868, 942, 976], ox: 80, oy: 75, z: 1.32, panel: "grid", n: "④", title: "16 型人格即時適配", desc: "每動一格，預測適配同步重算。" },
     { k: [974, 1010, 1102, 1136], ox: 46, oy: 62, z: 1.22, panel: "none",  n: "⑤", title: "確認後，一鍵建模", desc: "生成環境指紋與適配分佈。" },
   ];
   const active = stops.find((s) => frame >= s.k[0] && frame < s.k[3]);
@@ -915,16 +921,19 @@ const B2Define: React.FC = () => {
   );
   // Panel dim/glow (only while meaningfully zoomed)
   const zoomT = Math.max(0, Math.min(1, (camZoom - 1) / 0.4));
-  const leftDim  = active?.panel === "right" ? 1 - 0.62 * zoomT : 1;
-  const rightDim = active?.panel === "left"  ? 1 - 0.62 * zoomT : 1;
+  const leftDim  = active?.panel === "right" || active?.panel === "radar" || active?.panel === "grid" ? 1 - 0.62 * zoomT : 1;
+  // Per-section dim/glow for right panel sub-zones
+  const radarDim  = active?.panel === "left" || active?.panel === "grid" ? 1 - 0.62 * zoomT : 1;
+  const gridDim   = active?.panel === "left" || active?.panel === "radar" ? 1 - 0.62 * zoomT : 1;
   const leftGlow  = active?.panel === "left"  && zoomT > 0.4;
-  const rightGlow = active?.panel === "right" && zoomT > 0.4;
+  const radarGlow = active?.panel === "radar" && zoomT > 0.4;
+  const gridGlow  = active?.panel === "grid"  && zoomT > 0.4;
   const ring = (on: boolean) => on ? "0 0 0 2.5px rgba(0,180,216,0.55), 0 0 40px rgba(0,180,216,0.22)" : "none";
 
   // Big floating explanation — appears on the side opposite the spotlighted panel
   const calloutOp = active ? interpolate(frame, [active.k[0] + 6, active.k[0] + 28, active.k[2] - 8, active.k[2] + 12], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) : 0;
   const calloutRise = active ? interpolate(frame, [active.k[0] + 6, active.k[0] + 30], [26, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" }) : 0;
-  const calloutSide: "left" | "right" = active?.panel === "left" ? "right" : "left";
+  const calloutSide: "left" | "right" = active?.panel === "left" ? "left" : "right";
 
   return (
     <AbsoluteFill style={{ opacity: sceneOp }}>
@@ -979,9 +988,9 @@ const B2Define: React.FC = () => {
                     {frame >= PB - 18 && frame < PC + 18 && <div style={{ position: "absolute", inset: 0, display: "flex", opacity: bOp }}><B2LeftB lf={lB} /></div>}
                     {frame >= PC - 18 && <div style={{ position: "absolute", inset: 0, display: "flex", opacity: cOp }}><B2LeftC lf={lC} /></div>}
                   </div>
-                  {/* Right slot — persistent radar + 16-type grid, dim + glow per focus */}
-                  <div style={{ flexShrink: 0, display: "flex", borderRadius: 12, opacity: rightDim, boxShadow: ring(rightGlow) }}>
-                    <B2RightPanel liveEnvVals={liveEnvVals} hexProg={hexProg} pressureScore={pressureScore} sliderProgress={sliderProgress} lB={panelLB} />
+                  {/* Right slot — per-section radar/grid glow */}
+                  <div style={{ flexShrink: 0, display: "flex", borderRadius: 12 }}>
+                    <B2RightPanel liveEnvVals={liveEnvVals} hexProg={hexProg} pressureScore={pressureScore} sliderProgress={sliderProgress} lB={panelLB} radarGlow={radarGlow} gridGlow={gridGlow} radarDim={radarDim} gridDim={gridDim} />
                   </div>
                 </div>
               </div>
@@ -1059,6 +1068,7 @@ const B3Bridge: React.FC = () => {
 // ────────────────────────────────────────────────────────────────────────────
 
 // Shared SJT card shell ────────────────────────────────────────────────────
+// Shared SJT card shell ────────────────────────────────────────────────────
 const SJTCard: React.FC<{
   questionNum: string;
   tag: string;
@@ -1071,26 +1081,24 @@ const SJTCard: React.FC<{
   localFrame: number;
   progressPct: number;
   totalQ: string;
-  floatOffset: number;
-  focusKey?: string;        // "scenario" | "options" | "selected" | "none"
-  hoverLetter?: string | null;
-}> = ({ questionNum, tag, scenario, prompt, options, selectedLetter, revealStart, clickFrame, localFrame, progressPct, totalQ, floatOffset, focusKey = "none", hoverLetter = null }) => {
+}> = ({ questionNum, tag, scenario, prompt, options, selectedLetter, revealStart, clickFrame, localFrame, progressPct, totalQ }) => {
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
-  const cardOp = interpolate(localFrame, [0, 14], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const cardSc = interpolate(localFrame, [0, 16], [0.93, 1], {
-    easing: Easing.out(Easing.back(1.2)), extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
+  
+  // 3D Entrance
+  const cardOp = interpolate(localFrame, [0, 16], [0, 1], cl);
+  const cardRotX = interpolate(localFrame, [0, 24], [15, 0], { easing: Easing.out(Easing.back(1.4)), ...cl });
+  const cardY = interpolate(localFrame, [0, 24], [40, 0], { easing: Easing.out(Easing.back(1.4)), ...cl });
+  const cardSc = interpolate(localFrame, [0, 24], [0.92, 1], { easing: Easing.out(Easing.back(1.2)), ...cl });
 
-  // Gaze-guiding: dim the regions that aren't the current focus, glow the one that is
-  const scenarioDim = focusKey === "options" || focusKey === "selected" ? 0.32 : 1;
-  const scenarioGlow = focusKey === "scenario";
+  // Breathing motion
+  const breathe = Math.sin(localFrame / 30) * 3;
 
   return (
     <div style={{
       opacity: cardOp,
-      transform: `translateY(${floatOffset}px) scale(${cardSc})`,
+      transform: `translateY(${cardY + breathe}px) scale(${cardSc}) perspective(1000px) rotateX(${cardRotX}deg)`,
       width: 1100, borderRadius: 12, overflow: "hidden" as const, position: "relative" as const,
-      boxShadow: "0 20px 80px rgba(0,0,0,0.5)",
+      boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)",
     }}>
       {/* Header */}
       <div style={{ background: "#131826", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "14px 24px", display: "flex", alignItems: "center", gap: 12 }}>
@@ -1102,7 +1110,7 @@ const SJTCard: React.FC<{
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ fontSize: 12, fontFamily: fonts.mono, color: colors.dimWhite }}>{questionNum} / {totalQ}</span>
           <div style={{ width: 120, height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 9999 }}>
-            <div style={{ height: "100%", width: `${progressPct}%`, background: ds.blue, borderRadius: 9999 }} />
+            <div style={{ height: "100%", width: `${progressPct}%`, background: ds.blue, borderRadius: 9999, transition: "none" }} />
           </div>
           <div style={{ padding: "4px 10px", borderRadius: 4, border: "1px solid rgba(255,255,255,0.10)", fontSize: 12, fontFamily: fonts.mono, color: ds.fgFaint }}>儲存並離開</div>
         </div>
@@ -1110,16 +1118,7 @@ const SJTCard: React.FC<{
 
       {/* Body */}
       <div style={{ background: "#1A2030", padding: "28px 32px", display: "flex", flexDirection: "column", gap: 16 }}>
-        {/* Scenario block — glows when focused, dims when attention moves to options */}
-        <div style={{
-          opacity: scenarioDim, transition: "none",
-          borderRadius: 10,
-          padding: "14px 16px",
-          margin: "-14px -16px",
-          background: scenarioGlow ? "rgba(0,180,216,0.06)" : "transparent",
-          boxShadow: scenarioGlow ? "0 0 0 1.5px rgba(0,180,216,0.45), 0 0 24px rgba(0,180,216,0.18)" : "none",
-          display: "flex", flexDirection: "column" as const, gap: 16,
-        }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 8 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ fontSize: 12, fontFamily: fonts.mono, color: ds.fgMuted, letterSpacing: "0.10em", textTransform: "uppercase" as const }}>{tag}</span>
             <div style={{ width: 5, height: 5, borderRadius: "50%", background: ds.cyan }} />
@@ -1130,45 +1129,36 @@ const SJTCard: React.FC<{
         </div>
 
         {options.map((opt, i) => {
-          const revF = revealStart + i * 14;
-          const optOp = interpolate(localFrame, [revF, revF + 14], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+          const revF = revealStart + i * 8;
+          const optOp = interpolate(localFrame, [revF, revF + 12], [0, 1], cl);
+          const optY = interpolate(localFrame, [revF, revF + 16], [12, 0], { easing: Easing.out(Easing.cubic), ...cl });
           const selected = opt.letter === selectedLetter;
-          const hovered = !selected && opt.letter === hoverLetter;
-          const pop = selected
-            ? interpolate(localFrame, [clickFrame, clickFrame + 4, clickFrame + 12], [1, 1.024, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
-            : 1;
-          const tickSc = selected
-            ? interpolate(localFrame, [clickFrame, clickFrame + 10], [0, 1], { easing: Easing.out(Easing.back(1.6)), extrapolateLeft: "clamp", extrapolateRight: "clamp" })
-            : 0;
+          
+          const pop = selected ? interpolate(localFrame, [clickFrame, clickFrame + 4, clickFrame + 12], [1, 1.024, 1], cl) : 1;
+          const tickSc = selected ? interpolate(localFrame, [clickFrame, clickFrame + 10], [0, 1], { easing: Easing.out(Easing.back(1.6)), ...cl }) : 0;
           const rippleSc = selected ? interpolate(localFrame, [clickFrame, clickFrame + 48], [0, 4.2], { easing: Easing.out(Easing.cubic), ...cl }) : 0;
           const rippleOp = selected ? interpolate(localFrame, [clickFrame, clickFrame + 16, clickFrame + 48], [0.45, 0.22, 0], cl) : 0;
-          // When a selection is locked in (focusKey "selected"), dim the non-chosen options
-          const dimUnchosen = focusKey === "selected" && !selected ? 0.34 : 1;
+          
           return (
             <div key={opt.letter} style={{
-              opacity: optOp * dimUnchosen, transform: `scale(${pop})`,
+              opacity: optOp, transform: `translateY(${optY}px) scale(${pop})`,
               display: "flex", alignItems: "center", gap: 14, height: 58, boxSizing: "border-box" as const, padding: "0 18px", borderRadius: 10,
-              background: selected ? "rgba(33,81,245,0.18)" : hovered ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.03)",
-              border: `1.5px solid ${selected ? "#2151F5AA" : hovered ? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.06)"}`,
-              boxShadow: selected ? "0 0 0 3px rgba(33,81,245,0.10)" : hovered ? "0 0 0 1px rgba(255,255,255,0.07)" : "none",
-              position: "relative" as const, overflow: "hidden" as const,
+              background: selected ? "rgba(33,81,245,0.18)" : "rgba(255,255,255,0.03)",
+              border: `1.5px solid ${selected ? "#2151F5AA" : "rgba(255,255,255,0.06)"}`,
+              boxShadow: selected ? "0 0 0 3px rgba(33,81,245,0.10)" : "none",
+              position: "relative" as const, overflow: "hidden" as const, transition: "none",
             }}>
               {selected && (
                 <div style={{
-                  position: "absolute", left: "50%", top: "50%",
-                  width: 80, height: 80, borderRadius: "50%",
-                  background: "rgba(33,81,245,0.40)",
-                  transform: `translate(-50%, -50%) scale(${rippleSc})`,
-                  opacity: rippleOp, pointerEvents: "none",
+                  position: "absolute", left: "50%", top: "50%", width: 80, height: 80, borderRadius: "50%",
+                  background: "rgba(33,81,245,0.40)", transform: `translate(-50%, -50%) scale(${rippleSc})`, opacity: rippleOp, pointerEvents: "none",
                 }} />
               )}
-              <div style={{ width: 34, height: 34, borderRadius: 8, background: selected ? ds.blue : "rgba(255,255,255,0.06)", border: `1.5px solid ${selected ? ds.blue : "rgba(255,255,255,0.10)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 1 }}>
+              <div style={{ width: 34, height: 34, borderRadius: 8, background: selected ? ds.blue : "rgba(255,255,255,0.06)", border: `1.5px solid ${selected ? ds.blue : "rgba(255,255,255,0.10)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 1, transition: "none" }}>
                 <span style={{ fontSize: 15, fontFamily: fonts.mono, fontWeight: 700, color: "#FFF" }}>{opt.letter}</span>
               </div>
               <span style={{ fontSize: 22, color: selected ? colors.softWhite : colors.dimWhite, fontFamily: fonts.display, flex: 1, zIndex: 1 }}>{opt.text}</span>
-              {selected && (
-                <span style={{ fontSize: 20, color: ds.cyan, fontWeight: 700, transform: `scale(${tickSc})`, display: "inline-block", zIndex: 1 }}>✓</span>
-              )}
+              {selected && <span style={{ fontSize: 20, color: ds.cyan, fontWeight: 700, transform: `scale(${tickSc})`, display: "inline-block", zIndex: 1 }}>✓</span>}
             </div>
           );
         })}
@@ -1177,7 +1167,7 @@ const SJTCard: React.FC<{
         {selectedLetter !== null && (
           <div style={{
             height: 2, borderRadius: 1, background: `linear-gradient(90deg,${ds.blue},${ds.cyan})`,
-            width: `${interpolate(localFrame, [clickFrame + 2, clickFrame + 70], [0, 100], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" })}%`,
+            width: `${interpolate(localFrame, [clickFrame + 2, clickFrame + 70], [0, 100], { easing: Easing.out(Easing.cubic), ...cl })}%`,
           }} />
         )}
       </div>
@@ -1187,77 +1177,53 @@ const SJTCard: React.FC<{
 
 const B4Interact: React.FC = () => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const t = frame / fps;
   const m = momentAnim(frame, 0, 8, 686, 700);
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
-  // ── No opener, start immediately ──────────────────────────────────────────
-  const O = 0; // offset applied to all Q-phase frame thresholds
-
-  // ── Q-phase flags (all shifted by O) ─────────────────────────────────────
-  const qFrame      = Math.max(0, frame - O);   // local frame within Q phases
-  const showQ1      = frame >= O && frame < O + 430;
-  const showQ2      = frame >= O + 370 && frame < O + 570;
-  const showLoading = frame >= O + 530 && frame < O + 710;
-
-  // Q1: click A at qFrame 280
-  const q1LocalFrame = qFrame;
-  const q1selected   = qFrame >= 300 ? "A" : null;
-
-  // Q2: click B at q2LocalFrame 130
-  const q2LocalFrame = Math.max(0, qFrame - 370);
-  const q2selected   = qFrame >= 480 ? "B" : null;
-
-  // Loading bar
-  const loadProg = interpolate(frame, [O + 560, O + 670], [0, 100], {
-    easing: Easing.out(Easing.cubic), ...cl,
-  });
-
-  // ── Region focus controller (gaze guiding within the SJT card) ──
-  const focusStage = (() => {
-    if (qFrame < 370) {
-      if (qFrame < 50)  return { key: "none",     title: "", desc: "" };
-      if (qFrame < 160) return { key: "scenario", title: "① 真實情境", desc: "把人放進一個沒有標準答案的高壓現場。" };
-      if (qFrame < 300) return { key: "options",  title: "② 四個選項", desc: "每個選項對應不同的決策風格與壓力反應。" };
-      return                   { key: "selected", title: "③ 真實選擇", desc: "選的不是對錯，是這個人實際會怎麼做。" };
-    }
-    if (qFrame < 550) return { key: "options", title: "再來一題", desc: "換一個情境，交叉驗證行為的穩定度。" };
-    return { key: "none", title: "", desc: "" };
-  })();
-
-  const floatA = floatY(t, 0.68, 8, 0.4);
-
-  // ── Transitions ──
-  const q1ExitX  = interpolate(frame, [O + 376, O + 410], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
-  const q1ExitOp = interpolate(frame, [O + 370, O + 410], [1, 0], cl);
-  const q1ExitSc = interpolate(frame, [O + 376, O + 410], [1, 0.90], { easing: Easing.in(Easing.quad), ...cl });
+  const O = 0;
+  const qFrame      = Math.max(0, frame - O);
   
-  const q2EnterX = interpolate(frame, [O + 390, O + 430], [64, 0], { easing: Easing.out(Easing.cubic), ...cl });
-  const q2EnterOp = interpolate(frame, [O + 390, O + 420], [0, 1], cl);
-  const q2EnterSc = interpolate(frame, [O + 390, O + 430], [0.90, 1], { easing: Easing.out(Easing.cubic), ...cl });
+  // Adjusted timings:
+  // Q1: 0 - 320
+  // Q2: 280 - 540
+  // Loading: 500 - 700
+  const showQ1      = frame >= O && frame < O + 320;
+  const showQ2      = frame >= O + 280 && frame < O + 540;
+  const showLoading = frame >= O + 500 && frame < O + 710;
 
-  const q2ExitX  = interpolate(frame, [O + 530, O + 560], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
-  const q2ExitOp = interpolate(frame, [O + 530, O + 560], [1, 0], cl);
-  const q2ExitSc = interpolate(frame, [O + 530, O + 560], [1, 0.90], { easing: Easing.in(Easing.quad), ...cl });
+  const q1Local = qFrame;
+  const q1Click = 200;
 
-  // Hover pre-click: candidate's cursor lingers before clicking
-  const q1HoverLetter = q1LocalFrame >= 258 && q1LocalFrame < 300 ? "A" : null;
-  const q2HoverLetter = q2LocalFrame >= 70 && q2LocalFrame < 110 ? "B" : null;
+  const q2Local = Math.max(0, qFrame - 280);
+  const q2Click = 140;
+
+  // Q1 Out / Q2 In transitions
+  const q1ExitX = interpolate(qFrame, [280, 310], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
+  const q1ExitOp = interpolate(qFrame, [280, 310], [1, 0], cl);
+  const q1ExitSc = interpolate(qFrame, [280, 310], [1, 0.90], { easing: Easing.in(Easing.cubic), ...cl });
+
+  const q2EnterX = interpolate(q2Local, [0, 30], [64, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  const q2EnterOp = interpolate(q2Local, [0, 20], [0, 1], cl);
+  const q2EnterSc = interpolate(q2Local, [0, 30], [0.90, 1], { easing: Easing.out(Easing.cubic), ...cl });
+
+  const q2ExitX = interpolate(qFrame, [500, 530], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
+  const q2ExitOp = interpolate(qFrame, [500, 530], [1, 0], cl);
+  const q2ExitSc = interpolate(qFrame, [500, 530], [1, 0.90], { easing: Easing.in(Easing.cubic), ...cl });
+
+  const wireRot = frame * 0.4;
 
   return (
     <AbsoluteFill>
       <BgCalm theme="dark" tint="blue" />
 
-
       <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform }}>
-        {/* Q1 + Q2 */}
-        {(showQ1 || showQ2) && (
-          <AbsoluteFill style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-            {showQ1 && (
-              <div style={{ transform: `translateX(${q1ExitX}px) scale(${q1ExitSc})`, opacity: q1ExitOp }}>
+        
+        <div style={{ width: "100%", height: "100%", position: "absolute", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          
+          {showQ1 && (
+            <div style={{ position: "absolute", transform: `translateX(${q1ExitX}px) scale(${q1ExitSc})`, opacity: q1ExitOp, zIndex: 10 }}>
               <SJTCard
-                questionNum="07" totalQ="15" tag="情境 07 · 廚房 · 截止日碰撞"
+                questionNum="07" tag="情境 07 · 廚房 · 截止日碰撞"
                 scenario="你負責備餐，傳菜員已在出餐口等待。配菜那端的隊友突然發現食材不夠，開始重備，但沒有開口說。廚師長正在計時，三分鐘後這桌就超時了。"
                 prompt="你第一個動作是——"
                 options={[
@@ -1266,21 +1232,20 @@ const B4Interact: React.FC = () => {
                   { letter: "C", text: "先出一個可以先上的菜穩住桌況，配菜再想辦法。" },
                   { letter: "D", text: "向廚師長報告有問題，請他決定怎麼調度。" },
                 ]}
-                selectedLetter={q1selected}
-                revealStart={70}
-                clickFrame={300}
-                localFrame={q1LocalFrame}
+                selectedLetter={q1Local >= q1Click ? "A" : null}
+                revealStart={30}
+                clickFrame={q1Click}
+                localFrame={q1Local}
                 progressPct={46}
-                floatOffset={floatA}
-                focusKey={focusStage.key}
-                hoverLetter={q1HoverLetter}
+                totalQ="15"
               />
-              </div>
-            )}
-            {showQ2 && (
-              <div style={{ transform: `translateX(${q2EnterX + q2ExitX}px) scale(${q2EnterSc * q2ExitSc})`, opacity: q2EnterOp * q2ExitOp }}>
+            </div>
+          )}
+
+          {showQ2 && (
+            <div style={{ position: "absolute", transform: `translateX(${q2EnterX + q2ExitX}px) scale(${q2EnterSc * q2ExitSc})`, opacity: q2EnterOp * q2ExitOp, zIndex: 20 }}>
               <SJTCard
-                questionNum="08" totalQ="15" tag="情境 08 · 遠端會議 · 技術分歧"
+                questionNum="08" tag="情境 08 · 遠端會議 · 技術分歧"
                 scenario="你在跨時區的視訊設計評審中，提出的架構方案遭到資深工程師當場否決，理由簡短且缺乏解釋。其他人保持沉默，主持人正準備繼續下一議題。"
                 prompt="你會——"
                 options={[
@@ -1289,41 +1254,58 @@ const B4Interact: React.FC = () => {
                   { letter: "C", text: "提議先暫停議程，開個小組釐清分歧。" },
                   { letter: "D", text: "調整方案，提出折衷版本讓討論繼續。" },
                 ]}
-                selectedLetter={q2selected}
-                revealStart={10}
-                clickFrame={110}
-                localFrame={q2LocalFrame}
+                selectedLetter={q2Local >= q2Click ? "B" : null}
+                revealStart={30}
+                clickFrame={q2Click}
+                localFrame={q2Local}
                 progressPct={53}
-                floatOffset={floatY(t, 0.74, 8, 0.5)}
-                focusKey={focusStage.key}
-                hoverLetter={q2HoverLetter}
+                totalQ="15"
               />
-              </div>
-            )}
-          </AbsoluteFill>
-        )}
+            </div>
+          )}
 
-        {/* Loading — large sequential trait reveal */}
+        </div>
+
+        {/* Loading Phase */}
         {showLoading && (() => {
-          const loadOp = interpolate(frame, [O + 540, O + 560, O + 690, O + 710], [0, 1, 1, 0], cl);
+          const lF = qFrame - 500;
           const traits = ["壓力反應模式", "協作決策傾向", "模糊容忍度", "衝突處理策略"];
-          const traitCycle = 26; // frames per trait
-          const traitProgress = (frame - (O + 560)) / traitCycle;
-          const traitIdx = Math.max(0, Math.min(traits.length - 1, Math.floor(traitProgress)));
-          const traitLocalF = (frame - (O + 560)) - traitIdx * traitCycle;
-          const traitOp = interpolate(traitLocalF, [0, 8, 20, 26], [0, 1, 1, 0], cl);
+          const traitCycle = 22; 
+          const currentT = Math.max(0, Math.min(traits.length - 1, Math.floor((lF - 30) / traitCycle)));
+          const progressStep = (currentT + 1) * 25;
+          const smoothProg = interpolate(lF, [30 + currentT * traitCycle, 30 + currentT * traitCycle + 10], [currentT * 25, progressStep], cl);
+          const loadOp = interpolate(lF, [0, 20, 180, 200], [0, 1, 1, 0], cl);
+
           return (
-            <AbsoluteFill style={{ opacity: loadOp, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 48 }}>
-              <TypewriterText text="分析行為指紋中…" startFrame={O + 540} charStagger={3} fontSize={64} fontWeight={700} colorScheme="white-to-cyan" />
-              <div style={{ width: 560, height: 5, background: "rgba(255,255,255,0.08)", borderRadius: 9999 }}>
-                <div style={{ height: "100%", width: `${loadProg}%`, background: `linear-gradient(90deg,${ds.blue},${ds.cyan})`, borderRadius: 9999, transition: "none" }} />
+            <AbsoluteFill style={{ opacity: loadOp, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 54 }}>
+              
+              <div style={{ position: "relative", width: 140, height: 140, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {/* Rotating 3D Hexagon wireframe illusion */}
+                <div style={{ position: "absolute", width: "100%", height: "100%", transform: `rotateZ(${wireRot}deg) rotateX(60deg)`, border: "2px solid rgba(0,180,216,0.3)", borderRadius: "50%" }} />
+                <div style={{ position: "absolute", width: "100%", height: "100%", transform: `rotateZ(${-wireRot * 0.8}deg) rotateY(60deg)`, border: "2px solid rgba(33,81,245,0.4)", borderRadius: "50%" }} />
+                <LucideIcon name="target" size={56} color="#FFF" />
               </div>
-              {frame >= O + 560 && traitIdx < traits.length && (
-                <div style={{ opacity: traitOp, display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 10px ${ds.cyan}` }} />
-                  <span style={{ fontSize: 28, fontFamily: fonts.mono, color: "rgba(255,255,255,0.60)", letterSpacing: "0.14em" }}>{traits[traitIdx]}</span>
-                </div>
-              )}
+
+              <TypewriterText text="分析行為指紋中…" startFrame={qFrame - 490} charStagger={3} fontSize={56} fontWeight={700} colorScheme="white-to-cyan" />
+              
+              <div style={{ width: 480, height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 9999 }}>
+                <div style={{ height: "100%", width: `${smoothProg}%`, background: `linear-gradient(90deg,${ds.blue},${ds.cyan})`, borderRadius: 9999, transition: "none" }} />
+              </div>
+
+              <div style={{ height: 40, overflow: "hidden", position: "relative", width: 400, display: "flex", justifyContent: "center" }}>
+                {lF >= 30 && traits.map((t, i) => {
+                  const tLocal = lF - (30 + i * traitCycle);
+                  if (tLocal < 0 || tLocal > traitCycle + 12) return null;
+                  const tY = interpolate(tLocal, [0, 8, traitCycle, traitCycle + 8], [30, 0, 0, -30], cl);
+                  const tOp = interpolate(tLocal, [0, 8, traitCycle, traitCycle + 8], [0, 1, 1, 0], cl);
+                  return (
+                    <div key={t} style={{ position: "absolute", opacity: tOp, transform: `translateY(${tY}px)`, display: "flex", alignItems: "center", gap: 12 }}>
+                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 10px ${ds.cyan}` }} />
+                      <span style={{ fontSize: 24, fontFamily: fonts.mono, color: "rgba(255,255,255,0.70)", letterSpacing: "0.14em" }}>{t}</span>
+                    </div>
+                  );
+                })}
+              </div>
             </AbsoluteFill>
           );
         })()}
@@ -1567,10 +1549,10 @@ const B7Tailor: React.FC = () => {
   // ── Camera tour stops ──
   type B7Stop = { k: [number,number,number,number]; ox: number; oy: number; z: number; sect: "kpi"|"pemap"|"xai"|"recs"; n: string; title: string; desc: string; calloutPos: "bottom"|"right"|"left"|"top" };
   const b7Stops: B7Stop[] = [
-    { k: [200, 228, 388, 416], ox: 50, oy: 15, z: 1.28, sect: "kpi",   n: "①", title: "P×E 預測結果", desc: "結合環境與行為，直接預測留任率與錯配成本。", calloutPos: "bottom" },
-    { k: [416, 444, 604, 632], ox: 24, oy: 54, z: 1.34, sect: "pemap", n: "②", title: "雷達疊合分析", desc: "視覺化比對雙方落差，找出隱藏的摩擦風險點。", calloutPos: "right" },
-    { k: [632, 660, 820, 848], ox: 76, oy: 54, z: 1.34, sect: "xai",   n: "③", title: "行為驅動因子", desc: "XAI 解釋為什麼適合，給予高信心度的背後原因。", calloutPos: "left" },
-    { k: [848, 876, 1036, 1064], ox: 50, oy: 85, z: 1.28, sect: "recs",  n: "④", title: "專屬管理建議", desc: "直接給主管第一天的具體帶人指南，避免磨合失敗。", calloutPos: "top" },
+    { k: [200, 228, 388, 416], ox: 50, oy: 15, z: 1.22, sect: "kpi",   n: "①", title: "P×E 預測結果", desc: "結合環境與行為，直接預測留任率與錯配成本。", calloutPos: "bottom" },
+    { k: [416, 444, 604, 632], ox: 24, oy: 54, z: 1.22, sect: "pemap", n: "②", title: "雷達疊合分析", desc: "視覺化比對雙方落差，找出隱藏的摩擦風險點。", calloutPos: "left" },
+    { k: [632, 660, 820, 848], ox: 76, oy: 54, z: 1.22, sect: "xai",   n: "③", title: "行為驅動因子", desc: "XAI 解釋為什麼適合，給予高信心度的背後原因。", calloutPos: "right" },
+    { k: [848, 876, 1036, 1064], ox: 50, oy: 85, z: 1.18, sect: "recs",  n: "④", title: "專屬管理建議", desc: "直接給主管第一天的具體帶人指南，避免磨合失敗。", calloutPos: "top" },
   ];
   const b7Active = b7Stops.find(s => lf >= s.k[0] && lf < s.k[3]);
   
@@ -1578,7 +1560,7 @@ const B7Tailor: React.FC = () => {
   // Keyframes: before | kpi-in | kpi-hold | pemap-in | pemap-hold | xai-in | xai-hold | recs-in | recs-hold | out
   const camZ = interpolate(lf,
     [200, 228, 388, 444, 604, 660, 820, 876, 1036, 1064],
-    [  1, 1.28, 1.28, 1.34, 1.34, 1.34, 1.34, 1.28, 1.28,    1],
+    [  1, 1.22, 1.22, 1.22, 1.22, 1.22, 1.22, 1.18, 1.18,    1],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
   const camOx = interpolate(lf,

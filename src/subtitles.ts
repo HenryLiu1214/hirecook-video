@@ -20,7 +20,7 @@ export const SUBTITLES: SubtitleEntry[] = [
   { from: s(72), to: s(80), text: "D-I-T：定義環境、互動測驗、產出手冊" },
   { from: s(82), to: s(101), text: "Define：主管拖曳滑桿，建立職位環境模型" },
   { from: s(104), to: s(124), text: "Interact：候選人在限時情境題中做出選擇" },
-  { from: s(127), to: s(148), text: "Tailor：系統產出 TAT 人才使用手冊" },
-  { from: s(151), to: s(164), text: "HireCook 不是取代 HR，而是升級決策" },
-  { from: s(167), to: s(179), text: "降低人才錯配，加入企業種子驗證計畫" },
+  { from: s(127), to: 8580, text: "Tailor：系統產出 TAT 人才使用手冊" },
+  { from: s(151) - 470, to: s(164) - 470, text: "HireCook 不是取代 HR，而是升級決策" },
+  { from: s(167) - 470, to: s(179) - 470, text: "降低人才錯配，加入企業種子驗證計畫" },
 ];

@@ -302,6 +302,15 @@ const SliderRow: React.FC<{
       </div>
       <div style={{ height: 8, background: "rgba(8,16,40,0.06)", borderRadius: 9999, position: "relative" }}>
         <div style={{ height: "100%", width: `${w}%`, background: color, borderRadius: 9999 }} />
+        {/* Arrival pulse — fires as the slider lands on its value */}
+        <div style={{
+          position: "absolute", left: `${w}%`, top: "50%",
+          width: 18, height: 18, marginLeft: -9, marginTop: -9, borderRadius: "50%",
+          border: `2px solid ${color}`,
+          transform: `scale(${1 + interpolate(localFrame, [barStart + 46, barStart + 80], [0, 1.8], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`,
+          opacity: interpolate(localFrame, [barStart + 46, barStart + 52, barStart + 80], [0, 0.6, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+          pointerEvents: "none",
+        }} />
         {/* Draggable thumb handle */}
         <div style={{
           position: "absolute",
@@ -574,7 +583,19 @@ const B2RightPanel: React.FC<{
           <span style={{ fontSize: 12, fontFamily: fonts.mono, color: ds.fgMuted, letterSpacing: "0.12em", textTransform: "uppercase" as const }}>即時預覽 · 環境指紋</span>
         </div>
         <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
-          <HexRadar size={220} values={liveEnvVals} labels={envLabels} color={ds.blue} fillColor="rgba(33,81,245,0.14)" prog={hexProg} />
+          <div style={{ position: "relative" as const, width: 220, height: 220, flexShrink: 0 }}>
+            {sliderProgress > 0.02 && sliderProgress < 0.99 && [0, 1].map((k) => {
+              const ph = ((lB + k * 22) % 44) / 44;
+              return <div key={k} style={{
+                position: "absolute" as const, left: "50%", top: "50%",
+                width: 196, height: 196, marginLeft: -98, marginTop: -98, borderRadius: "50%",
+                border: `1.5px solid ${ds.cyan}`,
+                transform: `scale(${0.55 + ph * 0.85})`, opacity: (1 - ph) * 0.42,
+                pointerEvents: "none" as const,
+              }} />;
+            })}
+            <HexRadar size={220} values={liveEnvVals} labels={envLabels} color={ds.blue} fillColor="rgba(33,81,245,0.14)" prog={hexProg} />
+          </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
               <span style={{ fontSize: 56, fontFamily: fonts.mono, fontWeight: 700, color: ds.blue, fontVariantNumeric: "tabular-nums", lineHeight: 1 }}>{pressureScore}</span>
@@ -943,7 +964,7 @@ const B2Define: React.FC = () => {
           const floatOsc = frame > 60 ? Math.sin(frame * 0.04) * floatAmp : 0;
           return (
             // Camera wrapper — scales about the focused region's origin, then returns
-            <div style={{ transformOrigin: `${camOx}% ${camOy}%`, transform: `scale(${camZoom})` }}>
+            <div style={{ transformOrigin: "50% 50%", transform: `translate(${-camZoom * (camOx - 50)}%, ${-camZoom * (camOy - 50)}%) scale(${camZoom})` }}>
               <div style={{
                 transform: `translateY(${baseY + floatOsc}px) rotateX(${entryTiltX}deg) scale(0.92)`,
                 width: 1440, background: "#FFFFFF", borderRadius: 16,
@@ -1038,38 +1059,6 @@ const B3Bridge: React.FC = () => {
 // ────────────────────────────────────────────────────────────────────────────
 
 // Shared SJT card shell ────────────────────────────────────────────────────
-// ─── HandCursor ───────────────────────────────────────────────────────────────
-// Animated pointer that travels along an interpolated waypoint path and clicks.
-// Render INSIDE a transformed container → it shares that coordinate space.
-const HandCursor: React.FC<{
-  frame: number;
-  path: { f: number; x: number; y: number }[];
-  clicks?: number[];
-  size?: number;
-  opacity?: number;
-}> = ({ frame, path, clicks = [], size = 30, opacity = 1 }) => {
-  const fs = path.map((p) => p.f);
-  const x = interpolate(frame, fs, path.map((p) => p.x), { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const y = interpolate(frame, fs, path.map((p) => p.y), { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  let press = 1, ripple = 0, rippleOp = 0;
-  for (const c of clicks) {
-    const d = frame - c;
-    if (d >= 0 && d < 7) press = Math.min(press, interpolate(d, [0, 3, 7], [1, 0.8, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
-    if (d >= 0 && d < 32) {
-      ripple = Math.max(ripple, interpolate(d, [0, 32], [0, 2.8], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
-      rippleOp = Math.max(rippleOp, interpolate(d, [0, 32], [0.5, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
-    }
-  }
-  return (
-    <div style={{ position: "absolute" as const, left: x, top: y, transform: `scale(${press})`, transformOrigin: "4px 4px", opacity, pointerEvents: "none" as const, zIndex: 60 }}>
-      <div style={{ position: "absolute" as const, left: 4, top: 4, width: 22, height: 22, marginLeft: -11, marginTop: -11, borderRadius: "50%", border: "2px solid rgba(33,81,245,0.78)", transform: `scale(${ripple})`, opacity: rippleOp }} />
-      <svg width={size} height={size} viewBox="0 0 24 24" style={{ filter: "drop-shadow(0 3px 5px rgba(0,0,0,0.45))" }}>
-        <path d="M4 2 L4 19 L8.5 14.7 L11.4 21.5 L14.3 20.3 L11.4 13.7 L17.6 13.7 Z" fill="#FFFFFF" stroke="#0B1020" strokeWidth="1.3" strokeLinejoin="round" />
-      </svg>
-    </div>
-  );
-};
-
 const SJTCard: React.FC<{
   questionNum: string;
   tag: string;
@@ -1085,8 +1074,7 @@ const SJTCard: React.FC<{
   floatOffset: number;
   focusKey?: string;        // "scenario" | "options" | "selected" | "none"
   hoverLetter?: string | null;
-  cursor?: { path: { f: number; x: number; y: number }[]; clicks: number[] };
-}> = ({ questionNum, tag, scenario, prompt, options, selectedLetter, revealStart, clickFrame, localFrame, progressPct, totalQ, floatOffset, focusKey = "none", hoverLetter = null, cursor }) => {
+}> = ({ questionNum, tag, scenario, prompt, options, selectedLetter, revealStart, clickFrame, localFrame, progressPct, totalQ, floatOffset, focusKey = "none", hoverLetter = null }) => {
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
   const cardOp = interpolate(localFrame, [0, 14], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const cardSc = interpolate(localFrame, [0, 16], [0.93, 1], {
@@ -1193,7 +1181,6 @@ const SJTCard: React.FC<{
           }} />
         )}
       </div>
-      {cursor && <HandCursor frame={localFrame} path={cursor.path} clicks={cursor.clicks} />}
     </div>
   );
 };
@@ -1287,13 +1274,6 @@ const B4Interact: React.FC = () => {
                 floatOffset={floatA}
                 focusKey={focusStage.key}
                 hoverLetter={q1HoverLetter}
-                cursor={{ path: [
-                  { f: 20, x: 780, y: 580 },
-                  { f: 140, x: 470, y: 380 },
-                  { f: 262, x: 118, y: 314 },
-                  { f: 300, x: 118, y: 314 },
-                  { f: 345, x: 250, y: 300 },
-                ], clicks: [300] }}
               />
               </div>
             )}
@@ -1317,12 +1297,6 @@ const B4Interact: React.FC = () => {
                 floatOffset={floatY(t, 0.74, 8, 0.5)}
                 focusKey={focusStage.key}
                 hoverLetter={q2HoverLetter}
-                cursor={{ path: [
-                  { f: 28, x: 740, y: 560 },
-                  { f: 72, x: 300, y: 420 },
-                  { f: 108, x: 118, y: 346 },
-                  { f: 145, x: 118, y: 346 },
-                ], clicks: [110] }}
               />
               </div>
             )}
@@ -1566,7 +1540,7 @@ const B7TailorTerminal: React.FC<{ lf: number }> = ({ lf }) => {
 
 const B7Tailor: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 1642, 1654);
+  const m = momentAnim(frame, 0, 8, 1170, 1184);
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
   // Phase gates & Transition
@@ -1593,30 +1567,33 @@ const B7Tailor: React.FC = () => {
   // ── Camera tour stops ──
   type B7Stop = { k: [number,number,number,number]; ox: number; oy: number; z: number; sect: "kpi"|"pemap"|"xai"|"recs"; n: string; title: string; desc: string; calloutPos: "bottom"|"right"|"left"|"top" };
   const b7Stops: B7Stop[] = [
-    { k: [200, 228, 430, 458], ox: 50, oy: 15, z: 1.28, sect: "kpi",   n: "①", title: "P×E 預測結果", desc: "結合環境與行為，直接預測留任率與錯配成本。", calloutPos: "bottom" },
-    { k: [458, 486, 688, 716], ox: 24, oy: 54, z: 1.34, sect: "pemap", n: "②", title: "雷達疊合分析", desc: "視覺化比對雙方落差，找出隱藏的摩擦風險點。", calloutPos: "right" },
-    { k: [716, 744, 946, 974], ox: 76, oy: 54, z: 1.34, sect: "xai",   n: "③", title: "行為驅動因子", desc: "XAI 解釋為什麼適合，給予高信心度的背後原因。", calloutPos: "left" },
-    { k: [974, 1002, 1204, 1232], ox: 50, oy: 85, z: 1.28, sect: "recs",  n: "④", title: "專屬管理建議", desc: "直接給主管第一天的具體帶人指南，避免磨合失敗。", calloutPos: "top" },
+    { k: [200, 228, 388, 416], ox: 50, oy: 15, z: 1.28, sect: "kpi",   n: "①", title: "P×E 預測結果", desc: "結合環境與行為，直接預測留任率與錯配成本。", calloutPos: "bottom" },
+    { k: [416, 444, 604, 632], ox: 24, oy: 54, z: 1.34, sect: "pemap", n: "②", title: "雷達疊合分析", desc: "視覺化比對雙方落差，找出隱藏的摩擦風險點。", calloutPos: "right" },
+    { k: [632, 660, 820, 848], ox: 76, oy: 54, z: 1.34, sect: "xai",   n: "③", title: "行為驅動因子", desc: "XAI 解釋為什麼適合，給予高信心度的背後原因。", calloutPos: "left" },
+    { k: [848, 876, 1036, 1064], ox: 50, oy: 85, z: 1.28, sect: "recs",  n: "④", title: "專屬管理建議", desc: "直接給主管第一天的具體帶人指南，避免磨合失敗。", calloutPos: "top" },
   ];
   const b7Active = b7Stops.find(s => lf >= s.k[0] && lf < s.k[3]);
   
   // Continuous camera path — no reset between stops, direct pan+zoom
   // Keyframes: before | kpi-in | kpi-hold | pemap-in | pemap-hold | xai-in | xai-hold | recs-in | recs-hold | out
   const camZ = interpolate(lf,
-    [200, 228, 430, 486, 688, 744, 946, 1002, 1204, 1232],
+    [200, 228, 388, 444, 604, 660, 820, 876, 1036, 1064],
     [  1, 1.28, 1.28, 1.34, 1.34, 1.34, 1.34, 1.28, 1.28,    1],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
   const camOx = interpolate(lf,
-    [200, 228, 430, 486, 688, 744, 946, 1002, 1204, 1232],
+    [200, 228, 388, 444, 604, 660, 820, 876, 1036, 1064],
     [ 50,  50,  50,  24,  24,  76,  76,   50,   50,  50],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
   const camOy = interpolate(lf,
-    [200, 228, 430, 486, 688, 744, 946, 1002, 1204, 1232],
+    [200, 228, 388, 444, 604, 660, 820, 876, 1036, 1064],
     [ 50,  15,  15,  54,  54,  54,  54,   85,   85,  50],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
+  // Idle float — keeps the dashboard alive on arrival, damped to 0 once the camera zooms in
+  const b7FloatAmp = interpolate(camZ, [1.02, 1.1], [3, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const b7Float = lf > 40 ? Math.sin(lf * 0.045) * b7FloatAmp : 0;
 
   // Section highlight / dim helpers
   const sOp = (sect: string): number => {
@@ -1674,13 +1651,13 @@ const B7Tailor: React.FC = () => {
         {!showTerminal && (
           <AbsoluteFill style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
             {/* Camera zoom wrapper */}
-            <div style={{ transformOrigin: `${camOx}% ${camOy}%`, transform: `scale(${camZ})` }}>
+            <div style={{ transformOrigin: "50% 50%", transform: `translate(${-camZ * (camOx - 50)}%, ${-camZ * (camOy - 50)}%) scale(${camZ})` }}>
               {/* Dashboard shell */}
               <div style={{
                 width: 1680, borderRadius: 16, overflow: "hidden" as const,
                 background: "#FFFFFF",
                 boxShadow: "0 24px 80px rgba(8,16,40,0.11), 0 1px 0 rgba(8,16,40,0.06)",
-                opacity: dashOp, transform: `translateY(${dashY}px) scale(${dashSc})`,
+                opacity: dashOp, transform: `translateY(${dashY + b7Float}px) scale(${dashSc})`,
                 display: "flex", flexDirection: "column" as const,
               }}>
 
@@ -1708,7 +1685,7 @@ const B7Tailor: React.FC = () => {
                 {/* ── KPI row ─────────────────────────────────── */}
                 <div style={{ display: "flex", borderBottom: "1px solid rgba(8,16,40,0.06)", flexShrink: 0, opacity: sOp("kpi"), boxShadow: sRing("kpi") }}>
                   {/* Fit Score */}
-                  <div style={{ flex: 1, padding: "18px 24px", borderRight: "1px solid rgba(8,16,40,0.06)", position: "relative" as const }}>
+                  <div style={{ flex: 1, padding: "18px 24px", borderRight: "1px solid rgba(8,16,40,0.06)", position: "relative" as const, opacity: interpolate(lf, [4, 24], [0, 1], cl), transform: `translateY(${interpolate(lf, [4, 30], [22, 0], { easing: Easing.out(Easing.cubic), ...cl })}px)` }}>
                     <div style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, background: ds.fit, borderRadius: "0 2px 2px 0" }} />
                     <div style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.fgFaint, letterSpacing: "0.08em", marginBottom: 5 }}>P×E 適配分數</div>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 3 }}>
@@ -1718,7 +1695,7 @@ const B7Tailor: React.FC = () => {
                     <div style={{ marginTop: 5, fontSize: 11, color: "#146F3E", fontFamily: fonts.mono }}>↑ 高出基準組 +18.2 分</div>
                   </div>
                   {/* Retention */}
-                  <div style={{ flex: 1, padding: "18px 24px", borderRight: "1px solid rgba(8,16,40,0.06)", position: "relative" as const }}>
+                  <div style={{ flex: 1, padding: "18px 24px", borderRight: "1px solid rgba(8,16,40,0.06)", position: "relative" as const, opacity: interpolate(lf, [12, 32], [0, 1], cl), transform: `translateY(${interpolate(lf, [12, 38], [22, 0], { easing: Easing.out(Easing.cubic), ...cl })}px)` }}>
                     <div style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, background: ds.blue, borderRadius: "0 2px 2px 0" }} />
                     <div style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.fgFaint, letterSpacing: "0.08em", marginBottom: 5 }}>6 個月留任率預測</div>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 3 }}>
@@ -1728,7 +1705,7 @@ const B7Tailor: React.FC = () => {
                     <div style={{ marginTop: 5, fontSize: 11, color: ds.blue, fontFamily: fonts.mono }}>對照基準 65.4% · ↑ +18.6pp</div>
                   </div>
                   {/* Cost */}
-                  <div style={{ flex: 1, padding: "18px 24px", position: "relative" as const }}>
+                  <div style={{ flex: 1, padding: "18px 24px", position: "relative" as const, opacity: interpolate(lf, [20, 40], [0, 1], cl), transform: `translateY(${interpolate(lf, [20, 46], [22, 0], { easing: Easing.out(Easing.cubic), ...cl })}px)` }}>
                     <div style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, background: ds.cyan, borderRadius: "0 2px 2px 0" }} />
                     <div style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.fgFaint, letterSpacing: "0.08em", marginBottom: 5 }}>錯配成本節省（預期）</div>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 3 }}>
@@ -1853,7 +1830,7 @@ export const S3_DIT: React.FC = () => {
       <Sequence from={1542} durationInFrames={710}  layout="none"><B4Interact /></Sequence>
       <Sequence from={2228} durationInFrames={264}  layout="none"><B5Capture /></Sequence>
       <Sequence from={2468} durationInFrames={150}  layout="none"><B6Bridge /></Sequence>
-      <Sequence from={2594} durationInFrames={1654} layout="none"><B7Tailor /></Sequence>
+      <Sequence from={2594} durationInFrames={1184} layout="none"><B7Tailor /></Sequence>
     </AbsoluteFill>
   );
 };

@@ -1,8 +1,8 @@
 // Design tokens — HireCook Digital Rationalism
 
 export const FPS = 60;
-export const TOTAL_SECONDS = 189.40; // 3:09.4 trimmed cut
-export const DURATION_IN_FRAMES = 11364; // Total frames
+export const TOTAL_SECONDS = 181.57; // 3:01.6 trimmed cut
+export const DURATION_IN_FRAMES = 10894; // Total frames
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
 
@@ -67,7 +67,7 @@ export const SCENES = {
   s0: { start: 0,     end: 270   }, // 4.5s  Intro
   s1: { start: 270,   end: 2280  }, // 33.5s Pain points (2010f)
   s2: { start: 2244,  end: 5124  }, // 48s   Science (2880f)
-  s3: { start: 5124,  end: 9372  }, // 70.8s DIT demo (4248f)
-  s4: { start: 9372,  end: 10332 }, // 16s   Difference (960f)
-  s5: { start: 10332, end: 11364 }, // 17.2s CTA (1032f)
+  s3: { start: 5124,  end: 8902  }, // 63s   DIT demo (3778f)
+  s4: { start: 8902,  end: 9862  }, // 16s   Difference (960f)
+  s5: { start: 9862,  end: 10894 }, // 17.2s CTA (1032f)
 };

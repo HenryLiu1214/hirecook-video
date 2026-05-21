@@ -204,12 +204,30 @@ const Pills: React.FC = () => {
 
 const Transition: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 200, 210); // Fade out right before sequence ends
-  const quoteOp = interpolate(frame, [6, 18], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return <AbsoluteFill style={{ opacity: m.opacity, clipPath: circleWipe(frame, 0, 30), transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 22 }}>
+
+  // Entrance: slash wipe over 28 frames
+  const wipe = slashWipe(frame, 0, 28);
+
+  // Exit: fade out towards end of 210-frame sequence
+  const exitOp = interpolate(frame, [180, 210], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const exitScale = interpolate(frame, [180, 210], [1, 1.08], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  // Subtitle: "「我看人很準」背後" — fade+rise after wipe settles
+  const subOp = interpolate(frame, [24, 42], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const subY = interpolate(frame, [24, 48], [28, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  return <AbsoluteFill style={{ opacity: exitOp, clipPath: wipe, transform: `scale(${exitScale})`, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 28 }}>
     <BgCalm theme="dark" tint="blue" />
-    <div style={{ opacity: quoteOp, color: colors.dimWhite, fontSize: 34, fontWeight: 600 }}>「我看人很準」背後</div>
-    <TypewriterText text="主管直覺" startFrame={10} charStagger={5} fontSize={162} fontWeight={850} colorScheme="white-to-blue" />
+    <div style={{
+      opacity: subOp,
+      transform: `translateY(${subY}px)`,
+      color: colors.dimWhite,
+      fontSize: 38,
+      fontWeight: 700,
+      letterSpacing: "-0.02em",
+      fontFamily: fonts.display,
+    }}>「我看人很準」背後</div>
+    <TypewriterText text="主管直覺" startFrame={32} charStagger={5} fontSize={162} fontWeight={850} colorScheme="white-to-blue" />
   </AbsoluteFill>;
 };
 

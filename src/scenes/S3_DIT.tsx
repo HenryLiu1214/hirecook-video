@@ -107,7 +107,7 @@ const HexRadar: React.FC<{
           x={lp.x}
           y={lp.y}
           fontSize={12}
-          fontFamily="'JetBrains Mono', monospace"
+          fontFamily={fonts.mono}
           fill="rgba(90,103,127,1)"
           textAnchor="middle"
           dominantBaseline="middle"
@@ -197,7 +197,7 @@ const PEMapRadar: React.FC<{
           x={lp.x}
           y={lp.y}
           fontSize={11}
-          fontFamily="'JetBrains Mono', monospace"
+          fontFamily={fonts.mono}
           fill="rgba(90,103,127,0.8)"
           textAnchor="middle"
           dominantBaseline="middle"
@@ -1006,7 +1006,7 @@ const B2Define: React.FC = () => {
       {/* ── Floating explanation text (dynamic, not a fixed header) ── */}
       {active && calloutOp > 0.01 && (
         <div style={{
-          position: "absolute", zIndex: 9, top: 286, width: 470, padding: "26px 30px",
+          position: "absolute", zIndex: 9, top: 286, width: 560, padding: "26px 30px",
           ...(calloutSide === "left" ? { left: 56 } : { right: 56 }),
           opacity: calloutOp * m.opacity, transform: `translateY(${calloutRise}px)`,
           textAlign: calloutSide === "left" ? "right" as const : "left" as const,
@@ -1020,7 +1020,7 @@ const B2Define: React.FC = () => {
             <span style={{ fontSize: 30, fontFamily: fonts.mono, fontWeight: 700, color: ds.blue }}>{active.n}</span>
             <span style={{ width: 38, height: 2, background: `${ds.blue}50` }} />
           </div>
-          <div style={{ fontSize: 52, fontWeight: 800, color: ds.fgPrimary, fontFamily: fonts.display, letterSpacing: "-2px", lineHeight: 1.12 }}>{active.title}</div>
+          <div style={{ fontSize: 52, fontWeight: 800, color: ds.fgPrimary, fontFamily: fonts.display, letterSpacing: "-2px", lineHeight: 1.12, whiteSpace: "nowrap" as const }}>{active.title}</div>
           <div style={{ marginTop: 14, fontSize: 21, color: ds.fgSecondary, fontFamily: fonts.display, lineHeight: 1.55, maxWidth: 400 }}>{active.desc}</div>
         </div>
       )}

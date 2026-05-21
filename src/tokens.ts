@@ -59,7 +59,7 @@ export const colors = {
 
 export const fonts = {
   display: "'Inter', 'Noto Sans TC', sans-serif",
-  mono: "'JetBrains Mono', 'Courier New', monospace",
+  mono: "'JetBrains Mono', 'Courier New', 'Noto Sans TC', monospace",
 };
 
 // Scene timing (frames @ 60fps) — 3:42 extended cut

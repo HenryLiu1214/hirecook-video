@@ -4,12 +4,13 @@ import { colors, fonts } from "../tokens";
 import { BgCalm } from "../components/BgCalm";
 import { HcLogoMark } from "../components/HcLogoMark";
 import { TypewriterText } from "../components/TypewriterText";
-import { momentAnim, breathe, rotXSettle, rotZIn } from "../anim";
+import { momentAnim, breathe, rotXSettle, rotZIn, rippleBurst, slashWipe } from "../anim";
 
-const BigBeat: React.FC<{ text: string; sub?: string; start?: number; colorScheme?: React.ComponentProps<typeof TypewriterText>["colorScheme"]; size?: number; dark?: boolean }> = ({ text, sub, start = 14, colorScheme = "plum-to-pink", size = 190, dark = false }) => {
+const BigBeat: React.FC<{ text: string; sub?: string; start?: number; colorScheme?: React.ComponentProps<typeof TypewriterText>["colorScheme"]; size?: number; dark?: boolean; wipe?: "ripple" | "slash" }> = ({ text, sub, start = 14, colorScheme = "plum-to-pink", size = 190, dark = false, wipe }) => {
   const frame = useCurrentFrame();
   const m = momentAnim(frame, 0, 8, 228, 240);
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 24, perspective: "1400px" }}>
+  const cp = wipe === "ripple" ? rippleBurst(frame, 0, 34) : wipe === "slash" ? slashWipe(frame, 0, 24) : undefined;
+  return <AbsoluteFill style={{ opacity: m.opacity, clipPath: cp, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 24, perspective: "1400px" }}>
     <div style={{ transform: `scale(${breathe(frame / 60, 1, 0.006)}) rotate(${rotZIn(frame, start, 28, -8)}deg) rotateX(${rotXSettle(frame, start, 32)}deg)` }}>
       <TypewriterText text={text} startFrame={start} charStagger={4} fontSize={size} fontWeight={850} letterSpacing="-0.055em" colorScheme={colorScheme} />
     </div>
@@ -20,7 +21,7 @@ const BigBeat: React.FC<{ text: string; sub?: string; start?: number; colorSchem
 const Brand: React.FC = () => {
   const frame = useCurrentFrame();
   const m = momentAnim(frame, 0, 8, 228, 240);
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 24 }}>
+  return <AbsoluteFill style={{ opacity: m.opacity, clipPath: slashWipe(frame, 0, 24), transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 24 }}>
     <div style={{ color: colors.hcFgMuted, fontSize: 38, fontWeight: 650 }}>不再測「你像什麼人格」，而是模擬「你在這個環境下會怎麼工作」</div>
     <div style={{ display: "flex", alignItems: "center", gap: 18, padding: "20px 32px", borderRadius: 999, background: "#FFFFFF", border: `1px solid ${colors.hcHairline}`, boxShadow: "0 1px 0 rgba(8,16,40,0.04)" }}>
       <HcLogoMark size={54} />
@@ -323,8 +324,7 @@ const MBTIInjection: React.FC = () => {
       <div style={{ color: colors.hcFgPrimary, fontSize: 66, fontWeight: 900, letterSpacing: "-0.045em" }}>AI Agent Online</div>
       <div style={{ marginTop: 10, color: colors.hcFgSecondary, fontSize: 28, fontWeight: 680 }}>人格訊號已載入，準備進入 Work-Sim</div>
     </div>
-    <div style={{ position: "absolute", inset: 0, opacity: frame >= 348 ? 1 : 0, background: "#17339C" }} />
-    <div style={{ position: "absolute", left: 960, top: 590, width: interpolate(exitRing, [0, 1], [340, 3600]), height: interpolate(exitRing, [0, 1], [340, 3600]), opacity: frame >= 348 ? 1 : 0, transform: "translate(-50%, -50%)", borderRadius: "50%", border: `${interpolate(exitRing, [0, 1], [7, 920])}px solid rgba(111,227,245,0.42)`, boxShadow: "0 0 120px rgba(111,227,245,0.36)" }} />
+    <div style={{ position: "absolute", left: 960, top: 590, width: interpolate(exitRing, [0, 1], [340, 3600]), height: interpolate(exitRing, [0, 1], [340, 3600]), opacity: frame >= 348 ? 1 : 0, background: "#17339C", transform: "translate(-50%, -50%)", borderRadius: "50%", border: `${interpolate(exitRing, [0, 1], [7, 920])}px solid rgba(111,227,245,0.42)`, boxShadow: "0 0 120px rgba(111,227,245,0.36)" }} />
     <div style={{ position: "absolute", left: 960, top: 590, width: 340, height: 340, opacity: frame >= 348 ? 1 : 0, transform: "translate(-50%, -50%)" }}>
       <RobotAgent size={340} boot={1} bodyColor="#17339C" />
     </div>
@@ -402,9 +402,8 @@ const OvercookedPlay: React.FC = () => {
       TRACE CAPTURED →
     </div>
 
-    <div style={{ position: "absolute", inset: 0, opacity: cover, background: "#17339C" }} />
-    <div style={{ position: "absolute", left: 960, top: 590, width: 340 + cover * 3260, height: 340 + cover * 3260, opacity: cover, transform: "translate(-50%, -50%)", borderRadius: "50%", border: `${7 + cover * 913}px solid rgba(111,227,245,0.42)`, boxShadow: "0 0 120px rgba(111,227,245,0.36)" }} />
-    <div style={{ position: "absolute", left: 960, top: 590, width: 340, height: 340, opacity: cover, transform: "translate(-50%, -50%)" }}>
+    <div style={{ position: "absolute", left: 960, top: 590, width: 340 + cover * 3260, height: 340 + cover * 3260, background: "#17339C", opacity: cover, transform: "translate(-50%, -50%)", borderRadius: "50%", border: `${7 + cover * 913}px solid rgba(111,227,245,0.42)`, boxShadow: "0 0 120px rgba(111,227,245,0.36)", zIndex: 10 }} />
+    <div style={{ position: "absolute", left: 960, top: 590, width: 340, height: 340, opacity: cover, transform: "translate(-50%, -50%)", zIndex: 11 }}>
       <RobotAgent size={340} boot={1} bodyColor="#17339C" />
     </div>
   </AbsoluteFill>;
@@ -525,7 +524,7 @@ export const S2_Science: React.FC = () => <AbsoluteFill>
   <Sequence from={0} durationInFrames={720} layout="none"><AbsoluteFill><BgCalm theme="light" tint="blue" /></AbsoluteFill></Sequence>
   <Sequence from={720} durationInFrames={2700} layout="none"><AbsoluteFill><BgCalm theme="dark" tint="blue" /></AbsoluteFill></Sequence>
   <Sequence from={0} durationInFrames={240} layout="none"><BigBeat text="MBTI" sub="Personality signal，不是錄用結論" size={230} /></Sequence>
-  <Sequence from={240} durationInFrames={240} layout="none"><BigBeat text="P × E Interaction" sub="同一人格，在不同壓力結構下會有不同表現" size={156} /></Sequence>
+  <Sequence from={240} durationInFrames={240} layout="none"><BigBeat text="P × E Interaction" sub="同一人格，在不同壓力結構下會有不同表現" size={156} wipe="ripple" /></Sequence>
   <Sequence from={480} durationInFrames={240} layout="none"><Brand /></Sequence>
   <Sequence from={720} durationInFrames={360} layout="none"><Formula /></Sequence>
   <Sequence from={1080} durationInFrames={360} layout="none"><PE /></Sequence>

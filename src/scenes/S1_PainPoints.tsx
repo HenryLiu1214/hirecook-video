@@ -4,7 +4,7 @@ import { colors, fonts } from "../tokens";
 import { BgCalm } from "../components/BgCalm";
 import { TypewriterText } from "../components/TypewriterText";
 import { LucideIcon } from "../components/LucideIcon";
-import { momentAnim, breathe, rotXSettle, rotZIn, skewSettle } from "../anim";
+import { momentAnim, breathe, rotXSettle, rotZIn, skewSettle, slashWipe, circleWipe } from "../anim";
 
 const card = {
   background: "#FFFFFF",
@@ -56,7 +56,7 @@ const Audience: React.FC = () => {
   const m = momentAnim(frame, 0, 8, 168, 180);
   const industryOp = interpolate(frame, [76, 90], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const industryY = interpolate(frame, [76, 96], [24, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 22, perspective: "1400px" }}>
+  return <AbsoluteFill style={{ opacity: m.opacity, clipPath: slashWipe(frame, 0, 24), transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 22, perspective: "1400px" }}>
     <div style={{ fontFamily: fonts.mono, color: colors.hcFgMuted, fontSize: 23, letterSpacing: "0.14em", textTransform: "uppercase" }}>TARGET CUSTOMER</div>
     <div style={{ transform: `rotate(${rotZIn(frame, 18, 26, -7)}deg) rotateX(${rotXSettle(frame, 18, 30)}deg)` }}>
       <TypewriterText text="成長型中小企業" startFrame={18} charStagger={3} fontSize={176} fontWeight={850} letterSpacing="-0.055em" colorScheme="plum-to-pink" />
@@ -78,7 +78,7 @@ const GutFeeling: React.FC = () => {
   ];
   const subOp = interpolate(frame, [116, 130], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const subY = interpolate(frame, [116, 136], [24, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 26, perspective: "1400px" }}>
+  return <AbsoluteFill style={{ opacity: m.opacity, clipPath: slashWipe(frame, 0, 24), transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 26, perspective: "1400px" }}>
     <div style={{ color: colors.hcFgMuted, fontFamily: fonts.mono, fontSize: 23, letterSpacing: "0.14em" }}>WHO MAKES THE HIRING CALL</div>
     <div style={{ transform: `scale(${breathe(frame / 60, 1, 0.006)}) rotate(${rotZIn(frame, 14, 28, -8)}deg) rotateX(${rotXSettle(frame, 14, 34)}deg)` }}>
       <TypewriterText text="營運導向決策者" startFrame={14} charStagger={3} fontSize={154} fontWeight={850} letterSpacing="-0.055em" colorScheme="plum-to-pink" />
@@ -101,7 +101,7 @@ const Pills: React.FC = () => {
   const m = momentAnim(frame, 0, 8, 168, 180);
   const qOp = interpolate(frame, [92, 106], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const qY = interpolate(frame, [92, 112], [30, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 24, perspective: "1400px" }}>
+  return <AbsoluteFill style={{ opacity: m.opacity, clipPath: slashWipe(frame, 0, 24), transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 24, perspective: "1400px" }}>
     <div style={{ color: colors.hcFgMuted, fontFamily: fonts.mono, fontSize: 23, letterSpacing: "0.14em" }}>ABOUT THE NEW HIRE</div>
     <div style={{ transform: `rotate(${rotZIn(frame, 18, 28, -7)}deg) rotateX(${rotXSettle(frame, 18, 32)}deg)` }}>
       <TypewriterText text={"這位新人\n六個月後還在嗎？"} startFrame={18} charStagger={3} fontSize={132} fontWeight={850} letterSpacing="-0.055em" colorScheme="plum-to-pink" lineHeight={0.92} />
@@ -116,7 +116,7 @@ const Transition: React.FC = () => {
   const frame = useCurrentFrame();
   const m = momentAnim(frame, 0, 8, 108, 120);
   const quoteOp = interpolate(frame, [58, 72], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 22 }}>
+  return <AbsoluteFill style={{ opacity: m.opacity, clipPath: circleWipe(frame, 0, 30), transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 22 }}>
     <div style={{ opacity: quoteOp, color: colors.dimWhite, fontSize: 34, fontWeight: 600 }}>「我看人很準」背後</div>
     <TypewriterText text="主管直覺" startFrame={10} charStagger={5} fontSize={162} fontWeight={850} colorScheme="white-to-blue" />
   </AbsoluteFill>;

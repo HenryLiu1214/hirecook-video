@@ -1256,7 +1256,7 @@ const B4Interact: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
-  const m = momentAnim(frame, 0, 8, 1212, 1224);
+  const m = momentAnim(frame, 0, 8, 1282, 1294);
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
   // ── 120f candidate-perspective opener before Q1 ───────────────────────────
@@ -1271,59 +1271,59 @@ const B4Interact: React.FC = () => {
 
   // ── Q-phase flags (all shifted by O) ─────────────────────────────────────
   const qFrame      = Math.max(0, frame - O);   // local frame within Q phases
-  const showQ1      = frame >= O && frame < O + 480;
-  const showQ2      = frame >= O + 420 && frame < O + 680;
-  const showLoading = frame >= O + 640 && frame < O + 840;
-  const showScore   = frame >= O + 840;
+  const showQ1      = frame >= O && frame < O + 550;
+  const showQ2      = frame >= O + 490 && frame < O + 750;
+  const showLoading = frame >= O + 710 && frame < O + 910;
+  const showScore   = frame >= O + 910;
 
   // Q1: click A at qFrame 400
   const q1LocalFrame = qFrame;
   const q1selected   = qFrame >= 400 ? "A" : null;
 
   // Q2: click B at q2LocalFrame 160
-  const q2LocalFrame = Math.max(0, qFrame - 450);
-  const q2selected   = qFrame >= 610 ? "B" : null;
+  const q2LocalFrame = Math.max(0, qFrame - 520);
+  const q2selected   = qFrame >= 680 ? "B" : null;
 
   // Loading bar
-  const loadProg = interpolate(frame, [O + 670, O + 830], [0, 100], {
+  const loadProg = interpolate(frame, [O + 740, O + 900], [0, 100], {
     easing: Easing.out(Easing.cubic), ...cl,
   });
 
   // Score card
-  const scoreSc = interpolate(frame, [O + 840, O + 858], [0.82, 1], {
+  const scoreSc = interpolate(frame, [O + 910, O + 928], [0.82, 1], {
     easing: Easing.out(Easing.back(1.25)), ...cl,
   });
-  const scoreOp = interpolate(frame, [O + 840, O + 854], [0, 1], cl);
-  const scoreVal = interpolate(frame, [O + 860, O + 940], [0, 88.5], {
+  const scoreOp = interpolate(frame, [O + 910, O + 924], [0, 1], cl);
+  const scoreVal = interpolate(frame, [O + 930, O + 1010], [0, 88.5], {
     easing: Easing.out(Easing.cubic), ...cl,
   });
 
   // ── Region focus controller (gaze guiding within the SJT card) ──
   const focusStage = (() => {
-    if (qFrame < 450) {
+    if (qFrame < 520) {
       if (qFrame < 70)  return { key: "none",     title: "", desc: "" };
       if (qFrame < 240) return { key: "scenario", title: "① 真實情境", desc: "把人放進一個沒有標準答案的高壓現場。" };
       if (qFrame < 400) return { key: "options",  title: "② 四個選項", desc: "每個選項對應不同的決策風格與壓力反應。" };
       return                   { key: "selected", title: "③ 真實選擇", desc: "選的不是對錯，是這個人實際會怎麼做。" };
     }
-    if (qFrame < 660) return { key: "options", title: "再來一題", desc: "換一個情境，交叉驗證行為的穩定度。" };
+    if (qFrame < 730) return { key: "options", title: "再來一題", desc: "換一個情境，交叉驗證行為的穩定度。" };
     return { key: "none", title: "", desc: "" };
   })();
 
   const floatA = floatY(t, 0.68, 8, 0.4);
 
   // ── Transitions ──
-  const q1ExitX  = interpolate(frame, [O + 426, O + 460], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
-  const q1ExitOp = interpolate(frame, [O + 420, O + 460], [1, 0], cl);
-  const q1ExitSc = interpolate(frame, [O + 426, O + 460], [1, 0.90], { easing: Easing.in(Easing.quad), ...cl });
+  const q1ExitX  = interpolate(frame, [O + 496, O + 530], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
+  const q1ExitOp = interpolate(frame, [O + 490, O + 530], [1, 0], cl);
+  const q1ExitSc = interpolate(frame, [O + 496, O + 530], [1, 0.90], { easing: Easing.in(Easing.quad), ...cl });
   
-  const q2EnterX = interpolate(frame, [O + 440, O + 480], [64, 0], { easing: Easing.out(Easing.cubic), ...cl });
-  const q2EnterOp = interpolate(frame, [O + 440, O + 470], [0, 1], cl);
-  const q2EnterSc = interpolate(frame, [O + 440, O + 480], [0.90, 1], { easing: Easing.out(Easing.cubic), ...cl });
+  const q2EnterX = interpolate(frame, [O + 510, O + 550], [64, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  const q2EnterOp = interpolate(frame, [O + 510, O + 540], [0, 1], cl);
+  const q2EnterSc = interpolate(frame, [O + 510, O + 550], [0.90, 1], { easing: Easing.out(Easing.cubic), ...cl });
 
-  const q2ExitX  = interpolate(frame, [O + 640, O + 670], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
-  const q2ExitOp = interpolate(frame, [O + 640, O + 670], [1, 0], cl);
-  const q2ExitSc = interpolate(frame, [O + 640, O + 670], [1, 0.90], { easing: Easing.in(Easing.quad), ...cl });
+  const q2ExitX  = interpolate(frame, [O + 710, O + 740], [0, -64], { easing: Easing.in(Easing.cubic), ...cl });
+  const q2ExitOp = interpolate(frame, [O + 710, O + 740], [1, 0], cl);
+  const q2ExitSc = interpolate(frame, [O + 710, O + 740], [1, 0.90], { easing: Easing.in(Easing.quad), ...cl });
 
   // Hover pre-click: candidate's cursor lingers before clicking
   const q1HoverLetter = q1LocalFrame >= 340 && q1LocalFrame < 400 ? "A" : null;
@@ -1691,7 +1691,7 @@ const B7TailorTerminal: React.FC<{ lf: number }> = ({ lf }) => {
 
 const B7Tailor: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 1548, 1560);
+  const m = momentAnim(frame, 0, 8, 1872, 1884);
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
   // Phase gates
@@ -1720,10 +1720,10 @@ const B7Tailor: React.FC = () => {
   // ── Camera tour stops ──
   type B7Stop = { k: [number,number,number,number]; ox: number; oy: number; z: number; sect: "kpi"|"pemap"|"xai"|"recs"; n: string; title: string; desc: string; calloutPos: "bottom"|"right"|"left"|"top" };
   const b7Stops: B7Stop[] = [
-    { k: [200, 228, 340, 368], ox: 50, oy: 15, z: 1.28, sect: "kpi",   n: "①", title: "P×E 預測結果", desc: "結合環境與行為，直接預測留任率與錯配成本。", calloutPos: "bottom" },
-    { k: [368, 396, 520, 548], ox: 24, oy: 54, z: 1.34, sect: "pemap", n: "②", title: "雷達疊合分析", desc: "視覺化比對雙方落差，找出隱藏的摩擦風險點。", calloutPos: "right" },
-    { k: [548, 576, 700, 728], ox: 76, oy: 54, z: 1.34, sect: "xai",   n: "③", title: "行為驅動因子", desc: "XAI 解釋為什麼適合，給予高信心度的背後原因。", calloutPos: "left" },
-    { k: [728, 756, 880, 908], ox: 50, oy: 85, z: 1.28, sect: "recs",  n: "④", title: "專屬管理建議", desc: "直接給主管第一天的具體帶人指南，避免磨合失敗。", calloutPos: "top" },
+    { k: [200, 228, 430, 458], ox: 50, oy: 15, z: 1.28, sect: "kpi",   n: "①", title: "P×E 預測結果", desc: "結合環境與行為，直接預測留任率與錯配成本。", calloutPos: "bottom" },
+    { k: [458, 486, 688, 716], ox: 24, oy: 54, z: 1.34, sect: "pemap", n: "②", title: "雷達疊合分析", desc: "視覺化比對雙方落差，找出隱藏的摩擦風險點。", calloutPos: "right" },
+    { k: [716, 744, 946, 974], ox: 76, oy: 54, z: 1.34, sect: "xai",   n: "③", title: "行為驅動因子", desc: "XAI 解釋為什麼適合，給予高信心度的背後原因。", calloutPos: "left" },
+    { k: [974, 1002, 1204, 1232], ox: 50, oy: 85, z: 1.28, sect: "recs",  n: "④", title: "專屬管理建議", desc: "直接給主管第一天的具體帶人指南，避免磨合失敗。", calloutPos: "top" },
   ];
   const b7Active = b7Stops.find(s => lf >= s.k[0] && lf < s.k[3]);
   
@@ -1979,10 +1979,10 @@ export const S3_DIT: React.FC = () => {
       <Sequence from={0}    durationInFrames={600}  layout="none"><B0Overview /></Sequence>
       <Sequence from={576}  durationInFrames={1284} layout="none"><B2Define /></Sequence>
       <Sequence from={1836} durationInFrames={150}  layout="none"><B3Bridge /></Sequence>
-      <Sequence from={1962} durationInFrames={1224} layout="none"><B4Interact /></Sequence>
-      <Sequence from={3162} durationInFrames={264}  layout="none"><B5Capture /></Sequence>
-      <Sequence from={3402} durationInFrames={150}  layout="none"><B6Bridge /></Sequence>
-      <Sequence from={3528} durationInFrames={1560} layout="none"><B7Tailor /></Sequence>
+      <Sequence from={1962} durationInFrames={1294} layout="none"><B4Interact /></Sequence>
+      <Sequence from={3232} durationInFrames={264}  layout="none"><B5Capture /></Sequence>
+      <Sequence from={3472} durationInFrames={150}  layout="none"><B6Bridge /></Sequence>
+      <Sequence from={3598} durationInFrames={1884} layout="none"><B7Tailor /></Sequence>
     </AbsoluteFill>
   );
 };

@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>HireCook Design System — Overview</title>
+  <link rel="icon" href="assets/monogram.svg">
+  <link rel="stylesheet" href="colors_and_type.css">
+  <style>
+    :root {
+      --slide-w: 1920px;
+      --slide-h: 1080px;
+      --pad-x: 120px;
+      --pad-y: 100px;
+    }
+    html, body { margin: 0; background: #1a1a1a; }
+
+    /* Slide common */
+    section {
+      width: var(--slide-w);
+      height: var(--slide-h);
+      background: var(--bg-canvas);
+      color: var(--fg-primary);
+      font-family: var(--font-sans);
+      padding: var(--pad-y) var(--pad-x);
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+    }
+    .eyebrow {
+      font: 500 18px/1 var(--font-mono);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .eyebrow .signal-dot {
+      width: 10px; height: 10px; border-radius: 999px;
+      background: #00B4D8; box-shadow: 0 0 10px rgba(0,180,216,0.45);
+    }
+    .display { font: 600 120px/1.02 var(--font-display); letter-spacing: -0.025em; color: var(--fg-primary); margin: 0; }
+    .h-display { font: 600 84px/1.05 var(--font-display); letter-spacing: -0.025em; color: var(--fg-primary); margin: 0; }
+    .h1 { font: 600 56px/1.1 var(--font-display); letter-spacing: -0.02em; margin: 0; }
+    .h2 { font: 600 36px/1.2 var(--font-display); letter-spacing: -0.015em; margin: 0; }
+    .lede { font: 400 28px/1.45 var(--font-sans); color: var(--fg-secondary); max-width: 24ch; margin: 0; }
+    .meta-mono { font: 500 16px/1 var(--font-mono); letter-spacing: 0.12em; color: var(--fg-muted); text-transform: uppercase; }
+    .footer {
+      position: absolute; left: var(--pad-x); right: var(--pad-x); bottom: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      font: 500 16px/1 var(--font-mono); letter-spacing: 0.10em;
+      text-transform: uppercase; color: var(--fg-faint);
+    }
+    .brand-stripe { display: flex; align-items: center; gap: 14px; }
+    .brand-stripe img { width: 32px; height: 32px; }
+    .brand-stripe span { color: var(--fg-secondary); }
+    .pagenum { font-family: var(--font-mono); font-feature-settings: "tnum"; }
+
+    /* Backgrounds + decoration */
+    .dot-grid {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(33,81,245,0.12) 1.5px, transparent 1.5px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* Slide 1 — Cover */
+    .cover { display: flex; flex-direction: column; justify-content: space-between; }
+    .cover__head { display: flex; align-items: center; gap: 20px; }
+    .cover__head img { width: 56px; height: 56px; }
+    .cover__head .name { font: 600 22px/1 var(--font-sans); letter-spacing: -0.005em; }
+    .cover__head .sub { font: 500 16px/1 var(--font-mono); letter-spacing: 0.10em; text-transform: uppercase; color: var(--fg-muted); margin-top: 4px; }
+    .cover__main { display: flex; flex-direction: column; gap: 36px; }
+    .cover__title { font: 600 144px/0.96 var(--font-display); letter-spacing: -0.03em; margin: 0; max-width: 18ch; }
+    .cover__title em { font-style: normal; color: #2151F5; }
+    .cover__sub { font: 400 32px/1.4 var(--font-sans); color: var(--fg-secondary); max-width: 32ch; margin: 0; }
+    .cover__metarow { display: flex; gap: 64px; align-items: center; }
+    .cover__metarow > div { display: flex; flex-direction: column; gap: 6px; }
+    .cover__metarow .k { font: 500 13px/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-faint); }
+    .cover__metarow .v { font: 500 18px/1.3 var(--font-sans); color: var(--fg-primary); }
+
+    /* Slide 2 — Formula */
+    .formula { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 56px; height: 100%; padding-bottom: 80px; box-sizing: border-box; }
+    .formula__eq { font: 600 220px/1 var(--font-display); letter-spacing: -0.04em; color: var(--fg-primary); }
+    .formula__eq .op { color: #2151F5; margin: 0 18px; }
+    .formula__eq .dim { color: var(--fg-faint); font-weight: 400; }
+    .formula__legend { display: grid; grid-template-columns: repeat(3, 1fr); gap: 64px; max-width: 1280px; }
+    .formula__legend > div { display: flex; flex-direction: column; gap: 10px; }
+    .formula__legend .k { font: 500 14px/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-muted); }
+    .formula__legend .v { font: 600 28px/1.2 var(--font-display); letter-spacing: -0.01em; color: var(--fg-primary); }
+    .formula__legend .d { font: 400 18px/1.5 var(--font-sans); color: var(--fg-muted); }
+
+    /* Slide 3 — Brand mark */
+    .markpage { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; height: 100%; align-items: center; }
+    .markpage__left { display: flex; flex-direction: column; gap: 40px; }
+    .markpage__right { background: #F2F4F9; border-radius: 24px; height: 720px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line-hairline); }
+    .markpage__right img { width: 360px; height: 360px; }
+    .markpage__rows { display: flex; flex-direction: column; gap: 24px; margin-top: 16px; }
+    .markpage__row { display: grid; grid-template-columns: 200px 1fr; gap: 24px; padding: 16px 0; border-top: 1px solid var(--line-hairline); }
+    .markpage__row .k { font: 500 14px/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-muted); padding-top: 4px; }
+    .markpage__row .v { font: 400 20px/1.45 var(--font-sans); color: var(--fg-primary); }
+
+    /* Slide 4 — Color brand scale */
+    .scalepage { display: flex; flex-direction: column; gap: 56px; height: 100%; }
+    .scalepage__head { display: flex; align-items: flex-end; justify-content: space-between; }
+    .scalepage__head h1 { margin: 0; }
+    .scalepage__head .stamp { display: inline-flex; align-items: center; gap: 12px; padding: 12px 18px; border-radius: 999px; background: #2151F5; color: white; font: 600 18px/1 var(--font-mono); letter-spacing: 0.04em; }
+    .blue-scale { display: grid; grid-template-columns: repeat(11, 1fr); gap: 0; border-radius: 16px; overflow: hidden; border: 1px solid var(--line-hairline); }
+    .blue-scale .sw { aspect-ratio: 1 / 1.5; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; font-family: var(--font-mono); }
+    .blue-scale .sw .n { font-size: 22px; font-weight: 500; }
+    .blue-scale .sw .h { font-size: 14px; opacity: 0.7; }
+    .blue-scale .sw.dark { color: #FFFFFF; }
+    .blue-scale .sw.light { color: #0B1020; }
+    .scalepage__caption { display: flex; justify-content: space-between; gap: 48px; }
+    .scalepage__caption > div { display: flex; flex-direction: column; gap: 6px; max-width: 30ch; }
+    .scalepage__caption .k { font: 500 13px/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-faint); }
+    .scalepage__caption .v { font: 400 18px/1.5 var(--font-sans); color: var(--fg-secondary); }
+
+    /* Slide 5 — Status palette */
+    .statuspage { display: flex; flex-direction: column; gap: 64px; height: 100%; }
+    .statusgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .statustile { background: #FFFFFF; border: 1px solid var(--line-hairline); border-radius: 16px; padding: 40px; display: flex; flex-direction: column; gap: 20px; height: 480px; box-shadow: 0 1px 0 rgba(8,16,40,0.04); }
+    .statustile .swatch { width: 60px; height: 60px; border-radius: 12px; }
+    .statustile .lbl { font: 500 14px/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-muted); }
+    .statustile .name { font: 600 28px/1.2 var(--font-display); letter-spacing: -0.01em; color: var(--fg-primary); }
+    .statustile .hex { font: 400 16px/1 var(--font-mono); color: var(--fg-faint); }
+    .statustile .desc { font: 400 17px/1.5 var(--font-sans); color: var(--fg-muted); margin-top: auto; }
+    .statustile .chip { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; font: 500 15px/1.5 var(--font-sans); width: fit-content; }
+    .statustile .chip .dot { width: 8px; height: 8px; border-radius: 999px; }
+
+    /* Slide 6 — Type */
+    .typepage { display: flex; flex-direction: column; gap: 48px; height: 100%; }
+    .typerows { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line-hairline); }
+    .typerow { display: grid; grid-template-columns: 200px 200px 1fr; gap: 32px; padding: 28px 0; border-bottom: 1px solid var(--line-hairline); align-items: baseline; }
+    .typerow .tag { font: 500 14px/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-muted); }
+    .typerow .spec { font: 400 15px/1 var(--font-mono); color: var(--fg-faint); }
+    .typerow .sample { color: var(--fg-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Slide 7 — Components */
+    .componentspage { display: flex; flex-direction: column; gap: 56px; height: 100%; }
+    .compgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; flex: 1; }
+    .comppanel { background: #FFFFFF; border: 1px solid var(--line-hairline); border-radius: 16px; padding: 36px; display: flex; flex-direction: column; gap: 24px; box-shadow: 0 1px 0 rgba(8,16,40,0.04); }
+    .comppanel .head { font: 500 14px/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-muted); }
+    .comppanel .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .btn { font: 500 18px/1 var(--font-sans); padding: 14px 22px; border-radius: 8px; border: 1px solid transparent; display: inline-flex; align-items: center; gap: 10px; }
+    .btn-primary { background: #2151F5; color: white; }
+    .btn-secondary { background: #FFFFFF; color: #0B1020; border-color: rgba(8,16,40,0.10); }
+    .btn-ghost { background: transparent; color: #364159; }
+    .chip-big { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; font: 500 15px/1.5 var(--font-sans); }
+    .chip-big .dot { width: 8px; height: 8px; border-radius: 999px; }
+    .kpi { display: flex; flex-direction: column; gap: 14px; }
+    .kpi__num { font: 600 64px/1 var(--font-display); letter-spacing: -0.02em; font-feature-settings: "tnum"; }
+    .kpi__unit { font: 500 22px/1 var(--font-mono); color: var(--fg-faint); margin-left: 8px; }
+    .kpi__meta { font: 400 16px/1.4 var(--font-sans); color: var(--fg-muted); display: flex; align-items: center; gap: 10px; }
+    .kpi__delta { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font: 500 15px/1.4 var(--font-mono); background: #E6F5EC; color: #146F3E; }
+    .field { display: flex; flex-direction: column; gap: 10px; }
+    .field label { font: 500 14px/1 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); }
+    .field .input { background: #FFFFFF; border: 1px solid rgba(8,16,40,0.10); border-radius: 6px; padding: 14px 18px; font: 400 18px/1 var(--font-sans); color: var(--fg-primary); }
+    .field .input.focused { border-color: #2151F5; box-shadow: 0 0 0 4px rgba(33,81,245,0.18); }
+
+    /* Slide 8 — Voice */
+    .voicepage { display: flex; flex-direction: column; gap: 48px; height: 100%; }
+    .voicegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; flex: 1; }
+    .voicepanel { padding: 40px; border-radius: 16px; display: flex; flex-direction: column; gap: 16px; border: 1px solid var(--line-hairline); background: #FFFFFF; }
+    .voicepanel.yes { border-left: 4px solid #1B7A4D; }
+    .voicepanel.no  { border-left: 4px solid #B83A2E; }
+    .voicepanel .tag { font: 500 14px/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 10px; }
+    .voicepanel.yes .tag { color: #1B7A4D; }
+    .voicepanel.no .tag { color: #B83A2E; }
+    .voicepanel .quote { font: 500 32px/1.35 var(--font-display); letter-spacing: -0.015em; color: var(--fg-primary); }
+    .voicepanel .note  { font: 400 18px/1.5 var(--font-sans); color: var(--fg-muted); margin-top: auto; }
+    .dot-md { width: 10px; height: 10px; border-radius: 999px; }
+    .dot-md.green { background: #1B7A4D; }
+    .dot-md.red   { background: #B83A2E; }
+
+    /* Slide 9 — Closing / file index */
+    .closepage { display: grid; grid-template-columns: 1.3fr 1fr; gap: 80px; height: 100%; align-items: center; }
+    .closepage__left { display: flex; flex-direction: column; gap: 32px; }
+    .filelist { display: flex; flex-direction: column; }
+    .filelist__row { display: grid; grid-template-columns: 260px 1fr; gap: 24px; padding: 18px 0; border-top: 1px solid var(--line-hairline); }
+    .filelist__row:last-child { border-bottom: 1px solid var(--line-hairline); }
+    .filelist__row .k { font: 500 16px/1.4 var(--font-mono); color: #2151F5; }
+    .filelist__row .v { font: 400 18px/1.5 var(--font-sans); color: var(--fg-secondary); }
+    .closing-mark { display: flex; align-items: center; justify-content: center; height: 100%; }
+    .closing-mark img { width: 320px; height: 320px; }
+  </style>
+</head>
+<body>
+
+<script type="application/json" id="speaker-notes">
+[
+  "Welcome. HireCook is an AI Decision Infrastructure for hiring — we predict how a candidate will behave inside a specific job environment. This deck walks through the design system that supports that product.",
+  "The single most important idea in our brand is the formula: behavior is a function of personality and environment. We don't measure personality in isolation. We model the environment, then predict how this person works inside it.",
+  "The brand mark is a P × E lattice. The top-left node is personality. The bottom-right node is environment. The cyan trace between them passes through the predicted behavior point at the center. Same idea in a single glyph.",
+  "Deep Intelligence Blue at 500 is our only brand color. It owns primary actions, the focus ring, and the mark. The full scale ranges from very pale tints for backgrounds up to near-black for quiet surfaces.",
+  "Four semantic colors. Green for fit. Amber for watch. Red for risk. A teal-cyan for active prediction — never as a button color, only as a signal trace. Status is always flat, never gradient.",
+  "Type is Inter for sans, JetBrains Mono for the data rail. Display sizes have tight negative tracking. Body sits at 14 px for high-density dashboards and 16 px on marketing surfaces. Tabular figures everywhere numbers appear.",
+  "Buttons, chips, KPI cards, and form inputs share the same calm vocabulary. Hairline borders, small radii, brand-blue focus rings. Nothing decorative — every component earns its weight.",
+  "Voice is calm, exact, and declarative. We sound like a research note, not a marketing email. Numbers are exact. Mechanism is explained. No emoji, no hype, no exclamation points.",
+  "Everything in the system lives in this repository. README for the long-form rules, colors_and_type.css for tokens, the ui_kits folder for the live React dashboard, and SKILL.md so AI agents can adopt this brand verbatim."
+]
+</script>
+
+<deck-stage canvas-width="1920" canvas-height="1080" background="#1a1a1a">
+
+  <!-- Slide 1 — Cover -->
+  <section data-screen-label="01 Cover" class="cover">
+    <div class="dot-grid"></div>
+    <div class="cover__head">
+      <img src="assets/logo-mark.svg" alt="">
+      <div>
+        <div class="name">HireCook</div>
+        <div class="sub">Design System · v1.0 · 2026</div>
+      </div>
+    </div>
+    <div class="cover__main">
+      <h1 class="cover__title">An instrument for <em>hiring decisions</em>.</h1>
+      <p class="cover__sub">The visual, verbal, and interactive language of HireCook — calm, scientific, predictive.</p>
+    </div>
+    <div class="cover__metarow">
+      <div><span class="k">Discipline</span><span class="v">Digital Rationalism</span></div>
+      <div><span class="k">References</span><span class="v">Bloomberg · Palantir · Linear · Stripe</span></div>
+      <div><span class="k">Surface</span><span class="v">White canonical · dark opt-in</span></div>
+    </div>
+  </section>
+
+  <!-- Slide 2 — Formula -->
+  <section data-screen-label="02 Formula" class="formula">
+    <span class="eyebrow"><span class="signal-dot"></span>The core idea</span>
+    <div class="formula__eq">
+      <span>B</span><span class="op">=</span><span>f</span><span class="dim">(</span><span>P</span><span class="op">×</span><span>E</span><span class="dim">)</span>
+    </div>
+    <div class="formula__legend">
+      <div>
+        <span class="k">P · Personality</span>
+        <span class="v">Inferred from behavior</span>
+        <span class="d">We don't ask. We watch the candidate act under simulated pressure.</span>
+      </div>
+      <div>
+        <span class="k">E · Environment</span>
+        <span class="v">Modeled, not assumed</span>
+        <span class="d">Team structure, collaboration density, stress rhythm, decision mode.</span>
+      </div>
+      <div>
+        <span class="k">B · Behavior</span>
+        <span class="v">The predicted output</span>
+        <span class="d">How they will actually work — in this role, in this team, today.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 3 — Brand mark -->
+  <section data-screen-label="03 Brand mark" class="markpage">
+    <div class="markpage__left">
+      <span class="eyebrow">Brand mark</span>
+      <h1 class="h-display">A lattice, not a&nbsp;logo.</h1>
+      <div class="markpage__rows">
+        <div class="markpage__row"><span class="k">Personality node</span><span class="v">Top-left solid square. The candidate.</span></div>
+        <div class="markpage__row"><span class="k">Environment node</span><span class="v">Bottom-right solid square. The team and role.</span></div>
+        <div class="markpage__row"><span class="k">Predicted behavior</span><span class="v">Center point, cyan ring. The output of the model.</span></div>
+        <div class="markpage__row"><span class="k">Path</span><span class="v">P → B → E. The same shape repeats in our diagrams.</span></div>
+      </div>
+    </div>
+    <div class="markpage__right">
+      <img src="assets/logo-mark.svg" alt="">
+    </div>
+  </section>
+
+  <!-- Slide 4 — Color brand scale -->
+  <section data-screen-label="04 Color · brand" class="scalepage">
+    <div class="scalepage__head">
+      <div>
+        <span class="eyebrow">Color · brand</span>
+        <h1 class="h-display" style="margin-top: 24px;">Deep Intelligence Blue.</h1>
+      </div>
+      <span class="stamp">500 · #2151F5</span>
+    </div>
+    <div class="blue-scale">
+      <div class="sw light" style="background: #EAF0FF"><span class="n">50</span><span class="h">#EAF0FF</span></div>
+      <div class="sw light" style="background: #CFDCFF"><span class="n">100</span><span class="h">#CFDCFF</span></div>
+      <div class="sw light" style="background: #9CB6FF"><span class="n">200</span><span class="h">#9CB6FF</span></div>
+      <div class="sw light" style="background: #6A8FFF"><span class="n">300</span><span class="h">#6A8FFF</span></div>
+      <div class="sw dark"  style="background: #436BFB"><span class="n">400</span><span class="h">#436BFB</span></div>
+      <div class="sw dark"  style="background: #2151F5"><span class="n">500</span><span class="h">#2151F5</span></div>
+      <div class="sw dark"  style="background: #1A40C9"><span class="n">600</span><span class="h">#1A40C9</span></div>
+      <div class="sw dark"  style="background: #1430A0"><span class="n">700</span><span class="h">#1430A0</span></div>
+      <div class="sw dark"  style="background: #0F2476"><span class="n">800</span><span class="h">#0F2476</span></div>
+      <div class="sw dark"  style="background: #0A1850"><span class="n">900</span><span class="h">#0A1850</span></div>
+      <div class="sw dark"  style="background: #060F33"><span class="n">950</span><span class="h">#060F33</span></div>
+    </div>
+    <div class="scalepage__caption">
+      <div><span class="k">Primary</span><span class="v">500 owns buttons, focus rings, the mark.</span></div>
+      <div><span class="k">Hover · Press</span><span class="v">400 lightens; 600 darkens. Never a custom hover hex.</span></div>
+      <div><span class="k">Tints</span><span class="v">50–200 for hover backgrounds, brand pills, glows.</span></div>
+      <div><span class="k">Quiet</span><span class="v">700+ as supporting fills, not for decoration.</span></div>
+    </div>
+  </section>
+
+  <!-- Slide 5 — Status palette -->
+  <section data-screen-label="05 Color · status" class="statuspage">
+    <div>
+      <span class="eyebrow">Color · status</span>
+      <h1 class="h-display" style="margin-top: 24px;">Four signals. Flat. No&nbsp;gradients.</h1>
+    </div>
+    <div class="statusgrid">
+      <div class="statustile">
+        <div class="swatch" style="background: #1B7A4D"></div>
+        <span class="lbl">Fit</span>
+        <span class="name">High fit · low risk</span>
+        <span class="hex">#1B7A4D</span>
+        <span class="chip" style="background: #E6F5EC; color: #146F3E; border: 1px solid rgba(27,122,77,0.22);"><span class="dot" style="background: #1B7A4D"></span>fit · 82.4</span>
+        <span class="desc">For scores above the team baseline and inside confidence.</span>
+      </div>
+      <div class="statustile">
+        <div class="swatch" style="background: #B27800"></div>
+        <span class="lbl">Watch</span>
+        <span class="name">Monitor · medium</span>
+        <span class="hex">#B27800</span>
+        <span class="chip" style="background: #FBF2DD; color: #8A5F00; border: 1px solid rgba(178,120,0,0.25);"><span class="dot" style="background: #B27800"></span>watch · divergence</span>
+        <span class="desc">A predictor diverges meaningfully from the team baseline.</span>
+      </div>
+      <div class="statustile">
+        <div class="swatch" style="background: #B83A2E"></div>
+        <span class="lbl">Risk</span>
+        <span class="name">Mismatch · high risk</span>
+        <span class="hex">#B83A2E</span>
+        <span class="chip" style="background: #FBE7E5; color: #A02A1F; border: 1px solid rgba(184,58,46,0.25);"><span class="dot" style="background: #B83A2E"></span>risk · 6mo &lt; 50%</span>
+        <span class="desc">Predicted retention or behavior falls outside safe range.</span>
+      </div>
+      <div class="statustile">
+        <div class="swatch" style="background: #00B4D8"></div>
+        <span class="lbl">Signal</span>
+        <span class="name">Inference active</span>
+        <span class="hex">#00B4D8</span>
+        <span class="chip" style="background: #E0F5FA; color: #066B7C; border: 1px solid rgba(6,107,124,0.25);"><span class="dot" style="background: #00B4D8; box-shadow: 0 0 6px #00B4D8"></span>predicting</span>
+        <span class="desc">The system is computing. Never used as a button color.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 6 — Typography -->
+  <section data-screen-label="06 Type" class="typepage">
+    <div>
+      <span class="eyebrow">Typography</span>
+      <h1 class="h-display" style="margin-top: 24px;">Inter. Tight tracking. <span style="color: #00B4D8;">Tabular figures.</span></h1>
+    </div>
+    <div class="typerows">
+      <div class="typerow"><span class="tag">Display 1</span><span class="spec">120 · -0.025em</span><span class="sample" style="font: 600 80px/1.02 'Inter',sans-serif; letter-spacing: -0.025em;">Predict, don't&nbsp;guess.</span></div>
+      <div class="typerow"><span class="tag">Display 2</span><span class="spec">84 · -0.025em</span><span class="sample" style="font: 600 56px/1.05 'Inter',sans-serif; letter-spacing: -0.02em;">Behavioral intelligence</span></div>
+      <div class="typerow"><span class="tag">H1</span><span class="spec">56 · -0.02em</span><span class="sample" style="font: 600 38px/1.1 'Inter',sans-serif; letter-spacing: -0.015em;">TAT Playbook · Marcus Lai</span></div>
+      <div class="typerow"><span class="tag">Body</span><span class="spec">28 · 1.45</span><span class="sample" style="font: 400 22px/1.4 'Inter',sans-serif; color: #364159;">HireCook predicts how a candidate will work inside a specific job environment — before you hire them.</span></div>
+      <div class="typerow"><span class="tag">Mono · data</span><span class="spec">JetBrains · tnum</span><span class="sample" style="font: 400 22px/1.4 'JetBrains Mono',monospace; color: #364159; font-feature-settings: 'tnum';">model.v4.3 · sjt-3.1 · 248ms · 82.4 ± 3.1</span></div>
+      <div class="typerow"><span class="tag">Eyebrow</span><span class="spec">+0.12em uppercase</span><span class="sample" style="font: 500 18px/1.2 'JetBrains Mono',monospace; letter-spacing: 0.18em; text-transform: uppercase; color: #5C677F;">RETENTION RISK · ROLE BACKEND L3</span></div>
+    </div>
+  </section>
+
+  <!-- Slide 7 — Components -->
+  <section data-screen-label="07 Components" class="componentspage">
+    <div>
+      <span class="eyebrow">Components</span>
+      <h1 class="h-display" style="margin-top: 24px;">Hairlines. Small radii. <span style="color: #2151F5;">Brand-blue focus.</span></h1>
+    </div>
+    <div class="compgrid">
+      <div class="comppanel">
+        <div class="head">Buttons</div>
+        <div class="row">
+          <button class="btn btn-primary">Run prediction</button>
+          <button class="btn btn-secondary">Export TAT</button>
+          <button class="btn btn-ghost">Cancel</button>
+        </div>
+      </div>
+      <div class="comppanel">
+        <div class="head">Status chips</div>
+        <div class="row">
+          <span class="chip-big" style="background: #E6F5EC; color: #146F3E; border: 1px solid rgba(27,122,77,0.22);"><span class="dot" style="background: #1B7A4D"></span>fit · 82.4</span>
+          <span class="chip-big" style="background: #FBF2DD; color: #8A5F00; border: 1px solid rgba(178,120,0,0.25);"><span class="dot" style="background: #B27800"></span>watch</span>
+          <span class="chip-big" style="background: #FBE7E5; color: #A02A1F; border: 1px solid rgba(184,58,46,0.25);"><span class="dot" style="background: #B83A2E"></span>risk</span>
+          <span class="chip-big" style="background: #E0F5FA; color: #066B7C; border: 1px solid rgba(6,107,124,0.25);"><span class="dot" style="background: #00B4D8; box-shadow: 0 0 6px #00B4D8"></span>predicting</span>
+        </div>
+      </div>
+      <div class="comppanel">
+        <div class="head">KPI card</div>
+        <div class="kpi">
+          <div class="meta-mono" style="color: #5C677F;">P × E FIT SCORE</div>
+          <div><span class="kpi__num">82.4</span><span class="kpi__unit">/100</span></div>
+          <div class="kpi__meta">± 3.1 confidence <span class="kpi__delta">↗ +4.2</span></div>
+        </div>
+      </div>
+      <div class="comppanel">
+        <div class="head">Form input · focused</div>
+        <div class="field">
+          <label>Role title</label>
+          <div class="input focused">Backend Engineer L3</div>
+        </div>
+        <div class="field">
+          <label>SJT batch</label>
+          <div class="input">sjt-3.1-prod-2451</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 8 — Voice -->
+  <section data-screen-label="08 Voice" class="voicepage">
+    <div>
+      <span class="eyebrow">Voice</span>
+      <h1 class="h-display" style="margin-top: 24px;">A research note. Not a marketing email.</h1>
+    </div>
+    <div class="voicegrid">
+      <div class="voicepanel yes">
+        <span class="tag"><span class="dot-md green"></span>On-brand</span>
+        <span class="quote">Predict how the candidate will work, here.</span>
+        <span class="note">Mechanism-led. Plain. The product reads as an instrument.</span>
+      </div>
+      <div class="voicepanel no">
+        <span class="tag"><span class="dot-md red"></span>Off-brand</span>
+        <span class="quote">Find your perfect hire with AI magic.</span>
+        <span class="note">Hype, vague, salesy — the HR-portal failure mode.</span>
+      </div>
+      <div class="voicepanel yes">
+        <span class="tag"><span class="dot-md green"></span>On-brand</span>
+        <span class="quote">新人六個月留任率僅 65.4%。</span>
+        <span class="note">Exact number. Single claim. Source-able.</span>
+      </div>
+      <div class="voicepanel no">
+        <span class="tag"><span class="dot-md red"></span>Off-brand</span>
+        <span class="quote">Most people quit pretty fast — we fix that.</span>
+        <span class="note">Vague, casual, salesy.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 9 — Closing / file index -->
+  <section data-screen-label="09 Index" class="closepage">
+    <div class="closepage__left">
+      <span class="eyebrow">The system, on disk</span>
+      <h1 class="h-display">Everything lives in one place.</h1>
+      <div class="filelist">
+        <div class="filelist__row"><span class="k">README.md</span><span class="v">Long-form brand, voice, and visual rules.</span></div>
+        <div class="filelist__row"><span class="k">colors_and_type.css</span><span class="v">All design tokens. Drop-in import.</span></div>
+        <div class="filelist__row"><span class="k">SKILL.md</span><span class="v">Agent Skill entry point. Use to brief an AI.</span></div>
+        <div class="filelist__row"><span class="k">assets/</span><span class="v">Mark, wordmark, monogram. Always reference.</span></div>
+        <div class="filelist__row"><span class="k">ui_kits/dashboard/</span><span class="v">Live React kit. The TAT Playbook surface.</span></div>
+        <div class="filelist__row"><span class="k">preview/</span><span class="v">22 atomic specimens for the Design System tab.</span></div>
+      </div>
+    </div>
+    <div class="closing-mark">
+      <img src="assets/logo-mark.svg" alt="">
+    </div>
+  </section>
+
+</deck-stage>
+
+<script src="deck-stage.js"></script>
+<script>
+(async () => {
+  try { await customElements.whenDefined('deck-stage'); } catch (e) {}
+  const ds = document.querySelector('deck-stage');
+  if (ds) {
+    // Weigh only slide children — same filter as deck-stage.length. Skipping
+    // slotted script/style/template keeps inline Babel/CSS from registering
+    // as stable "content" before the framework has mounted anything.
+    const weigh = () => {
+      let text = 0, media = 0;
+      for (const c of ds.children) {
+        const t = c.tagName;
+        if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+        text += (c.textContent || '').trim().length;
+        media += c.querySelectorAll('img,svg,canvas,video').length;
+      }
+      return text + media * 100;
+    };
+    const deadline = Date.now() + 15000;
+    let last = -1, stable = 0;
+    while (Date.now() < deadline) {
+      const n = weigh();
+      if (n > 0 && n === last) { if (++stable >= 2) break; } else { stable = 0; }
+      last = n;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+  }
+  try { await document.fonts.ready; } catch (e) {}
+  setTimeout(() => { try { window.print(); } catch (e) {} }, 200);
+})();
+</script>
+</body>
+</html>

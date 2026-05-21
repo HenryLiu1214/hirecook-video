@@ -1,0 +1,39 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Body, mono, eyebrow</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .block { display: flex; flex-direction: column; gap: 6px; }
+  .lbl { font: 500 10px/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-muted); }
+  .spec { font: 400 10px/1 var(--font-mono); color: var(--fg-faint); margin-bottom: 4px; }
+  p { margin: 0; }
+</style></head>
+<body><div class="card">
+  <div class="eyebrow" style="margin-bottom: 14px;">Body · mono · eyebrow · caption</div>
+  <div class="grid">
+    <div class="block">
+      <div class="lbl">Body</div>
+      <div class="spec">14 / 1.55 · regular</div>
+      <p style="font: 400 14px/1.55 'Inter',sans-serif; color: var(--fg-primary);">HireCook models the candidate's behavior inside a specific job environment, then explains the prediction.</p>
+    </div>
+    <div class="block">
+      <div class="lbl">Body small</div>
+      <div class="spec">13 / 1.50</div>
+      <p style="font: 400 13px/1.5 'Inter',sans-serif; color: var(--fg-secondary);">Confidence interval is shown beside every score so the decision stays auditable.</p>
+    </div>
+    <div class="block">
+      <div class="lbl">Caption</div>
+      <div class="spec">12 / 1.40 · muted</div>
+      <p style="font: 400 12px/1.4 'Inter',sans-serif; color: var(--fg-muted);">Last refreshed 2026-05-19 14:02 UTC</p>
+    </div>
+    <div class="block">
+      <div class="lbl">Mono</div>
+      <div class="spec">13 / 1.45 · tabular</div>
+      <p style="font: 400 13px/1.45 'JetBrains Mono',monospace; color: var(--fg-secondary); font-feature-settings: 'tnum';">model.v4.3 · sjt-3.1 · 248ms</p>
+    </div>
+    <div class="block" style="grid-column: span 2;">
+      <div class="lbl">Eyebrow</div>
+      <div class="spec">11 / 1.20 · mono · +0.12em uppercase</div>
+      <p style="font: 500 11px/1.2 'JetBrains Mono',monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted);">RETENTION RISK · ROLE: BACKEND ENGINEER L3</p>
+    </div>
+  </div>
+</div></body></html>

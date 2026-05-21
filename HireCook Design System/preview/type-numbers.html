@@ -1,0 +1,33 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Numbers · tabular figures</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .kpi { background: var(--bg-surface); border: 1px solid var(--line-hairline); border-radius: 8px; padding: 16px; }
+  .kpi .lbl { font: 500 10px/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-muted); margin-bottom: 10px; }
+  .kpi .big { font: 600 32px/1 'Inter',sans-serif; letter-spacing: -0.02em; font-feature-settings: "tnum"; color: var(--fg-primary); }
+  .kpi .unit { font: 500 14px/1 'JetBrains Mono',monospace; color: var(--fg-faint); margin-left: 6px; }
+  .kpi .sub { font-family: var(--font-mono); font-size: 11px; color: var(--fg-muted); margin-top: 6px; font-feature-settings: "tnum"; }
+  .kpi .delta { display: inline-flex; align-items: center; gap: 4px; padding: 1px 6px; border-radius: 999px; font: 500 11px/1.4 'JetBrains Mono',monospace; }
+  .delta-up { background: rgba(43,182,115,0.14); color: var(--chip-fit-fg); }
+  .delta-down { background: rgba(229,90,77,0.14); color: var(--chip-risk-fg); }
+</style></head>
+<body><div class="card">
+  <div class="eyebrow" style="margin-bottom: 12px;">Numbers · tabular figures · precise units</div>
+  <div class="grid">
+    <div class="kpi">
+      <div class="lbl">P × E Fit Score</div>
+      <div><span class="big">82.4</span><span class="unit">/100</span></div>
+      <div class="sub">± 3.1 · n=148  <span class="delta delta-up">↗ +4.2</span></div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">Retention 6mo</div>
+      <div><span class="big">65.4</span><span class="unit">%</span></div>
+      <div class="sub">baseline · industry  <span class="delta delta-down">↘ -2.1</span></div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">Mishire cost</div>
+      <div><span class="big">20–30</span><span class="unit">萬</span></div>
+      <div class="sub">NT$ · per incident · TW SMB</div>
+    </div>
+  </div>
+</div></body></html>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Elevation</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .stage { background: var(--bg-canvas); padding: 24px; border-radius: 8px; display: flex; align-items: center; justify-content: center; height: 110px; }
+  .card2 { background: var(--bg-surface); padding: 14px 18px; border-radius: 8px; color: var(--fg-secondary); font: 500 12px/1 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; }
+  .s1 { box-shadow: 0 1px 0 rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06); }
+  .s2 { box-shadow: 0 4px 12px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.09); }
+  .s3 { box-shadow: 0 16px 48px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.09); }
+  .label { font: 500 10px/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-muted); margin-top: 8px; }
+  .desc { font: 400 11px/1.4 'Inter',sans-serif; color: var(--fg-faint); margin-top: 4px; }
+</style></head>
+<body><div class="card">
+  <div class="eyebrow" style="margin-bottom: 12px;">Elevation · hairline-first · shadows only on overlays</div>
+  <div class="grid">
+    <div>
+      <div class="stage"><div class="card2 s1">shadow-1</div></div>
+      <div class="label">SHADOW-1 · CARDS</div>
+      <div class="desc">Effectively a hairline. Card on canvas.</div>
+    </div>
+    <div>
+      <div class="stage"><div class="card2 s2">shadow-2</div></div>
+      <div class="label">SHADOW-2 · MENUS</div>
+      <div class="desc">Dropdowns, popovers, command palette.</div>
+    </div>
+    <div>
+      <div class="stage"><div class="card2 s3">shadow-3</div></div>
+      <div class="label">SHADOW-3 · MODALS</div>
+      <div class="desc">Dialogs over scrim with blur.</div>
+    </div>
+  </div>
+</div></body></html>

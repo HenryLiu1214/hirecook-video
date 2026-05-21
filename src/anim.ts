@@ -78,3 +78,31 @@ export const skewSettle = (frame: number, startFrame: number, duration = 24): nu
 // Glowing pulse brightness for glow-frame boxes (0–1 oscillating).
 export const glowPulse = (t: number, speed = 1.3, base = 0.55, amp = 0.25): number =>
   base + amp * Math.sin(t * speed);
+
+// ── Zelios Style Cinematic Effects ──
+
+// Sharp impact scale-up with heavy spring overshoot
+export const scalePunch = (frame: number, startFrame: number, duration = 20): number =>
+  interpolate(frame, [startFrame, startFrame + duration], [0.3, 1], {
+    easing: Easing.out(Easing.back(2.2)),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+// Smooth, continuous forward camera movement (scale up slowly after entrance)
+export const cameraPush = (frame: number, startFrame: number, duration = 120, maxScale = 1.15): number =>
+  interpolate(frame, [startFrame, startFrame + duration], [1, maxScale], {
+    easing: Easing.out(Easing.cubic),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+// Circle mask reveal from center (returns a clip-path string)
+export const circleWipe = (frame: number, startFrame: number, duration = 30): string => {
+  const progress = interpolate(frame, [startFrame, startFrame + duration], [0, 150], {
+    easing: Easing.inOut(Easing.cubic),
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  return `circle(${progress}% at 50% 50%)`;
+};

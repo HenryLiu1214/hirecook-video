@@ -1,0 +1,45 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>KPI card</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px; }
+  .card2 { background: var(--bg-surface); border: 1px solid var(--line-hairline); border-radius: 8px; padding: 18px 20px; }
+  .eyebrow2 { font: 500 11px/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-muted); display: flex; align-items: center; gap: 8px; }
+  .num { font: 600 38px/1 'Inter',sans-serif; letter-spacing: -0.02em; color: var(--fg-primary); font-feature-settings: "tnum"; margin-top: 12px; }
+  .unit { font: 500 14px/1 'JetBrains Mono',monospace; color: var(--fg-faint); margin-left: 4px; }
+  .meta { font: 400 12px/1.4 'Inter',sans-serif; color: var(--fg-muted); margin-top: 8px; display: flex; gap: 10px; align-items: center; }
+  .delta { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 999px; font: 500 11px/1.4 'JetBrains Mono',monospace; }
+  .up { background: rgba(43,182,115,0.14); color: var(--chip-fit-fg); }
+  .down { background: rgba(229,90,77,0.14); color: var(--chip-risk-fg); }
+  .bar { display: flex; gap: 3px; height: 36px; align-items: flex-end; margin-top: 14px; }
+  .bar b { flex: 1; background: rgba(33,81,245,0.5); border-radius: 1px; display: block; }
+  .bar b.hi { background: #2151F5; }
+  .listrow { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--line-hairline); font-size: 12px; }
+  .listrow:first-child { border-top: 0; padding-top: 0; }
+  .listrow .name { color: var(--fg-secondary); }
+  .listrow .v { font-family: var(--font-mono); color: var(--fg-primary); font-feature-settings: "tnum"; }
+  .signal { width: 6px; height: 6px; border-radius: 999px; background: var(--chip-signal-dot); box-shadow: 0 0 6px var(--chip-signal-dot); }
+</style></head>
+<body><div class="card">
+  <div class="eyebrow" style="margin-bottom: 12px;">Card patterns · KPI + breakdown</div>
+  <div class="grid">
+    <div class="card2">
+      <div class="eyebrow2"><span class="signal"></span>P × E FIT SCORE</div>
+      <div class="num">82.4<span class="unit">/100</span></div>
+      <div class="meta">± 3.1 confidence  <span class="delta up">↗ +4.2 vs. baseline</span></div>
+      <div class="bar">
+        <b style="height: 30%"></b><b style="height: 45%"></b><b style="height: 38%"></b>
+        <b style="height: 58%"></b><b style="height: 72%"></b><b style="height: 65%"></b>
+        <b style="height: 78%"></b><b style="height: 85%"></b><b class="hi" style="height: 92%"></b>
+      </div>
+    </div>
+    <div class="card2">
+      <div class="eyebrow2">XAI · DRIVERS</div>
+      <div style="margin-top: 14px;">
+        <div class="listrow"><span class="name">Collaboration density</span><span class="v">+18.2</span></div>
+        <div class="listrow"><span class="name">Stress regulation</span><span class="v">+11.5</span></div>
+        <div class="listrow"><span class="name">Autonomy preference</span><span class="v">+6.0</span></div>
+        <div class="listrow"><span class="name">Conflict response</span><span class="v" style="color: var(--chip-risk-fg)">−4.3</span></div>
+      </div>
+    </div>
+  </div>
+</div></body></html>

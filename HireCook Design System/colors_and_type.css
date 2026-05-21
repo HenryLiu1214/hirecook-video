@@ -1,0 +1,263 @@
+/* =============================================================
+   HireCook Design Tokens
+   Digital Rationalism — calm, scientific, predictive.
+   LIGHT surface is canonical. Dark mode available via [data-theme="dark"].
+   ============================================================= */
+
+/* ---------- Fonts ----------
+   Substitutions vs. the brief:
+   - "Inter" / "Geist" / "IBM Plex Sans"  →  Inter (canonical)
+   - "Noto Sans TC"                       →  Noto Sans TC (canonical)
+   - "Mono" rail                          →  JetBrains Mono (closest to IBM Plex Mono on GF)
+   --------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+
+:root {
+  /* ===========================================================
+     COLOR — Deep Intelligence Blue palette (theme-invariant)
+     =========================================================== */
+  --hc-blue-50:  #EAF0FF;
+  --hc-blue-100: #CFDCFF;
+  --hc-blue-200: #9CB6FF;
+  --hc-blue-300: #6A8FFF;
+  --hc-blue-400: #436BFB;
+  --hc-blue-500: #2151F5;   /* primary brand */
+  --hc-blue-600: #1A40C9;
+  --hc-blue-700: #1430A0;
+  --hc-blue-800: #0F2476;
+  --hc-blue-900: #0A1850;
+  --hc-blue-950: #060F33;
+
+  --hc-signal-cyan: #00B4D8;     /* signal — tuned darker for legibility on white */
+  --hc-signal-cyan-bright: #6FE3F5;  /* dark-mode signal */
+
+  /* Neutral — cool, near-black, slight blue cast */
+  --hc-ink-1000: #05070C;
+  --hc-ink-950:  #090C13;
+  --hc-ink-900:  #0E121C;
+  --hc-ink-850:  #131826;
+  --hc-ink-800:  #1A2030;
+  --hc-ink-700:  #232A3D;
+  --hc-ink-600:  #2E3650;
+  --hc-ink-500:  #4A546F;
+  --hc-ink-400:  #6B7591;
+  --hc-ink-300:  #8C95AE;
+  --hc-ink-200:  #B4BCD0;
+  --hc-ink-100:  #D7DCE8;
+  --hc-ink-50:   #ECEFF6;
+  --hc-ink-0:    #F7F8FB;
+
+  /* Semantic status — base hues (theme-invariant) */
+  --hc-status-fit:    #1B7A4D;
+  --hc-status-watch:  #B27800;
+  --hc-status-risk:   #B83A2E;
+  --hc-status-info:   var(--hc-blue-500);
+
+  /* ===========================================================
+     SEMANTIC TOKENS — LIGHT (canonical)
+     =========================================================== */
+  --bg-canvas:        #FFFFFF;
+  --bg-surface:       #FFFFFF;
+  --bg-raised:        #F7F8FB;
+  --bg-overlay:       #FFFFFF;
+  --bg-subtle:        #F2F4F9;   /* hero / quiet zones */
+
+  --fg-primary:       #0B1020;
+  --fg-secondary:     #364159;
+  --fg-muted:         #5C677F;
+  --fg-faint:         #8C95AE;
+  --fg-on-brand:      #FFFFFF;
+
+  --line-hairline:    rgba(8, 16, 40, 0.06);
+  --line-soft:        rgba(8, 16, 40, 0.10);
+  --line-strong:      rgba(8, 16, 40, 0.18);
+
+  --accent-brand:       var(--hc-blue-500);
+  --accent-brand-hover: var(--hc-blue-400);
+  --accent-brand-press: var(--hc-blue-600);
+  --accent-signal:      var(--hc-signal-cyan);
+
+  /* Status chip colors */
+  --chip-fit-bg:      #E6F5EC;
+  --chip-fit-fg:      #146F3E;
+  --chip-fit-border:  rgba(27, 122, 77, 0.22);
+  --chip-fit-dot:     #1B7A4D;
+
+  --chip-watch-bg:    #FBF2DD;
+  --chip-watch-fg:    #8A5F00;
+  --chip-watch-border:rgba(178, 120, 0, 0.25);
+  --chip-watch-dot:   #B27800;
+
+  --chip-risk-bg:     #FBE7E5;
+  --chip-risk-fg:     #A02A1F;
+  --chip-risk-border: rgba(184, 58, 46, 0.25);
+  --chip-risk-dot:    #B83A2E;
+
+  --chip-signal-bg:   #E0F5FA;
+  --chip-signal-fg:   #066B7C;
+  --chip-signal-border:rgba(6, 107, 124, 0.25);
+  --chip-signal-dot:  #00B4D8;
+
+  --chip-neutral-bg:  #F2F4F9;
+  --chip-neutral-fg:  var(--fg-secondary);
+  --chip-neutral-border: var(--line-soft);
+
+  /* Subtle blue luminance (for hero only, on light) */
+  --glow-brand-faint:   0 0 0 1px rgba(33, 81, 245, 0.18), 0 0 24px rgba(33, 81, 245, 0.10);
+  --glow-brand-strong:  0 0 0 1px rgba(33, 81, 245, 0.35), 0 0 36px rgba(33, 81, 245, 0.18);
+  --ring-focus:         0 0 0 2px #FFFFFF, 0 0 0 4px var(--hc-blue-500);
+
+  /* ===========================================================
+     TYPOGRAPHY
+     =========================================================== */
+  --font-sans:    'Inter', 'Noto Sans TC', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Inter', 'Noto Sans TC', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'IBM Plex Mono', 'SF Mono', ui-monospace, monospace;
+
+  --fs-display-1: 56px;   --lh-display-1: 1.05; --tr-display-1: -0.02em;
+  --fs-display-2: 40px;   --lh-display-2: 1.10; --tr-display-2: -0.02em;
+  --fs-h1:        28px;   --lh-h1:        1.20; --tr-h1:        -0.015em;
+  --fs-h2:        22px;   --lh-h2:        1.25; --tr-h2:        -0.01em;
+  --fs-h3:        17px;   --lh-h3:        1.35; --tr-h3:        -0.005em;
+  --fs-body:      14px;   --lh-body:      1.55; --tr-body:       0;
+  --fs-body-sm:   13px;   --lh-body-sm:   1.50;
+  --fs-caption:   12px;   --lh-caption:   1.40;
+  --fs-mono:      13px;   --lh-mono:      1.45;
+  --fs-eyebrow:   11px;   --lh-eyebrow:   1.20; --tr-eyebrow:    0.12em;
+
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semi:    600;
+  --fw-bold:    700;
+
+  /* ===========================================================
+     SPACING — 4 px base
+     =========================================================== */
+  --sp-0:  0px;  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px;  --sp-6: 24px; --sp-7: 32px; --sp-8: 40px; --sp-9: 48px;
+  --sp-10:64px;  --sp-11:80px; --sp-12:96px;
+
+  /* ===========================================================
+     RADIUS
+     =========================================================== */
+  --r-0: 0px; --r-xs: 3px; --r-sm: 6px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px; --r-pill: 999px;
+
+  /* ===========================================================
+     ELEVATION — hairline-first on light
+     =========================================================== */
+  --shadow-0: none;
+  --shadow-1: 0 1px 0 rgba(8,16,40,0.04), 0 0 0 1px var(--line-hairline);
+  --shadow-2: 0 4px 12px rgba(8,16,40,0.06), 0 0 0 1px var(--line-soft);
+  --shadow-3: 0 16px 48px rgba(8,16,40,0.10), 0 0 0 1px var(--line-soft);
+
+  /* ===========================================================
+     MOTION
+     =========================================================== */
+  --ease-standard: cubic-bezier(0.2, 0.0, 0.0, 1);
+  --ease-precise:  cubic-bezier(0.4, 0.0, 0.2, 1);
+  --ease-enter:    cubic-bezier(0.0, 0.0, 0.2, 1);
+  --ease-exit:     cubic-bezier(0.4, 0.0, 1.0, 1);
+  --dur-instant: 80ms; --dur-fast: 140ms; --dur-base: 200ms; --dur-slow: 320ms;
+
+  /* ===========================================================
+     LAYOUT
+     =========================================================== */
+  --container-max: 1280px;
+  --grid-gutter:   24px;
+  --sidebar-w:     240px;
+  --topbar-h:      52px;
+}
+
+/* ===========================================================
+   DARK MODE — supported, opt-in via [data-theme="dark"]
+   =========================================================== */
+[data-theme="dark"] {
+  --bg-canvas:    var(--hc-ink-1000);
+  --bg-surface:   var(--hc-ink-900);
+  --bg-raised:    var(--hc-ink-850);
+  --bg-overlay:   var(--hc-ink-800);
+  --bg-subtle:    var(--hc-ink-950);
+
+  --fg-primary:   var(--hc-ink-100);
+  --fg-secondary: var(--hc-ink-200);
+  --fg-muted:     var(--hc-ink-300);
+  --fg-faint:     var(--hc-ink-400);
+  --fg-on-brand:  #FFFFFF;
+
+  --line-hairline: rgba(255, 255, 255, 0.06);
+  --line-soft:     rgba(255, 255, 255, 0.09);
+  --line-strong:   rgba(255, 255, 255, 0.14);
+
+  --chip-fit-bg:      rgba(43,182,115,0.14);
+  --chip-fit-fg:      #6FD9A2;
+  --chip-fit-border:  rgba(43,182,115,0.30);
+  --chip-fit-dot:     #2BB673;
+
+  --chip-watch-bg:    rgba(224,169,59,0.14);
+  --chip-watch-fg:    #F2CB78;
+  --chip-watch-border:rgba(224,169,59,0.30);
+  --chip-watch-dot:   #E0A93B;
+
+  --chip-risk-bg:     rgba(229,90,77,0.14);
+  --chip-risk-fg:     #F58C81;
+  --chip-risk-border: rgba(229,90,77,0.30);
+  --chip-risk-dot:    #E55A4D;
+
+  --chip-signal-bg:   rgba(111,227,245,0.10);
+  --chip-signal-fg:   #A3EEF8;
+  --chip-signal-border:rgba(111,227,245,0.30);
+  --chip-signal-dot:  #6FE3F5;
+
+  --chip-neutral-bg:  rgba(255,255,255,0.04);
+  --chip-neutral-fg:  var(--fg-secondary);
+  --chip-neutral-border: var(--line-soft);
+
+  --accent-signal:    var(--hc-signal-cyan-bright);
+
+  --shadow-1: 0 1px 0 rgba(0,0,0,0.4), 0 0 0 1px var(--line-hairline);
+  --shadow-2: 0 4px 12px rgba(0,0,0,0.45), 0 0 0 1px var(--line-soft);
+  --shadow-3: 0 16px 48px rgba(0,0,0,0.55), 0 0 0 1px var(--line-soft);
+
+  --ring-focus:  0 0 0 2px var(--bg-canvas), 0 0 0 4px var(--hc-blue-500);
+}
+
+/* ===========================================================
+   SEMANTIC ELEMENT BASELINES
+   =========================================================== */
+html, body {
+  background: var(--bg-canvas);
+  color: var(--fg-primary);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-feature-settings: "ss01", "cv11", "tnum";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.hc-display-1 { font: var(--fw-semi) var(--fs-display-1)/var(--lh-display-1) var(--font-display); letter-spacing: var(--tr-display-1); }
+.hc-display-2 { font: var(--fw-semi) var(--fs-display-2)/var(--lh-display-2) var(--font-display); letter-spacing: var(--tr-display-2); }
+.hc-h1        { font: var(--fw-semi) var(--fs-h1)/var(--lh-h1) var(--font-display); letter-spacing: var(--tr-h1); }
+.hc-h2        { font: var(--fw-semi) var(--fs-h2)/var(--lh-h2) var(--font-display); letter-spacing: var(--tr-h2); }
+.hc-h3        { font: var(--fw-semi) var(--fs-h3)/var(--lh-h3) var(--font-sans); letter-spacing: var(--tr-h3); }
+.hc-body      { font: var(--fw-regular) var(--fs-body)/var(--lh-body) var(--font-sans); }
+.hc-body-sm   { font: var(--fw-regular) var(--fs-body-sm)/var(--lh-body-sm) var(--font-sans); }
+.hc-caption   { font: var(--fw-regular) var(--fs-caption)/var(--lh-caption) var(--font-sans); color: var(--fg-muted); }
+.hc-mono      { font: var(--fw-regular) var(--fs-mono)/var(--lh-mono) var(--font-mono); font-feature-settings: "zero", "ss01"; }
+.hc-eyebrow   {
+  font: var(--fw-medium) var(--fs-eyebrow)/var(--lh-eyebrow) var(--font-mono);
+  letter-spacing: var(--tr-eyebrow);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+*:focus-visible {
+  outline: none;
+  box-shadow: var(--ring-focus);
+  border-radius: var(--r-xs);
+}
+
+::selection {
+  background: rgba(33, 81, 245, 0.18);
+  color: #0B1020;
+}

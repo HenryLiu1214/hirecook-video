@@ -1,0 +1,31 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Chips & tags</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .lbl { font: 500 10px/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-muted); margin-bottom: 8px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 8px; border-radius: 999px; font: 500 11px/1.5 'Inter',sans-serif; }
+  .chip .dot { width: 6px; height: 6px; border-radius: 999px; }
+  .pulse { width: 6px; height: 6px; border-radius: 999px; background: var(--chip-signal-dot); box-shadow: 0 0 6px var(--chip-signal-dot); animation: p 2s ease-in-out infinite; }
+  @keyframes p { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+  .tag { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 3px; font: 500 11px/1.5 'JetBrains Mono',monospace; background: var(--bg-raised); color: var(--fg-secondary); border: 1px solid var(--line-soft); }
+  .tag.brand { background: #EAF0FF; color: #1430A0; border-color: rgba(33,81,245,0.25); }
+</style></head>
+<body><div class="card">
+  <div class="lbl">STATUS CHIPS · pill · semantic colors only</div>
+  <div class="group">
+    <span class="chip" style="background: var(--chip-fit-bg); color: var(--chip-fit-fg); border: 1px solid var(--chip-fit-border);"><span class="dot" style="background: var(--chip-fit-dot);"></span>fit · 82.4</span>
+    <span class="chip" style="background: var(--chip-watch-bg); color: var(--chip-watch-fg); border: 1px solid var(--chip-watch-border);"><span class="dot" style="background: var(--chip-watch-dot);"></span>watch · stress divergence</span>
+    <span class="chip" style="background: var(--chip-risk-bg); color: var(--chip-risk-fg); border: 1px solid var(--chip-risk-border);"><span class="dot" style="background: var(--chip-risk-dot);"></span>risk · 6mo &lt; 50%</span>
+    <span class="chip" style="background: var(--chip-signal-bg); color: var(--chip-signal-fg); border: 1px solid var(--chip-signal-border);"><span class="pulse"></span>predicting</span>
+    <span class="chip" style="background: rgba(255,255,255,0.04); color: var(--fg-secondary); border: 1px solid var(--line-soft);"><span class="dot" style="background: var(--fg-faint);"></span>draft</span>
+  </div>
+
+  <div class="lbl" style="margin-top: 8px;">META TAGS · square · mono</div>
+  <div class="group">
+    <span class="tag">model.v4.3</span>
+    <span class="tag">sjt-3.1</span>
+    <span class="tag">latency · 248ms</span>
+    <span class="tag brand">P × E · fit</span>
+    <span class="tag brand">XAI</span>
+  </div>
+</div></body></html>

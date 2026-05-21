@@ -1,41 +1,134 @@
 import React from "react";
-import { useCurrentFrame, interpolate, AbsoluteFill, Sequence } from "remotion";
+import { useCurrentFrame, interpolate, AbsoluteFill, Sequence, Easing } from "remotion";
 import { colors, fonts } from "../tokens";
 import { BgCalm } from "../components/BgCalm";
 import { TypewriterText } from "../components/TypewriterText";
-import { momentAnim, rotXSettle, rotZIn, breathe } from "../anim";
+import { scalePunch, cameraPush, circleWipe } from "../anim";
 
-const Beat: React.FC<{ text: string; sub?: string; start?: number; size?: number; scheme?: React.ComponentProps<typeof TypewriterText>["colorScheme"] }> = ({ text, sub, start = 10, size = 128, scheme = "white-to-blue" }) => {
+const Statement: React.FC<{ english: string; chinese: string; start: number; end: number; align?: "center" | "left" }> = ({ english, chinese, start, end, align = "center" }) => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 168, 180);
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 22 }}>
-    <div style={{ transform: `scale(${breathe(frame / 60, 1, 0.006)}) rotate(${rotZIn(frame, start, 28, -8)}deg) rotateX(${rotXSettle(frame, start, 30)}deg)` }}>
-      <TypewriterText text={text} startFrame={start} charStagger={3} fontSize={size} fontWeight={850} letterSpacing="-0.05em" colorScheme={scheme} />
-    </div>
-    {sub && <div style={{ color: colors.dimWhite, fontSize: 38, fontWeight: 600 }}>{sub}</div>}
-  </AbsoluteFill>;
+  if (frame < start || frame > end + 30) return null;
+
+  const clip = circleWipe(frame, start, 40);
+  const opacity = interpolate(frame, [end - 20, end], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const scale = cameraPush(frame, start, end - start, 1.05);
+
+  return (
+    <AbsoluteFill style={{ 
+      display: "flex", 
+      alignItems: align, 
+      justifyContent: "center",
+      flexDirection: "column",
+      clipPath: clip,
+      opacity,
+      transform: `scale(${scale})`
+    }}>
+      <TypewriterText text={english} startFrame={start + 10} charStagger={2} fontSize={110} fontWeight={900} colorScheme="white" letterSpacing="-0.02em" />
+      <div style={{ 
+        marginTop: 24,
+        opacity: interpolate(frame, [start + 40, start + 60], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+        transform: `translateY(${interpolate(frame, [start + 40, start + 60], [20, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`,
+        color: colors.hcCyanBright, 
+        fontSize: 42, 
+        fontWeight: 700,
+        letterSpacing: "0.05em",
+        fontFamily: fonts.display
+      }}>
+        {chinese}
+      </div>
+    </AbsoluteFill>
+  );
 };
 
-const Compare: React.FC = () => {
+const ParadigmShift: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 228, 240);
-  const left = ["履歷印象", "主管直覺", "靜態測驗"];
-  const right = ["環境建模", "行為指紋", "TAT Playbook"];
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center" }}>
-    <div style={{ width: 1120, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
-      {[{ title: "傳統方式", color: colors.hcRisk, items: left }, { title: "HireCook", color: colors.hcBlue, items: right }].map((col, ci) => <div key={col.title} style={{ padding: "34px 40px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)", background: ci ? "rgba(33,81,245,0.08)" : "rgba(255,255,255,0.025)" }}>
-        <div style={{ fontSize: 34, fontWeight: 750, color: col.color, marginBottom: 22 }}>{col.title}</div>
-        {col.items.map((x, i) => <div key={x} style={{ opacity: interpolate(frame, [60 + i * 14, 72 + i * 14], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), display: "flex", alignItems: "center", gap: 12, padding: "12px 0", borderTop: i ? "1px solid rgba(255,255,255,0.06)" : "none" }}><span style={{ width: 7, height: 7, borderRadius: 999, background: col.color }} /><span style={{ color: colors.softWhite, fontSize: 30 }}>{x}</span></div>)}
-      </div>)}
-    </div>
-  </AbsoluteFill>;
+  
+  // Gut Feeling
+  const gutScale = scalePunch(frame, 0, 30);
+  const gutOp = interpolate(frame, [150, 180], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const lineDraw = interpolate(frame, [45, 60], [0, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  // Behavioral Intelligence
+  const biScale = scalePunch(frame, 160, 40);
+  const biOp = interpolate(frame, [450, 480], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const camScale = cameraPush(frame, 160, 320, 1.10); // gentle push in
+
+  return (
+    <AbsoluteFill>
+      {/* 0-180: GUT FEELING crossed out */}
+      <AbsoluteFill style={{ display: "flex", alignItems: "center", justifyContent: "center", opacity: gutOp }}>
+        <div style={{ position: "relative", transform: `scale(${gutScale})` }}>
+          <div style={{ fontFamily: fonts.display, fontSize: 130, fontWeight: 900, color: colors.pureWhite, letterSpacing: "-0.02em" }}>
+            GUT FEELING
+          </div>
+          <div style={{ 
+            position: "absolute", 
+            top: "50%", 
+            left: "-5%", 
+            width: `${lineDraw * 110}%`, 
+            height: 14, 
+            background: colors.hcRisk, 
+            transform: "translateY(-50%) rotate(-2deg)",
+            boxShadow: `0 0 20px ${colors.hcRisk}`,
+            borderRadius: 10
+          }} />
+          <div style={{ 
+            textAlign: "center", 
+            marginTop: 20,
+            color: colors.hcRisk,
+            fontSize: 40,
+            fontWeight: 700,
+            opacity: interpolate(frame, [45, 60], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
+          }}>
+            停止直覺式盲選
+          </div>
+        </div>
+      </AbsoluteFill>
+
+      {/* 160-480: BEHAVIORAL INTELLIGENCE */}
+      {frame >= 160 && (
+        <AbsoluteFill style={{ display: "flex", alignItems: "center", justifyContent: "center", opacity: biOp }}>
+          <div style={{ position: "relative", transform: `scale(${biScale}) scale(${camScale})`, display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div style={{ fontFamily: fonts.display, fontSize: 110, fontWeight: 900, color: colors.hcCyanBright, letterSpacing: "-0.02em", textShadow: `0 0 40px rgba(0,180,216,0.4)` }}>
+              BEHAVIORAL INTELLIGENCE
+            </div>
+            <div style={{ 
+              marginTop: 24,
+              color: colors.pureWhite,
+              fontSize: 42,
+              fontWeight: 700,
+              opacity: interpolate(frame, [180, 200], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
+            }}>
+              開始科學行為預測
+            </div>
+          </div>
+        </AbsoluteFill>
+      )}
+    </AbsoluteFill>
+  );
 };
 
-export const S4_Tech: React.FC = () => <AbsoluteFill>
-  <BgCalm theme="dark" tint="blue" />
-  <Sequence from={0} durationInFrames={180} layout="none"><Beat text="不是取代 HR" size={130} /></Sequence>
-  <Sequence from={180} durationInFrames={180} layout="none"><Beat text="而是升級決策" size={130} /></Sequence>
-  <Sequence from={360} durationInFrames={180} layout="none"><Beat text="From Gut Feeling" size={118} /></Sequence>
-  <Sequence from={540} durationInFrames={180} layout="none"><Beat text="To Behavioral Intelligence" size={92} /></Sequence>
-  <Sequence from={720} durationInFrames={240} layout="none"><Compare /></Sequence>
-</AbsoluteFill>;
+export const S4_Tech: React.FC = () => {
+  return (
+    <AbsoluteFill>
+      <BgCalm theme="dark" tint="blue" />
+      
+      {/* 0-240: Not replacing HR */}
+      <Sequence from={0} durationInFrames={960} layout="none">
+        <Statement english="NOT REPLACING HR" chinese="不是取代 HR" start={0} end={240} />
+      </Sequence>
+
+      {/* 240-480: Upgrading decisions */}
+      <Sequence from={0} durationInFrames={960} layout="none">
+        <Statement english="UPGRADING DECISIONS" chinese="而是升級決策" start={240} end={480} />
+      </Sequence>
+
+      {/* 480-960: Paradigm Shift (Stop Gut Feeling -> Start Behavioral Intelligence) */}
+      <Sequence from={480} durationInFrames={480} layout="none">
+        <ParadigmShift />
+      </Sequence>
+      
+    </AbsoluteFill>
+  );
+};
+

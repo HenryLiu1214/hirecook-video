@@ -266,7 +266,7 @@ const SimulationPipeline: React.FC = () => {
 
 const MBTIInjection: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 408, 420);
+  const enter = interpolate(frame, [0, 8], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const chips = [
     "INTJ", "INTP", "ENTJ", "ENTP",
     "INFJ", "INFP", "ENFJ", "ENFP",
@@ -276,17 +276,18 @@ const MBTIInjection: React.FC = () => {
   const chipColors = [colors.hcBlue, colors.hcCyan, colors.hcFit, colors.hcWatch];
   const swirl = interpolate(frame, [190, 336], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const boot = swirl;
-  const coreOpacity = interpolate(frame, [112, 146, 392, 416], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const coreOpacity = interpolate(frame, [112, 146], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const exitRing = interpolate(frame, [348, 420], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const titleOp = interpolate(frame, [10, 36, 170, 220], [0, 1, 1, 0.42], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const titleTop = interpolate(frame, [82, 136], [292, 44], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const titleScale = interpolate(frame, [82, 136], [1, 0.58], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const onlineText = interpolate(frame, [282, 314, 390, 416], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const eyeMood = interpolate(boot, [0, 1], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform }}>
+  return <AbsoluteFill style={{ opacity: enter }}>
     <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, #FFFFFF 0%, #F7F8FB 58%, #EAF0FF 100%)" }} />
     <div style={{ position: "absolute", inset: 0, opacity: 0.20, backgroundImage: "radial-gradient(circle, rgba(33,81,245,0.18) 1px, transparent 1px)", backgroundSize: "32px 32px", transform: `scale(${1 + swirl * 0.04}) rotate(${swirl * 1.2}deg)` }} />
     <div style={{ position: "absolute", left: 0, right: 0, top: titleTop, opacity: titleOp, textAlign: "center", transform: `scale(${titleScale})`, transformOrigin: "center top" }}>
-      <div style={{ color: colors.hcFgPrimary, fontSize: 88, fontWeight: 900, letterSpacing: "-0.06em" }}>16 MBTI chips</div>
+      <div style={{ color: colors.hcFgPrimary, fontSize: 88, fontWeight: 900, letterSpacing: "-0.06em" }}>人格注入</div>
       <div style={{ marginTop: 6, color: colors.hcFgSecondary, fontSize: 28, fontWeight: 680 }}>不是錄用結論，是模擬輸入</div>
     </div>
 
@@ -322,31 +323,38 @@ const MBTIInjection: React.FC = () => {
       <div style={{ color: colors.hcFgPrimary, fontSize: 66, fontWeight: 900, letterSpacing: "-0.045em" }}>AI Agent Online</div>
       <div style={{ marginTop: 10, color: colors.hcFgSecondary, fontSize: 28, fontWeight: 680 }}>人格訊號已載入，準備進入 Work-Sim</div>
     </div>
+    <div style={{ position: "absolute", inset: 0, opacity: frame >= 348 ? 1 : 0, background: "#17339C" }} />
+    <div style={{ position: "absolute", left: 960, top: 590, width: interpolate(exitRing, [0, 1], [340, 3600]), height: interpolate(exitRing, [0, 1], [340, 3600]), opacity: frame >= 348 ? 1 : 0, transform: "translate(-50%, -50%)", borderRadius: "50%", border: `${interpolate(exitRing, [0, 1], [7, 920])}px solid rgba(111,227,245,0.42)`, boxShadow: "0 0 120px rgba(111,227,245,0.36)" }} />
+    <div style={{ position: "absolute", left: 960, top: 590, width: 340, height: 340, opacity: frame >= 348 ? 1 : 0, transform: "translate(-50%, -50%)" }}>
+      <RobotAgent size={340} boot={1} bodyColor="#17339C" />
+    </div>
   </AbsoluteFill>;
 };
 
 const OvercookedPlay: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 528, 540);
-  const reveal = interpolate(frame, [42, 112], [0, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const block = interpolate(frame, [0, 52, 116], [0, 1, 0], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const camera = interpolate(frame, [118, 430], [1.01, 1.06], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const cover = interpolate(frame, [0, 72], [1, 0], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const tags = [
-    { en: "Time pressure", zh: "倒數壓力", c: colors.hcCyanBright, start: 118 },
-    { en: "Role handoff", zh: "角色交接", c: colors.hcBlue, start: 218 },
-    { en: "Resource conflict", zh: "資源衝突", c: colors.hcRisk, start: 318 },
+    { en: "TIME PRESSURE", zh: "倒數壓力", c: colors.hcCyanBright },
+    { en: "ROLE HANDOFF", zh: "角色交接", c: colors.hcBlue },
+    { en: "RESOURCE CONFLICT", zh: "資源衝突", c: colors.hcRisk },
   ];
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, overflow: "hidden", background: "#F7F8FB" }}>
-    <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 72% 42%, rgba(33,81,245,0.14), transparent 46%), linear-gradient(180deg, #FFFFFF 0%, #EEF4FF 100%)" }} />
-    <div style={{ position: "absolute", inset: 0, opacity: 0.20, backgroundImage: "radial-gradient(circle, rgba(33,81,245,0.18) 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
+  return <AbsoluteFill style={{ overflow: "hidden", background: "#F7F8FB" }}>
+    <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 72% 46%, rgba(111,227,245,0.16), transparent 38%), linear-gradient(112deg, #071D32 0%, #0D1430 39%, #F7F8FB 39.2%, #EEF4FF 100%)" }} />
+    <div style={{ position: "absolute", inset: 0, opacity: 0.16, backgroundImage: "radial-gradient(circle, rgba(111,227,245,0.42) 1px, transparent 1px)", backgroundSize: "34px 34px" }} />
 
-    <div style={{ position: "absolute", left: 86, top: 124, width: 488, opacity: interpolate(frame, [96, 134, 466, 528], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), transform: `translateX(${interpolate(frame, [96, 134], [-38, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)` }}>
-      <div style={{ color: colors.hcFgPrimary, fontSize: 74, fontWeight: 920, letterSpacing: "-0.065em", lineHeight: 0.94 }}>AI Agent<br />plays Work-Sim</div>
-      <div style={{ marginTop: 22, color: colors.hcBlue, fontFamily: fonts.mono, fontSize: 22, fontWeight: 900, letterSpacing: "0.08em" }}>COLLAB-OVERCOOKED</div>
-      <div style={{ marginTop: 18, width: 330, color: colors.hcFgSecondary, fontSize: 28, fontWeight: 680, lineHeight: 1.22, letterSpacing: "-0.025em" }}>AI 代理人在遊戲化壓力廚房中重複協作、等待、交接與決策。</div>
+    <div style={{ position: "absolute", left: 72, top: 90, width: 610, opacity: interpolate(frame, [540, 590], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+      <div style={{ color: colors.hcCyanBright, fontFamily: fonts.mono, fontSize: 25, fontWeight: 900, letterSpacing: "0.22em" }}>AI AGENT</div>
+      <div style={{ marginTop: 18, color: "#FFFFFF", fontSize: 132, fontWeight: 950, letterSpacing: "-0.085em", lineHeight: 0.80 }}>PLAYS</div>
+      <div style={{ color: colors.hcCyanBright, fontSize: 122, fontWeight: 950, letterSpacing: "-0.085em", lineHeight: 0.80 }}>PRESSURE</div>
+      <div style={{ marginTop: 30, color: colors.dimWhite, fontSize: 37, fontWeight: 800, lineHeight: 1.14, letterSpacing: "-0.04em" }}>遊戲行為<br />轉成可建模訊號</div>
+      <div style={{ marginTop: 38, display: "flex", alignItems: "center", gap: 14, color: colors.dimWhite, fontFamily: fonts.mono, fontSize: 20, fontWeight: 850, letterSpacing: "0.12em" }}>
+        <span style={{ width: 120, height: 2, background: `linear-gradient(90deg, ${colors.hcCyanBright}, transparent)`, boxShadow: "0 0 22px rgba(111,227,245,0.42)" }} />
+        WORK-SIM SIGNALS
+      </div>
     </div>
 
-    <div style={{ position: "absolute", right: 64, top: 82, width: 1220, height: 790, opacity: reveal, transform: `translateX(${interpolate(reveal, [0, 1], [72, 0])}px) scale(${interpolate(reveal, [0, 1], [0.94, 1])})`, borderRadius: 34, overflow: "hidden", background: "#FFFFFF", border: "1px solid rgba(33,81,245,0.16)", boxShadow: "0 38px 110px rgba(33,81,245,0.20)" }}>
+    <div style={{ position: "absolute", right: 82, top: 138, width: 1110, height: 694, borderRadius: 28, overflow: "hidden", background: "#FFFFFF", border: "1px solid rgba(111,227,245,0.22)", boxShadow: "0 34px 100px rgba(5,7,12,0.26)" }}>
       <Video
         src={staticFile("overcooked-worksim.mp4")}
         muted
@@ -356,32 +364,32 @@ const OvercookedPlay: React.FC = () => {
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          transform: `scale(${camera})`,
           filter: "saturate(1.04) contrast(1.03)",
         }}
       />
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(5,7,12,0.16) 0%, transparent 28%, transparent 70%, rgba(5,7,12,0.22) 100%)" }} />
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, rgba(5,7,12,0.18) 0%, transparent 22%, transparent 76%, rgba(5,7,12,0.10) 100%)" }} />
     </div>
 
-    <div style={{ position: "absolute", left: 86, bottom: 132, height: 88, display: "flex", alignItems: "center", opacity: interpolate(frame, [118, 148, 462, 522], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+    <div style={{ position: "absolute", left: 74, bottom: 132, width: 600, height: 226, opacity: interpolate(frame, [540, 590], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
       {tags.map((tag) => {
-        const op = interpolate(frame, [tag.start, tag.start + 22, tag.start + 78, tag.start + 106], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-        const y = interpolate(frame, [tag.start, tag.start + 22], [24, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-        return <div key={tag.en} style={{ position: "absolute", opacity: op, transform: `translateY(${y}px)`, padding: "15px 22px", borderRadius: 999, background: "rgba(5,7,12,0.86)", border: `1px solid ${tag.c}66`, boxShadow: `0 20px 90px ${tag.c}1F`, whiteSpace: "nowrap" }}>
-          <span style={{ color: tag.c, fontFamily: fonts.mono, fontSize: 24, fontWeight: 900 }}>{tag.en}</span>
-          <span style={{ marginLeft: 14, color: "#FFFFFF", fontSize: 25, fontWeight: 780 }}>{tag.zh}</span>
+        return <div key={tag.en} style={{ position: "absolute", left: 0, top: tags.indexOf(tag) * 72, display: "grid", gridTemplateColumns: "22px 1fr", columnGap: 16, alignItems: "center" }}>
+          <div style={{ width: 11, height: 11, borderRadius: "50%", background: tag.c, boxShadow: `0 0 24px ${tag.c}` }} />
+          <div>
+            <div style={{ color: tag.c, fontFamily: fonts.mono, fontSize: 28, fontWeight: 900, letterSpacing: "0.04em" }}>{tag.en}</div>
+            <div style={{ marginTop: 4, color: "#FFFFFF", fontSize: 25, fontWeight: 780 }}>{tag.zh}</div>
+          </div>
         </div>;
       })}
     </div>
 
-    <div style={{ position: "absolute", left: 86, bottom: 88, opacity: interpolate(frame, [420, 456, 520, 540], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), color: colors.hcFgMuted, fontFamily: fonts.mono, fontSize: 22, fontWeight: 850, letterSpacing: "0.05em" }}>
-      behavior trace captured
+    <div style={{ position: "absolute", left: 74, bottom: 64, opacity: interpolate(frame, [470, 510, 576, 600], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), color: colors.hcCyanBright, fontFamily: fonts.mono, fontSize: 28, fontWeight: 900, letterSpacing: "0.10em", textShadow: "0 0 28px rgba(111,227,245,0.36)" }}>
+      TRACE CAPTURED →
     </div>
 
-    <div style={{ position: "absolute", left: 960, top: 590, width: 420 + block * 2500, height: 420 + block * 2500, opacity: interpolate(frame, [0, 18, 116, 144], [1, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), transform: `translate(-50%, -50%) scale(${interpolate(frame, [0, 54, 116], [0.2, 1, 1], { easing: Easing.inOut(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`, borderRadius: "50%", background: `linear-gradient(145deg, #0B1434, ${colors.hcBlueDark})`, boxShadow: "0 0 120px rgba(111,227,245,0.32)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ opacity: interpolate(frame, [0, 44, 86], [1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
-        <RobotAgent size={320} boot={1} bodyColor="#17339C" />
-      </div>
+    <div style={{ position: "absolute", inset: 0, opacity: cover, background: "#17339C" }} />
+    <div style={{ position: "absolute", left: 960, top: 590, width: 340 + cover * 3260, height: 340 + cover * 3260, opacity: cover, transform: "translate(-50%, -50%)", borderRadius: "50%", border: `${7 + cover * 913}px solid rgba(111,227,245,0.42)`, boxShadow: "0 0 120px rgba(111,227,245,0.36)" }} />
+    <div style={{ position: "absolute", left: 960, top: 590, width: 340, height: 340, opacity: cover, transform: "translate(-50%, -50%)" }}>
+      <RobotAgent size={340} boot={1} bodyColor="#17339C" />
     </div>
   </AbsoluteFill>;
 };
@@ -499,14 +507,14 @@ const ScienceClose: React.FC = () => {
 
 export const S2_Science: React.FC = () => <AbsoluteFill>
   <Sequence from={0} durationInFrames={720} layout="none"><AbsoluteFill><BgCalm theme="light" tint="blue" /></AbsoluteFill></Sequence>
-  <Sequence from={720} durationInFrames={2640} layout="none"><AbsoluteFill><BgCalm theme="dark" tint="blue" /></AbsoluteFill></Sequence>
+  <Sequence from={720} durationInFrames={2700} layout="none"><AbsoluteFill><BgCalm theme="dark" tint="blue" /></AbsoluteFill></Sequence>
   <Sequence from={0} durationInFrames={240} layout="none"><BigBeat text="MBTI" sub="Personality signal，不是錄用結論" size={230} /></Sequence>
   <Sequence from={240} durationInFrames={240} layout="none"><BigBeat text="P × E Interaction" sub="同一人格，在不同壓力結構下會有不同表現" size={156} /></Sequence>
   <Sequence from={480} durationInFrames={240} layout="none"><Brand /></Sequence>
   <Sequence from={720} durationInFrames={360} layout="none"><Formula /></Sequence>
   <Sequence from={1080} durationInFrames={360} layout="none"><PE /></Sequence>
   <Sequence from={1440} durationInFrames={420} layout="none"><MBTIInjection /></Sequence>
-  <Sequence from={1860} durationInFrames={540} layout="none"><OvercookedPlay /></Sequence>
-  <Sequence from={2400} durationInFrames={720} layout="none"><FingerprintResults /></Sequence>
-  <Sequence from={3120} durationInFrames={240} layout="none"><ScienceClose /></Sequence>
+  <Sequence from={1860} durationInFrames={600} layout="none"><OvercookedPlay /></Sequence>
+  <Sequence from={2460} durationInFrames={720} layout="none"><FingerprintResults /></Sequence>
+  <Sequence from={3180} durationInFrames={240} layout="none"><ScienceClose /></Sequence>
 </AbsoluteFill>;

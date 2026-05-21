@@ -1,0 +1,23 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Monogram & icon sizes</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .row3 { display: flex; align-items: flex-end; gap: 18px; padding: 12px 0; }
+  .item { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+  .item .px { font: 400 10px/1 var(--font-mono); color: var(--fg-faint); }
+  .lbl { font: 500 10px/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-muted); margin-bottom: 6px; }
+</style></head>
+<body><div class="card">
+  <div class="eyebrow" style="margin-bottom: 12px;">Monogram · app icon, favicon, social</div>
+  <div class="lbl">MONOGRAM · HC · across sizes</div>
+  <div class="row3">
+    <div class="item"><img src="../assets/monogram.svg" width="80" height="80" /><span class="px">80 px</span></div>
+    <div class="item"><img src="../assets/monogram.svg" width="48" height="48" /><span class="px">48 px</span></div>
+    <div class="item"><img src="../assets/monogram.svg" width="32" height="32" /><span class="px">32 px</span></div>
+    <div class="item"><img src="../assets/monogram.svg" width="20" height="20" /><span class="px">20 px</span></div>
+    <div class="item"><img src="../assets/monogram.svg" width="16" height="16" /><span class="px">16 px</span></div>
+  </div>
+  <div class="lbl" style="margin-top: 12px;">USAGE</div>
+  <div style="font: 400 12px/1.5 'Inter',sans-serif; color: var(--fg-secondary);">
+    Use the monogram only where the wordmark won't fit: favicons, OS app icons, social avatars, single-character UI affordances. Below 16 px, fall back to the brand mark alone (no HC letters).
+  </div>
+</div></body></html>

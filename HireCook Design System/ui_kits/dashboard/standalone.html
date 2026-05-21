@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>HireCook — TAT Playbook</title>
+  <link rel="icon" href="../../assets/monogram.svg">
+  <link rel="stylesheet" href="../../colors_and_type.css">
+  <link rel="stylesheet" href="dashboard.css">
+
+  <!-- Resources referenced as strings inside JSX — lifted so the bundler can inline them. -->
+  <meta name="ext-resource-dependency" content="../../assets/logo-mark.svg" data-resource-id="logoMark" />
+
+  <!-- Splash + no-JS fallback. Shown fullscreen while the bundle unpacks. -->
+  <template id="__bundler_thumbnail" data-bg-color="#FFFFFF">
+    <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="hcSplash" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#00B4D8" stop-opacity="0.65"/>
+          <stop offset="60%" stop-color="#2151F5" stop-opacity="0.20"/>
+          <stop offset="100%" stop-color="#2151F5" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect x="40" y="40" width="160" height="160" rx="18" fill="#FFFFFF" stroke="#2151F5" stroke-width="3" opacity="0.85"/>
+      <g fill="#2151F5" opacity="0.45">
+        <circle cx="80"  cy="80"  r="4"/><circle cx="120" cy="80"  r="4"/><circle cx="160" cy="80"  r="4"/>
+        <circle cx="80"  cy="120" r="4"/><circle cx="160" cy="120" r="4"/>
+        <circle cx="80"  cy="160" r="4"/><circle cx="120" cy="160" r="4"/><circle cx="160" cy="160" r="4"/>
+      </g>
+      <circle cx="120" cy="120" r="42" fill="url(#hcSplash)"/>
+      <rect x="68"  y="68"  width="24" height="24" rx="4" fill="#2151F5"/>
+      <rect x="148" y="148" width="24" height="24" rx="4" fill="#2151F5"/>
+      <path d="M92 92 L120 120 L148 148" stroke="#00B4D8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="120" cy="120" r="9" fill="#FFFFFF" stroke="#00B4D8" stroke-width="4"/>
+      <circle cx="120" cy="120" r="3.5" fill="#00B4D8"/>
+    </svg>
+  </template>
+
+  <style>html, body { margin: 0; height: 100%; overflow: hidden; }</style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <script src="data.js"></script>
+  <script type="text/babel" src="Atoms.jsx"></script>
+  <script type="text/babel" src="Frame.jsx"></script>
+  <script type="text/babel" src="Candidates.jsx"></script>
+  <script type="text/babel" src="TATPlaybook.jsx"></script>
+  <script type="text/babel" src="Roles.jsx"></script>
+  <script type="text/babel" src="App.jsx"></script>
+</body>
+</html>

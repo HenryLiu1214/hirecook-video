@@ -1,0 +1,49 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Inputs</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .col2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font: 500 11px/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.10em; color: var(--fg-muted); }
+  .input { background: var(--bg-surface); border: 1px solid var(--line-soft); border-radius: 3px; padding: 9px 12px; font: 400 13px/1 'Inter',sans-serif; color: var(--fg-primary); transition: border-color 140ms; }
+  .input:hover { border-color: var(--line-strong); }
+  .input.focused { border-color: #2151F5; box-shadow: 0 0 0 3px rgba(33,81,245,0.18); outline: none; }
+  .input.error { border-color: #E55A4D; }
+  .help { font: 400 11px/1.4 'Inter',sans-serif; color: var(--fg-faint); }
+  .help.err { color: var(--chip-risk-fg); }
+  .select { display: flex; align-items: center; justify-content: space-between; }
+  .select svg { width: 14px; height: 14px; color: var(--fg-muted); }
+  .checkbox { display: inline-flex; align-items: center; gap: 8px; font: 400 13px/1 'Inter',sans-serif; color: var(--fg-secondary); }
+  .checkbox .box { width: 16px; height: 16px; border: 1px solid var(--line-strong); border-radius: 3px; background: var(--bg-surface); display: inline-flex; align-items: center; justify-content: center; }
+  .checkbox.on .box { background: #2151F5; border-color: #2151F5; }
+  .checkbox.on .box svg { display: block; }
+  .checkbox .box svg { display: none; width: 10px; height: 10px; color: white; }
+</style></head>
+<body><div class="card">
+  <div class="eyebrow" style="margin-bottom: 12px;">Form inputs · hairlines · brand-blue focus</div>
+  <div class="col2">
+    <div class="field">
+      <label>Role title</label>
+      <input class="input" value="Backend Engineer L3" />
+      <div class="help">Used to generate the environment model.</div>
+    </div>
+    <div class="field">
+      <label>Stress baseline</label>
+      <div class="input select"><span>Medium · weekly cycle</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
+      <div class="help">Pulled from the team's pattern, editable.</div>
+    </div>
+    <div class="field">
+      <label>SJT batch ID</label>
+      <input class="input focused" value="sjt-3.1-prod-2451" />
+      <div class="help">Focused state · 3px brand-blue ring.</div>
+    </div>
+    <div class="field">
+      <label>Candidate email</label>
+      <input class="input error" value="not an email" />
+      <div class="help err">Enter a valid email address.</div>
+    </div>
+  </div>
+  <div style="display: flex; gap: 20px; margin-top: 14px;">
+    <span class="checkbox on"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span>Include XAI breakdown</span>
+    <span class="checkbox"><span class="box"></span>Anonymize report</span>
+  </div>
+</div></body></html>

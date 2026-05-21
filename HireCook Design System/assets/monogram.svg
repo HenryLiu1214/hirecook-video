@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  
+  <rect width="64" height="64" rx="12" fill="#0E121C"></rect>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="11.5" stroke="#2151F5" stroke-opacity="0.4"></rect>
+  <text x="32" y="44" font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="700" letter-spacing="-1" text-anchor="middle" fill="#ECEFF6">HC</text>
+  <rect x="8" y="54" width="4" height="4" rx="0.8" fill="#2151F5"></rect>
+  <rect x="52" y="6" width="4" height="4" rx="0.8" fill="#6FE3F5"></rect>
+</svg>

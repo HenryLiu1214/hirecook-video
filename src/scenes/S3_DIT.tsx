@@ -470,43 +470,53 @@ const recs: { num: string; text: string; delay: number }[] = [
 
 const B0Overview: React.FC = () => {
   const frame = useCurrentFrame();
-  const m = momentAnim(frame, 0, 8, 348, 360);
+  const m = momentAnim(frame, 0, 8, 588, 600);
   const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
-  // ── Phase 1 (0–72f): cinematic title reveal ──────────────────────────────
-  const phase1Op = interpolate(frame, [0, 12, 56, 74], [0, 1, 1, 0], cl);
+  // ── Phase 0 (0–90f): HOW HIRECOOK WORKS title card ───────────────────────
+  const p0Op = interpolate(frame, [0, 14, 70, 90], [0, 1, 1, 0], cl);
 
-  const titleSc  = interpolate(frame, [8, 34], [0.82, 1], { easing: Easing.out(Easing.back(1.2)), ...cl });
-  const titleY   = interpolate(frame, [8, 34], [32, 0], { easing: Easing.out(Easing.cubic), ...cl });
-  const eyebrowOp1 = interpolate(frame, [6, 20], [0, 1], cl);
-  const subtitleOp1 = interpolate(frame, [30, 52], [0, 1], cl);
+  // ── Phase 1 (80–230f): D · 企業端 ────────────────────────────────────────
+  const p1Op     = interpolate(frame, [80, 100, 212, 230], [0, 1, 1, 0], cl);
+  const p1EyeOp  = interpolate(frame, [82, 100], [0, 1], cl);
+  const p1TitleOp = interpolate(frame, [94, 114], [0, 1], cl);
+  const p1TitleY  = interpolate(frame, [94, 118], [32, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  const p1SubOp   = interpolate(frame, [114, 132], [0, 1], cl);
+  const p1SubY    = interpolate(frame, [114, 136], [24, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  const p1DivW    = interpolate(frame, [134, 164], [0, 260], { easing: Easing.out(Easing.cubic), ...cl });
+  const p1DivOp   = interpolate(frame, [134, 150], [0, 1], cl);
+  const p1OutOp   = interpolate(frame, [148, 166], [0, 1], cl);
+  const p1OutY    = interpolate(frame, [148, 170], [20, 0], { easing: Easing.out(Easing.cubic), ...cl });
 
-  // ── Phase 2 (62f+): three-role flow diagram ───────────────────────────────
-  const phase2Op = interpolate(frame, [60, 82], [0, 1], cl);
-  const eyebrowOp2 = interpolate(frame, [64, 80], [0, 1], cl);
+  // ── Phase 2 (220–370f): I · 求職者 ───────────────────────────────────────
+  const p2Op     = interpolate(frame, [220, 240, 352, 370], [0, 1, 1, 0], cl);
+  const p2EyeOp  = interpolate(frame, [222, 240], [0, 1], cl);
+  const p2TitleOp = interpolate(frame, [234, 254], [0, 1], cl);
+  const p2TitleY  = interpolate(frame, [234, 258], [32, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  const p2SubOp   = interpolate(frame, [254, 272], [0, 1], cl);
+  const p2SubY    = interpolate(frame, [254, 276], [24, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  const p2DivW    = interpolate(frame, [274, 304], [0, 260], { easing: Easing.out(Easing.cubic), ...cl });
+  const p2DivOp   = interpolate(frame, [274, 290], [0, 1], cl);
+  const p2OutOp   = interpolate(frame, [288, 306], [0, 1], cl);
+  const p2OutY    = interpolate(frame, [288, 310], [20, 0], { easing: Easing.out(Easing.cubic), ...cl });
 
-  // Three roles with their inputs and outputs
-  const roles = [
-    {
-      letter: "D", step: "STEP 01", actor: "企業端", actorSub: "HR / 用人主管",
-      action: "設定職位壓力場", actionDetail: "協作密度、決策節奏、壓力情境等六個維度",
-      output: "環境指紋 E", outputNote: "量化為六維雷達，映射16型人格適配",
-      color: ds.blue, start: 110,
-    },
-    {
-      letter: "I", step: "STEP 02", actor: "求職者", actorSub: "應徵人選",
-      action: "SJT 情境行為測驗", actionDetail: "從真實廚房情境中推論決策模式",
-      output: "行為指紋 P", outputNote: "無標準答案設計，防偽裝，萃取真實人格向量",
-      color: "#5B8AFF", start: 164,
-    },
-    {
-      letter: "T", step: "STEP 03", actor: "決策者", actorSub: "主管 / 管理團隊",
-      action: "P × E 交叉分析", actionDetail: "AI 模型比對行為指紋與環境模型",
-      output: "TAT 管理手冊", outputNote: "適配分數、留任預測、前90天行動計畫",
-      color: ds.fit, start: 218,
-    },
-  ];
-  const footerOp = interpolate(frame, [272, 292], [0, 1], cl);
+  // ── Phase 3 (360–510f): T · 決策者 ───────────────────────────────────────
+  const p3Op     = interpolate(frame, [360, 380, 492, 510], [0, 1, 1, 0], cl);
+  const p3EyeOp  = interpolate(frame, [362, 380], [0, 1], cl);
+  const p3TitleOp = interpolate(frame, [374, 394], [0, 1], cl);
+  const p3TitleY  = interpolate(frame, [374, 398], [32, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  const p3SubOp   = interpolate(frame, [394, 412], [0, 1], cl);
+  const p3SubY    = interpolate(frame, [394, 416], [24, 0], { easing: Easing.out(Easing.cubic), ...cl });
+  const p3DivW    = interpolate(frame, [414, 444], [0, 260], { easing: Easing.out(Easing.cubic), ...cl });
+  const p3DivOp   = interpolate(frame, [414, 430], [0, 1], cl);
+  const p3OutOp   = interpolate(frame, [428, 446], [0, 1], cl);
+  const p3OutY    = interpolate(frame, [428, 450], [20, 0], { easing: Easing.out(Easing.cubic), ...cl });
+
+  // ── Phase 4 (500–600f): D · I · T cue ────────────────────────────────────
+  const p4Op     = interpolate(frame, [500, 518, 582, 600], [0, 1, 1, 0], cl);
+  const p4LetOp  = interpolate(frame, [502, 522], [0, 1], cl);
+  const p4CueOp  = interpolate(frame, [520, 540], [0, 1], cl);
+  const p4CueY   = interpolate(frame, [520, 542], [20, 0], { easing: Easing.out(Easing.cubic), ...cl });
 
   return (
     <AbsoluteFill>
@@ -516,87 +526,103 @@ const B0Overview: React.FC = () => {
 
       <AbsoluteFill style={{ opacity: m.opacity }}>
 
-        {/* Phase 1: full-screen title */}
-        {frame < 76 && (
-          <AbsoluteFill style={{ opacity: phase1Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 0 }}>
-            <div style={{ position: "absolute", fontSize: 480, fontWeight: 900, fontFamily: fonts.mono, color: ds.blue, opacity: 0.04, lineHeight: 1, letterSpacing: "-16px", userSelect: "none" as const, top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>DIT</div>
-            <div style={{ opacity: eyebrowOp1, marginBottom: 20, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 16px", borderRadius: 999, border: "1px solid rgba(0,180,216,0.30)", background: "rgba(0,180,216,0.06)" }}>
-              <div style={{ width: 6, height: 6, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 8px ${ds.cyan}` }} />
-              <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#6FE3F5", letterSpacing: "0.22em" }}>HOW HIRECOOK WORKS</span>
-            </div>
-            <div style={{ transform: `translateY(${titleY}px) scale(${titleSc})`, fontSize: 108, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-4px", lineHeight: 1, textAlign: "center" as const }}>
-              三個角色<br /><span style={{ color: ds.cyan }}>一份決策手冊</span>
-            </div>
-            <div style={{ opacity: subtitleOp1, marginTop: 24, fontSize: 22, color: "rgba(255,255,255,0.48)", fontFamily: fonts.display, letterSpacing: "-0.2px", textAlign: "center" as const }}>
-              把職位環境與人格行為量化，交叉分析後輸出可執行管理手冊
-            </div>
-          </AbsoluteFill>
-        )}
+        {/* ── Phase 0: Title ── */}
+        <AbsoluteFill style={{ opacity: p0Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ position: "absolute", fontSize: 520, fontWeight: 900, fontFamily: fonts.mono, color: ds.blue, opacity: 0.04, lineHeight: 1, letterSpacing: "-20px", userSelect: "none" as const }}>DIT</div>
+          <div style={{ marginBottom: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 16px", borderRadius: 999, border: "1px solid rgba(0,180,216,0.30)", background: "rgba(0,180,216,0.06)" }}>
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 8px ${ds.cyan}` }} />
+            <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#6FE3F5", letterSpacing: "0.24em" }}>HOW HIRECOOK WORKS</span>
+          </div>
+          <div style={{ fontSize: 110, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-5px", lineHeight: 1.08, textAlign: "center" as const }}>
+            三個角色<br /><span style={{ color: ds.cyan }}>一份決策手冊</span>
+          </div>
+        </AbsoluteFill>
 
-        {/* Phase 2: three-role flow diagram */}
-        {frame >= 60 && (
-          <AbsoluteFill style={{ opacity: phase2Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 0 }}>
-            <div style={{ opacity: eyebrowOp2, fontSize: 13, fontFamily: fonts.mono, color: "rgba(255,255,255,0.28)", letterSpacing: "0.30em", marginBottom: 36 }}>HOW HIRECOOK WORKS</div>
+        {/* ── Phase 1: D 企業端 ── */}
+        <AbsoluteFill style={{ opacity: p1Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ position: "absolute", fontSize: 520, fontWeight: 900, fontFamily: fonts.mono, color: ds.blue, opacity: 0.05, lineHeight: 1, letterSpacing: "-28px", userSelect: "none" as const }}>D</div>
+          <div style={{ opacity: p1EyeOp, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(33,81,245,0.38)", background: "rgba(33,81,245,0.08)", marginBottom: 28 }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: ds.blue, boxShadow: `0 0 8px ${ds.blue}` }} />
+            <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#6A8FFF", letterSpacing: "0.20em" }}>STEP 01 · D · DEFINE · 企業端</span>
+          </div>
+          <div style={{ opacity: p1TitleOp, transform: `translateY(${p1TitleY}px)`, fontSize: 96, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-4px", lineHeight: 1.05, textAlign: "center" as const }}>
+            設定職位壓力場
+          </div>
+          <div style={{ opacity: p1SubOp, transform: `translateY(${p1SubY}px)`, marginTop: 22, fontSize: 28, color: "rgba(255,255,255,0.48)", fontFamily: fonts.display, textAlign: "center" as const, letterSpacing: "-0.3px" }}>
+            協作密度、決策節奏、壓力情境等六個維度
+          </div>
+          <div style={{ opacity: p1DivOp, width: p1DivW, height: 2, background: `linear-gradient(90deg, ${ds.blue}, ${ds.cyan})`, borderRadius: 1, margin: "28px 0" }} />
+          <div style={{ opacity: p1OutOp, transform: `translateY(${p1OutY}px)`, display: "flex", alignItems: "center", gap: 14 }}>
+            <span style={{ fontSize: 12, fontFamily: fonts.mono, color: "rgba(33,81,245,0.60)", letterSpacing: "0.18em" }}>OUTPUT</span>
+            <span style={{ fontSize: 32, fontFamily: fonts.mono, fontWeight: 700, color: ds.blue }}>環境指紋 E</span>
+          </div>
+        </AbsoluteFill>
 
-            <div style={{ display: "flex", alignItems: "stretch", gap: 0 }}>
-              {roles.map((r, i) => {
-                const cardOp = interpolate(frame, [r.start, r.start + 16], [0, 1], cl);
-                const cardY  = interpolate(frame, [r.start, r.start + 20], [40, 0], { easing: Easing.out(Easing.cubic), ...cl });
-                const arrowOp = i > 0 ? interpolate(frame, [r.start - 14, r.start + 4], [0, 1], cl) : 0;
-                return (
-                  <React.Fragment key={r.letter}>
-                    {i > 0 && (
-                      <div style={{ display: "flex", alignItems: "center", padding: "0 8px", opacity: arrowOp, paddingBottom: 20 }}>
-                        <span style={{ fontSize: 32, color: "rgba(255,255,255,0.22)", fontWeight: 300 }}>{"→"}</span>
-                      </div>
-                    )}
-                    <div style={{
-                      opacity: cardOp, transform: `translateY(${cardY}px)`,
-                      width: 310, padding: "24px 24px 22px",
-                      background: "rgba(255,255,255,0.032)",
-                      border: `1px solid ${r.color}2E`,
-                      borderRadius: 16,
-                      display: "flex", flexDirection: "column" as const, gap: 0,
-                      boxShadow: "0 20px 60px rgba(0,0,0,0.38)",
-                    }}>
-                      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 12 }}>
-                        <div>
-                          <div style={{ fontSize: 10, fontFamily: fonts.mono, color: `${r.color}99`, letterSpacing: "0.20em", marginBottom: 4 }}>{r.step}</div>
-                          <div style={{ fontSize: 76, fontWeight: 900, fontFamily: fonts.mono, color: r.color, lineHeight: 0.82, letterSpacing: "-4px" }}>{r.letter}</div>
-                        </div>
-                        <div style={{ display: "flex", flexDirection: "column" as const, alignItems: "flex-end", gap: 4, marginTop: 4 }}>
-                          <div style={{ display: "inline-flex", alignItems: "center", padding: "3px 10px", borderRadius: 999, border: `1px solid ${r.color}38`, background: `${r.color}12` }}>
-                            <span style={{ fontSize: 12, fontFamily: fonts.mono, color: r.color, letterSpacing: "0.06em" }}>{r.actor}</span>
-                          </div>
-                          <span style={{ fontSize: 11, fontFamily: fonts.mono, color: "rgba(255,255,255,0.30)" }}>{r.actorSub}</span>
-                        </div>
-                      </div>
-                      <div style={{ height: 1, background: `${r.color}18`, marginBottom: 14 }} />
-                      <div style={{ fontSize: 16, fontWeight: 700, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-0.3px", marginBottom: 5 }}>{r.action}</div>
-                      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.42)", fontFamily: fonts.display, lineHeight: 1.55, marginBottom: 14 }}>{r.actionDetail}</div>
-                      <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 5 }}>
-                        <span style={{ fontSize: 10, fontFamily: fonts.mono, color: `${r.color}80`, letterSpacing: "0.18em" }}>OUTPUT</span>
-                        <span style={{ fontSize: 15, fontFamily: fonts.mono, fontWeight: 700, color: r.color }}>{r.output}</span>
-                      </div>
-                      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.36)", fontFamily: fonts.display, lineHeight: 1.5 }}>{r.outputNote}</div>
-                    </div>
-                  </React.Fragment>
-                );
-              })}
-            </div>
+        {/* ── Phase 2: I 求職者 ── */}
+        <AbsoluteFill style={{ opacity: p2Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ position: "absolute", fontSize: 520, fontWeight: 900, fontFamily: fonts.mono, color: "#5B8AFF", opacity: 0.05, lineHeight: 1, letterSpacing: "-28px", userSelect: "none" as const }}>I</div>
+          <div style={{ opacity: p2EyeOp, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(91,138,255,0.38)", background: "rgba(91,138,255,0.08)", marginBottom: 28 }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#5B8AFF", boxShadow: "0 0 8px #5B8AFF" }} />
+            <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#8AADFF", letterSpacing: "0.20em" }}>STEP 02 · I · INTERACT · 求職者</span>
+          </div>
+          <div style={{ opacity: p2TitleOp, transform: `translateY(${p2TitleY}px)`, fontSize: 96, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-4px", lineHeight: 1.05, textAlign: "center" as const }}>
+            SJT 情境行為測驗
+          </div>
+          <div style={{ opacity: p2SubOp, transform: `translateY(${p2SubY}px)`, marginTop: 22, fontSize: 28, color: "rgba(255,255,255,0.48)", fontFamily: fonts.display, textAlign: "center" as const, letterSpacing: "-0.3px" }}>
+            從真實廚房情境中推論決策模式
+          </div>
+          <div style={{ opacity: p2DivOp, width: p2DivW, height: 2, background: "linear-gradient(90deg, #5B8AFF, #6FE3F5)", borderRadius: 1, margin: "28px 0" }} />
+          <div style={{ opacity: p2OutOp, transform: `translateY(${p2OutY}px)`, display: "flex", alignItems: "center", gap: 14 }}>
+            <span style={{ fontSize: 12, fontFamily: fonts.mono, color: "rgba(91,138,255,0.60)", letterSpacing: "0.18em" }}>OUTPUT</span>
+            <span style={{ fontSize: 32, fontFamily: fonts.mono, fontWeight: 700, color: "#5B8AFF" }}>行為指紋 P</span>
+          </div>
+        </AbsoluteFill>
 
-            <div style={{ opacity: footerOp, marginTop: 44, display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 ${4 + 5 * (0.5 + 0.5 * Math.sin(frame * 0.18))}px ${ds.cyan}` }} />
-              <span style={{ fontSize: 18, fontFamily: fonts.display, color: "rgba(255,255,255,0.58)", letterSpacing: "0.03em" }}>接下來，逐一示範這三步</span>
-            </div>
-          </AbsoluteFill>
-        )}
+        {/* ── Phase 3: T 決策者 ── */}
+        <AbsoluteFill style={{ opacity: p3Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ position: "absolute", fontSize: 520, fontWeight: 900, fontFamily: fonts.mono, color: ds.fit, opacity: 0.05, lineHeight: 1, letterSpacing: "-28px", userSelect: "none" as const }}>T</div>
+          <div style={{ opacity: p3EyeOp, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(27,122,77,0.38)", background: "rgba(27,122,77,0.08)", marginBottom: 28 }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: ds.fit, boxShadow: `0 0 8px ${ds.fit}` }} />
+            <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#5FC48C", letterSpacing: "0.20em" }}>STEP 03 · T · TARGET · 決策者</span>
+          </div>
+          <div style={{ opacity: p3TitleOp, transform: `translateY(${p3TitleY}px)`, fontSize: 96, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-4px", lineHeight: 1.05, textAlign: "center" as const }}>
+            P × E 交叉分析
+          </div>
+          <div style={{ opacity: p3SubOp, transform: `translateY(${p3SubY}px)`, marginTop: 22, fontSize: 28, color: "rgba(255,255,255,0.48)", fontFamily: fonts.display, textAlign: "center" as const, letterSpacing: "-0.3px" }}>
+            AI 模型比對行為指紋與環境模型
+          </div>
+          <div style={{ opacity: p3DivOp, width: p3DivW, height: 2, background: `linear-gradient(90deg, ${ds.fit}, ${ds.cyan})`, borderRadius: 1, margin: "28px 0" }} />
+          <div style={{ opacity: p3OutOp, transform: `translateY(${p3OutY}px)`, display: "flex", alignItems: "center", gap: 14 }}>
+            <span style={{ fontSize: 12, fontFamily: fonts.mono, color: "rgba(27,122,77,0.60)", letterSpacing: "0.18em" }}>OUTPUT</span>
+            <span style={{ fontSize: 32, fontFamily: fonts.mono, fontWeight: 700, color: ds.fit }}>TAT 管理手冊</span>
+          </div>
+        </AbsoluteFill>
+
+        {/* ── Phase 4: D · I · T cue ── */}
+        <AbsoluteFill style={{ opacity: p4Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 32 }}>
+          <div style={{ opacity: p4LetOp, display: "flex", alignItems: "center", gap: 24 }}>
+            {([
+              { letter: "D", color: ds.blue },
+              { letter: "·", color: "rgba(255,255,255,0.22)" },
+              { letter: "I", color: "#5B8AFF" },
+              { letter: "·", color: "rgba(255,255,255,0.22)" },
+              { letter: "T", color: ds.fit },
+            ] as { letter: string; color: string }[]).map((item, idx) => (
+              <span key={idx} style={{ fontSize: 88, fontFamily: fonts.mono, fontWeight: 900, color: item.color, lineHeight: 1 }}>{item.letter}</span>
+            ))}
+          </div>
+          <div style={{ opacity: p4CueOp, transform: `translateY(${p4CueY}px)`, display: "flex", alignItems: "center", gap: 12 }}>
+            <span style={{ width: 7, height: 7, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 ${4 + 5 * (0.5 + 0.5 * Math.sin(frame * 0.18))}px ${ds.cyan}` }} />
+            <span style={{ fontSize: 28, fontFamily: fonts.display, color: "rgba(255,255,255,0.62)", letterSpacing: "-0.3px" }}>接下來，逐一示範這三步</span>
+          </div>
+        </AbsoluteFill>
 
       </AbsoluteFill>
     </AbsoluteFill>
   );
 
 };
+
 
 // ────────────────────────────────────────────────────────────────────────────
 // B2 — D · Define  (3 steps matching actual product, 1260 frames total)
@@ -924,17 +950,29 @@ const B2Define: React.FC = () => {
   type Stop = { k: number[]; ox: number; oy: number; z: number; panel: "left" | "right" | "none"; n: string; title: string; desc: string };
   const stops: Stop[] = [
     { k: [210, 250, 330, 370], ox: 30, oy: 35, z: 1.0, panel: "left",  n: "①", title: "描述職位的真實樣貌", desc: "不是理想，是這個位置實際的運作方式。" },
-    { k: [600, 638, 720, 758], ox: 30, oy: 54, z: 1.28, panel: "left",  n: "②", title: "六個維度，拉出壓力場", desc: "每個軸向對應一種真實的工作張力。" },
-    { k: [770, 808, 880, 918], ox: 80, oy: 40, z: 1.32, panel: "right", n: "③", title: "環境指紋即時生成", desc: "六維壓力分數，量化成一張雷達。" },
-    { k: [925, 958, 1180, 1208], ox: 80, oy: 70, z: 1.32, panel: "right", n: "④", title: "16 型人格即時適配", desc: "每動一格，預測適配同步重算。" },
-    { k: [1010, 1040, 1200, 1230], ox: 50, oy: 56, z: 1.18, panel: "none", n: "⑤", title: "確認後，一鍵建模", desc: "生成環境指紋與適配分佈，約 12 秒。" },
+    { k: [600, 640, 722, 760],   ox: 30, oy: 54, z: 1.28, panel: "left",  n: "②", title: "六個維度，拉出壓力場", desc: "每個軸向對應一種真實的工作張力。" },
+    { k: [784, 822, 894, 930],   ox: 80, oy: 40, z: 1.32, panel: "right", n: "③", title: "環境指紋即時生成", desc: "六維壓力分數，量化成一張雷達。" },
+    { k: [952, 988, 1062, 1096], ox: 80, oy: 70, z: 1.32, panel: "right", n: "④", title: "16 型人格即時適配", desc: "每動一格，預測適配同步重算。" },
+    { k: [1094, 1130, 1222, 1256], ox: 46, oy: 62, z: 1.22, panel: "none",  n: "⑤", title: "確認後，一鍵建模", desc: "生成環境指紋與適配分佈。" },
   ];
   const active = stops.find((s) => frame >= s.k[0] && frame < s.k[3]);
-  const camZoom = active
-    ? interpolate(frame, active.k as [number, number, number, number], [1, active.z, active.z, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
-    : 1;
-  const camOx = active ? active.ox : 50;
-  const camOy = active ? active.oy : 50;
+  // Continuous camera path — ②③④⑤ flow directly, no return to 1.0 between stops
+  // Gap ②→③: 760-784 (24f pan left→right)  Gap ③→④: 930-952 (22f shift down)  Gap ④→⑤: 1096-1130 (34f sweep right→center)
+  const camZoom = interpolate(frame,
+    [600,  640,  722,  760,  784,  822,  894,  930,  952,  988, 1062, 1096, 1130, 1222, 1256],
+    [  1, 1.28, 1.28, 1.28, 1.32, 1.32, 1.32, 1.32, 1.32, 1.32, 1.32, 1.22, 1.22, 1.22,    1],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  const camOx = interpolate(frame,
+    [600,  640,  722,  760,  784,  822,  894,  930,  952,  988, 1062, 1096, 1130, 1222, 1256],
+    [ 50,   30,   30,   30,   80,   80,   80,   80,   80,   80,   80,   46,   46,   46,   50],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  const camOy = interpolate(frame,
+    [600,  640,  722,  760,  784,  822,  894,  930,  952,  988, 1062, 1096, 1130, 1222, 1256],
+    [ 50,   54,   54,   54,   40,   40,   40,   40,   70,   70,   70,   62,   62,   62,   50],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
   // Panel dim/glow (only while meaningfully zoomed)
   const zoomT = Math.max(0, Math.min(1, (camZoom - 1) / 0.4));
   const leftDim  = active?.panel === "right" ? 1 - 0.62 * zoomT : 1;
@@ -1905,13 +1943,13 @@ export const S3_DIT: React.FC = () => {
     <AbsoluteFill>
       {/* S3 total: 5040f (84s @ 60fps).  Each Sequence overlaps ~24f with previous → crossfade, no flash.
           B0:372  B2:1284  B3:150  B4:1404(+120 opener)  B5:264  B6:150  B7:1560(+90 opener) */}
-      <Sequence from={0}    durationInFrames={372}  layout="none"><B0Overview /></Sequence>
-      <Sequence from={348}  durationInFrames={1284} layout="none"><B2Define /></Sequence>
-      <Sequence from={1608} durationInFrames={150}  layout="none"><B3Bridge /></Sequence>
-      <Sequence from={1734} durationInFrames={1464} layout="none"><B4Interact /></Sequence>
-      <Sequence from={3174} durationInFrames={264}  layout="none"><B5Capture /></Sequence>
-      <Sequence from={3414} durationInFrames={150}  layout="none"><B6Bridge /></Sequence>
-      <Sequence from={3540} durationInFrames={1560} layout="none"><B7Tailor /></Sequence>
+      <Sequence from={0}    durationInFrames={600}  layout="none"><B0Overview /></Sequence>
+      <Sequence from={576}  durationInFrames={1284} layout="none"><B2Define /></Sequence>
+      <Sequence from={1836} durationInFrames={150}  layout="none"><B3Bridge /></Sequence>
+      <Sequence from={1962} durationInFrames={1464} layout="none"><B4Interact /></Sequence>
+      <Sequence from={3402} durationInFrames={264}  layout="none"><B5Capture /></Sequence>
+      <Sequence from={3642} durationInFrames={150}  layout="none"><B6Bridge /></Sequence>
+      <Sequence from={3768} durationInFrames={1560} layout="none"><B7Tailor /></Sequence>
     </AbsoluteFill>
   );
 };

@@ -1,0 +1,43 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Neutral Scale</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .scale { display: grid; grid-template-columns: repeat(13, 1fr); gap: 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--line-hairline); }
+  .swatch { aspect-ratio: 1 / 1.4; padding: 8px 6px; display: flex; flex-direction: column; justify-content: space-between; font-family: var(--font-mono); font-size: 9px; }
+  .swatch .num { letter-spacing: 0.06em; opacity: 0.9; }
+  .swatch .hex { font-size: 8px; opacity: 0.6; }
+  .swatch.dark { color: white; }
+  .swatch.light { color: #0B1020; }
+  .meta { display: flex; gap: 16px; margin-top: 14px; }
+  .meta div { font-size: 11px; color: var(--fg-muted); }
+  .meta div b { color: var(--fg-secondary); font-weight: 500; font-family: var(--font-mono); }
+</style></head>
+<body><div class="card">
+  <div class="row" style="margin-bottom: 14px;">
+    <span class="eyebrow">Ink · cool near-black neutrals</span>
+    <span class="grow"></span>
+    <span class="mono" style="font-size: 11px; color: var(--fg-faint)">slight blue cast · never warm</span>
+  </div>
+  <div class="scale">
+    <div class="swatch dark"  style="background: #05070C"><span class="num">1000</span><span class="hex">canvas</span></div>
+    <div class="swatch dark"  style="background: #090C13"><span class="num">950</span></div>
+    <div class="swatch dark"  style="background: #0E121C"><span class="num">900</span><span class="hex">surface</span></div>
+    <div class="swatch dark"  style="background: #131826"><span class="num">850</span></div>
+    <div class="swatch dark"  style="background: #1A2030"><span class="num">800</span></div>
+    <div class="swatch dark"  style="background: #232A3D"><span class="num">700</span></div>
+    <div class="swatch dark"  style="background: #2E3650"><span class="num">600</span></div>
+    <div class="swatch dark"  style="background: #4A546F"><span class="num">500</span></div>
+    <div class="swatch dark"  style="background: #6B7591"><span class="num">400</span></div>
+    <div class="swatch light" style="background: #8C95AE"><span class="num">300</span></div>
+    <div class="swatch light" style="background: #B4BCD0"><span class="num">200</span></div>
+    <div class="swatch light" style="background: #D7DCE8"><span class="num">100</span></div>
+    <div class="swatch light" style="background: #ECEFF6"><span class="num">50</span></div>
+  </div>
+  <div class="meta">
+    <div><b>1000</b> · canvas</div>
+    <div><b>900</b> · surface</div>
+    <div><b>850</b> · raised</div>
+    <div><b>800</b> · overlay</div>
+    <div><b>300</b> · text muted</div>
+    <div><b>100</b> · text primary</div>
+  </div>
+</div></body></html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Semantic Status</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .tile { background: var(--bg-surface); border: 1px solid var(--line-hairline); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .dot { width: 10px; height: 10px; border-radius: 999px; box-shadow: 0 0 0 4px rgba(255,255,255,0.04); }
+  .tile .label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; font-family: var(--font-mono); color: var(--fg-muted); }
+  .tile .name { font-size: 14px; font-weight: 500; color: var(--fg-primary); }
+  .tile .hex { font-size: 11px; font-family: var(--font-mono); color: var(--fg-faint); }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 500; font-family: var(--font-sans); }
+</style></head>
+<body><div class="card">
+  <div class="row" style="margin-bottom: 14px;">
+    <span class="eyebrow">Semantic status · flat, never gradient</span>
+  </div>
+  <div class="grid">
+    <div class="tile">
+      <div class="dot" style="background: var(--chip-fit-dot)"></div>
+      <div class="label">FIT</div>
+      <div class="name">High fit · low risk</div>
+      <div class="hex">#2BB673</div>
+      <span class="chip" style="background: var(--chip-fit-bg); color: var(--chip-fit-fg); border: 1px solid var(--chip-fit-border);"><span class="dot" style="width:6px;height:6px;background: var(--chip-fit-dot);box-shadow:none"></span>fit</span>
+    </div>
+    <div class="tile">
+      <div class="dot" style="background: var(--chip-watch-dot)"></div>
+      <div class="label">WATCH</div>
+      <div class="name">Medium · monitor</div>
+      <div class="hex">#E0A93B</div>
+      <span class="chip" style="background: var(--chip-watch-bg); color: var(--chip-watch-fg); border: 1px solid var(--chip-watch-border);"><span class="dot" style="width:6px;height:6px;background: var(--chip-watch-dot);box-shadow:none"></span>watch</span>
+    </div>
+    <div class="tile">
+      <div class="dot" style="background: var(--chip-risk-dot)"></div>
+      <div class="label">RISK</div>
+      <div class="name">Mismatch · high risk</div>
+      <div class="hex">#E55A4D</div>
+      <span class="chip" style="background: var(--chip-risk-bg); color: var(--chip-risk-fg); border: 1px solid var(--chip-risk-border);"><span class="dot" style="width:6px;height:6px;background: var(--chip-risk-dot);box-shadow:none"></span>risk</span>
+    </div>
+    <div class="tile">
+      <div class="dot" style="background: var(--chip-signal-dot); box-shadow: 0 0 16px rgba(111,227,245,0.5);"></div>
+      <div class="label">SIGNAL</div>
+      <div class="name">Inference active</div>
+      <div class="hex">#6FE3F5</div>
+      <span class="chip" style="background: var(--chip-signal-bg); color: var(--chip-signal-fg); border: 1px solid var(--chip-signal-border);"><span class="dot" style="width:6px;height:6px;background: var(--chip-signal-dot);box-shadow:0 0 6px var(--chip-signal-dot)"></span>predicting</span>
+    </div>
+  </div>
+</div></body></html>

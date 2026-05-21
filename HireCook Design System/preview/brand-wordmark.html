@@ -1,0 +1,23 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Wordmark</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .stack { display: flex; flex-direction: column; gap: 12px; }
+  .panel { padding: 22px 26px; border-radius: 8px; border: 1px solid var(--line-hairline); display: flex; align-items: center; gap: 18px; }
+  .panel.dark { background: #0E121C; }
+  .panel.light { background: #F7F8FB; border-color: rgba(8,16,40,0.08); }
+  .lbl { font: 500 10px/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-muted); margin-left: auto; }
+  .panel.light .lbl { color: #5C677F; }
+</style></head>
+<body><div class="card">
+  <div class="eyebrow" style="margin-bottom: 12px;">Wordmark · mark + Inter Semibold · tracked -0.5</div>
+  <div class="stack">
+    <div class="panel dark">
+      <img src="../assets/logo-wordmark-dark.svg" height="44" alt="HireCook (dark)" />
+      <span class="lbl">ON DARK</span>
+    </div>
+    <div class="panel light">
+      <img src="../assets/logo-wordmark-light.svg" height="44" alt="HireCook (light)" />
+      <span class="lbl">ON LIGHT</span>
+    </div>
+  </div>
+</div></body></html>

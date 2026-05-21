@@ -1,0 +1,25 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Brand mark</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px; align-items: stretch; }
+  .panel { background: var(--bg-surface); border: 1px solid var(--line-hairline); border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+  .panel.light { background: #F7F8FB; color: #0B1020; border-color: rgba(8,16,40,0.08); }
+  .lbl { font: 500 10px/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-muted); }
+  .panel.light .lbl { color: #5C677F; }
+  .specrow { display: flex; gap: 16px; font: 400 11px/1.4 'JetBrains Mono',monospace; color: var(--fg-faint); }
+</style></head>
+<body><div class="card">
+  <div class="eyebrow" style="margin-bottom: 12px;">Brand mark · P × E lattice · "B = f(P, E)"</div>
+  <div class="grid">
+    <div class="panel">
+      <span class="lbl">MARK · ON DARK</span>
+      <img src="../assets/logo-mark.svg" width="96" height="96" alt="HireCook mark" />
+      <div class="specrow"><span>64 × 64 viewBox</span><span>min 24 px</span></div>
+    </div>
+    <div class="panel light">
+      <span class="lbl">MARK · ON LIGHT</span>
+      <img src="../assets/logo-mark.svg" width="96" height="96" alt="HireCook mark" />
+      <div class="specrow" style="color: #8C95AE;"><span>same SVG</span><span>F7F8FB ground</span></div>
+    </div>
+  </div>
+</div></body></html>

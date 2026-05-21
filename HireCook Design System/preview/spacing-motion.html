@@ -1,0 +1,37 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Motion</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .panel { background: var(--bg-surface); border: 1px solid var(--line-hairline); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .panel .name { font: 500 11px/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-secondary); }
+  .panel .curve { color: var(--fg-faint); font: 400 10px/1.4 var(--font-mono); }
+  .panel .dur { font: 600 18px/1 'Inter',sans-serif; letter-spacing: -0.01em; color: var(--fg-primary); font-feature-settings: "tnum"; }
+  .panel .desc { font: 400 11px/1.4 'Inter',sans-serif; color: var(--fg-muted); }
+  .pulse-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 12px; border: 1px dashed var(--line-soft); border-radius: 6px; }
+  .pulse-dot { width: 10px; height: 10px; border-radius: 999px; background: #00B4D8; box-shadow: 0 0 10px rgba(0,180,216,0.45); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.95; } }
+</style></head>
+<body><div class="card">
+  <div class="eyebrow" style="margin-bottom: 12px;">Motion · calm, instrument-like · no bounces</div>
+  <div class="grid">
+    <div class="panel">
+      <div class="name">DUR-FAST</div>
+      <div class="dur">140 ms</div>
+      <div class="curve">ease-precise · cubic-bezier(0.4, 0, 0.2, 1)</div>
+      <div class="desc">Default for hover/press color and border transitions.</div>
+    </div>
+    <div class="panel">
+      <div class="name">DUR-BASE</div>
+      <div class="dur">200 ms</div>
+      <div class="curve">ease-standard · cubic-bezier(0.2, 0, 0, 1)</div>
+      <div class="desc">Panels, popovers entering and exiting.</div>
+    </div>
+  </div>
+  <div class="pulse-row">
+    <div class="pulse-dot"></div>
+    <div>
+      <div style="font: 500 11px/1 'JetBrains Mono',monospace; color: var(--fg-secondary); text-transform: uppercase; letter-spacing: 0.12em;">SIGNAL · INFERENCE ACTIVE</div>
+      <div style="font: 400 11px/1.4 'Inter',sans-serif; color: var(--fg-muted); margin-top: 4px;">Signal cyan is the only idle animation. Everything else holds still.</div>
+    </div>
+  </div>
+</div></body></html>

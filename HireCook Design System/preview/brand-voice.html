@@ -1,0 +1,39 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Voice in copy</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .col2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .panel { padding: 14px 16px; border-radius: 8px; border: 1px solid var(--line-hairline); background: var(--bg-surface); }
+  .panel .lbl { font: 500 10px/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; display: inline-flex; align-items: center; gap: 6px; }
+  .yes .lbl { color: var(--chip-fit-fg); }
+  .no .lbl { color: var(--chip-risk-fg); }
+  .quote { font: 500 14px/1.45 'Inter','Noto Sans TC',sans-serif; color: var(--fg-primary); margin-bottom: 6px; letter-spacing: -0.005em; }
+  .note { font: 400 11px/1.4 'Inter',sans-serif; color: var(--fg-muted); }
+  .dot { width: 7px; height: 7px; border-radius: 999px; }
+  .yes .dot { background: var(--chip-fit-dot); }
+  .no .dot { background: var(--chip-risk-dot); }
+</style></head>
+<body><div class="card">
+  <div class="eyebrow" style="margin-bottom: 12px;">Voice · calm · exact · declarative</div>
+  <div class="col2">
+    <div class="panel yes">
+      <div class="lbl"><span class="dot"></span>ON-BRAND</div>
+      <div class="quote">Predict how the candidate will work, here.</div>
+      <div class="note">Mechanism-led. Plain. The product reads as an instrument.</div>
+    </div>
+    <div class="panel no">
+      <div class="lbl"><span class="dot"></span>OFF-BRAND</div>
+      <div class="quote">Find your perfect hire with AI magic ✨</div>
+      <div class="note">Hype, emoji, vague — the HR-portal failure mode.</div>
+    </div>
+    <div class="panel yes">
+      <div class="lbl"><span class="dot"></span>ON-BRAND</div>
+      <div class="quote">新人六個月留任率僅 65.4%。</div>
+      <div class="note">Exact number, single claim, source-able.</div>
+    </div>
+    <div class="panel no">
+      <div class="lbl"><span class="dot"></span>OFF-BRAND</div>
+      <div class="quote">Most people quit pretty fast — we fix that!</div>
+      <div class="note">Vague, casual, salesy.</div>
+    </div>
+  </div>
+</div></body></html>

@@ -1,0 +1,36 @@
+/* Shared styles for preview cards. Each card is ~700px wide and embeds via iframe in the Design System tab. */
+@import url('../colors_and_type.css');
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-canvas);
+  color: var(--fg-primary);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+}
+
+.card {
+  padding: 24px 28px;
+  box-sizing: border-box;
+  min-height: 100%;
+}
+
+.row { display: flex; align-items: center; gap: 16px; }
+.col { display: flex; flex-direction: column; gap: 8px; }
+.grow { flex: 1; }
+
+.eyebrow {
+  font: var(--fw-medium) 11px/1.2 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.mono { font-family: var(--font-mono); font-feature-settings: "tnum", "zero"; }
+
+.hairline {
+  height: 1px;
+  background: var(--line-hairline);
+  width: 100%;
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Bilingual specimen</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .lang { display: flex; flex-direction: column; gap: 8px; }
+  .lang .tag { font: 500 10px/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-muted); }
+  .lang h2 { margin: 0; font: 600 22px/1.25 'Inter','Noto Sans TC',sans-serif; letter-spacing: -0.01em; color: var(--fg-primary); }
+  .lang p { margin: 0; font: 400 13px/1.55 'Inter','Noto Sans TC',sans-serif; color: var(--fg-secondary); }
+  .pillrow { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill { font: 500 11px/1 'JetBrains Mono',monospace; padding: 4px 8px; border-radius: 999px; background: #EAF0FF; color: #1430A0; border: 1px solid rgba(33,81,245,0.25); }
+</style></head>
+<body><div class="card">
+  <div class="eyebrow" style="margin-bottom: 14px;">Bilingual · Inter + Noto Sans TC · half-width spaces around Latin</div>
+  <div class="pair">
+    <div class="lang">
+      <span class="tag">EN</span>
+      <h2>Predict how people work, here.</h2>
+      <p>HireCook models the role environment, then simulates candidate behavior under SJT conditions — before you hire.</p>
+      <div class="pillrow"><span class="pill">P × E</span><span class="pill">SJT</span><span class="pill">XAI</span></div>
+    </div>
+    <div class="lang">
+      <span class="tag">繁中</span>
+      <h2>預測人才，在你的環境中如何工作。</h2>
+      <p>HireCook 透過 AI 行為模擬與 SJT，預測候選人在特定職位環境中的真實表現與留任風險。</p>
+      <div class="pillrow"><span class="pill">人格 × 環境</span><span class="pill">情境判斷</span><span class="pill">可解釋 AI</span></div>
+    </div>
+  </div>
+</div></body></html>

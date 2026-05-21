@@ -1,0 +1,29 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Surface tokens</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .row2 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .layer { padding: 16px; border-radius: 8px; border: 1px solid var(--line-hairline); display: flex; flex-direction: column; gap: 8px; min-height: 110px; }
+  .layer .lbl { font: 500 11px/1.2 var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-muted); }
+  .layer .name { font-size: 13px; color: var(--fg-primary); font-weight: 500; }
+  .layer .hex { font-family: var(--font-mono); font-size: 10px; color: var(--fg-faint); }
+  .stacked { position: relative; height: 120px; margin-top: 12px; background: #F2F4F9; border-radius: 8px; padding: 12px; border: 1px solid var(--line-hairline); }
+  .stacked .s { position: absolute; border-radius: 6px; border: 1px solid var(--line-hairline); padding: 10px; font: 500 11px/1.2 var(--font-mono); color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.08em; box-shadow: 0 1px 0 rgba(8,16,40,0.03); }
+</style></head>
+<body><div class="card">
+  <div class="row" style="margin-bottom: 14px;">
+    <span class="eyebrow">Surface tokens · stacked elevation</span>
+    <span class="grow"></span>
+    <span class="mono" style="font-size: 11px; color: var(--fg-faint);">white canonical · dark via [data-theme="dark"]</span>
+  </div>
+  <div class="row2">
+    <div class="layer" style="background: #FFFFFF"><div class="lbl">bg-canvas</div><div class="name">Canvas</div><div class="hex">#FFFFFF</div></div>
+    <div class="layer" style="background: #FFFFFF; box-shadow: 0 1px 0 rgba(8,16,40,0.04), 0 0 0 1px rgba(8,16,40,0.06);"><div class="lbl">bg-surface</div><div class="name">Surface</div><div class="hex">#FFFFFF · w/ hairline</div></div>
+    <div class="layer" style="background: #F7F8FB"><div class="lbl">bg-raised</div><div class="name">Raised</div><div class="hex">#F7F8FB</div></div>
+    <div class="layer" style="background: #F2F4F9"><div class="lbl">bg-subtle</div><div class="name">Subtle</div><div class="hex">#F2F4F9 · sidebar</div></div>
+  </div>
+  <div class="stacked">
+    <div class="s" style="left: 16px; top: 14px; right: 16px; bottom: 14px; background: #FFFFFF;">SURFACE</div>
+    <div class="s" style="left: 40px; top: 30px; right: 40px; bottom: 30px; background: #FFFFFF;">RAISED</div>
+    <div class="s" style="left: 70px; top: 46px; right: 70px; bottom: 46px; background: #FFFFFF; box-shadow: 0 4px 12px rgba(8,16,40,0.08), 0 0 0 1px rgba(8,16,40,0.08);">OVERLAY</div>
+  </div>
+</div></body></html>

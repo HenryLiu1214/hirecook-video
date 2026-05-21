@@ -1,0 +1,49 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Buttons</title><link rel="stylesheet" href="_shared.css">
+<style>
+  .row3 { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .row3:last-child { margin-bottom: 0; }
+  .lbl { width: 90px; font: 500 10px/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-muted); flex: none; }
+  .btn { font: 500 13px/1 'Inter',sans-serif; padding: 9px 14px; border-radius: 6px; cursor: pointer; border: 1px solid transparent; transition: all 140ms cubic-bezier(0.4, 0, 0.2, 1); display: inline-flex; align-items: center; gap: 8px; }
+  .btn-primary { background: #2151F5; color: white; }
+  .btn-primary:hover { background: #436BFB; }
+  .btn-primary.press { background: #1A40C9; }
+  .btn-secondary { background: var(--bg-raised); color: var(--fg-primary); border-color: var(--line-soft); }
+  .btn-secondary:hover { border-color: var(--line-strong); background: var(--bg-overlay); }
+  .btn-ghost { background: transparent; color: var(--fg-secondary); }
+  .btn-ghost:hover { color: var(--fg-primary); background: var(--bg-surface); }
+  .btn-danger { background: rgba(229,90,77,0.14); color: var(--chip-risk-fg); border-color: rgba(229,90,77,0.3); }
+  .btn-sm { font-size: 12px; padding: 6px 10px; }
+  .btn-lg { font-size: 14px; padding: 12px 18px; }
+  .btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+  .icon { width: 14px; height: 14px; }
+</style></head>
+<body><div class="card">
+  <div class="eyebrow" style="margin-bottom: 14px;">Buttons · primary / secondary / ghost · sm md lg</div>
+
+  <div class="row3"><span class="lbl">PRIMARY</span>
+    <button class="btn btn-primary btn-sm">Run prediction</button>
+    <button class="btn btn-primary">Run prediction</button>
+    <button class="btn btn-primary btn-lg">Run prediction
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+    <button class="btn btn-primary press">pressed</button>
+  </div>
+
+  <div class="row3"><span class="lbl">SECONDARY</span>
+    <button class="btn btn-secondary btn-sm">Export</button>
+    <button class="btn btn-secondary">Export TAT</button>
+    <button class="btn btn-secondary"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Model role</button>
+  </div>
+
+  <div class="row3"><span class="lbl">GHOST</span>
+    <button class="btn btn-ghost btn-sm">Cancel</button>
+    <button class="btn btn-ghost">Learn more</button>
+    <button class="btn btn-ghost" disabled>Disabled</button>
+  </div>
+
+  <div class="row3"><span class="lbl">DANGER</span>
+    <button class="btn btn-danger btn-sm">Reject candidate</button>
+    <button class="btn btn-danger">Flag risk</button>
+  </div>
+</div></body></html>

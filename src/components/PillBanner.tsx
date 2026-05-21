@@ -84,7 +84,6 @@ export const PillBanner: React.FC<PillBannerProps> = ({
           fontWeight={500}
           colorScheme="white-to-purple"
           letterSpacing="-0.5px"
-          showCursor
           subtle
         />
       </div>

@@ -23,15 +23,15 @@ export const S0_Intro: React.FC = () => {
     extrapolateRight: "clamp",
   });
 
-  const separatorW = interpolate(frame, [210, 240], [0, 480], {
+  const separatorW = interpolate(frame, [154, 184], [0, 520], {
     easing: Easing.out(Easing.cubic),
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
   return (
-    <AbsoluteFill style={{ background: "#0E121C" }}>
-      <BgCalm theme="dark" tint="blue" />
+    <AbsoluteFill style={{ background: colors.hcCanvas }}>
+      <BgCalm theme="light" tint="blue" />
 
       {/* Main content — centered column */}
       <div style={{
@@ -40,8 +40,8 @@ export const S0_Intro: React.FC = () => {
         perspective: "1400px",
       }}>
         {/* Logo mark */}
-        <div style={{ opacity: logoOp, transform: `scale(${logoSc})`, marginBottom: 16 }}>
-          <Img src={staticFile("logo-mark.svg")} style={{ width: 160, height: 160 }} />
+        <div style={{ opacity: logoOp, transform: `scale(${logoSc})`, marginBottom: 8 }}>
+          <Img src={staticFile("logo-mark.svg")} style={{ width: 136, height: 136 }} />
         </div>
 
         {/* HireCook wordmark */}
@@ -50,41 +50,41 @@ export const S0_Intro: React.FC = () => {
         }}>
           <TypewriterText
             text="HireCook"
-            startFrame={20}
-            charStagger={5}
-            fontSize={260}
+            startFrame={16}
+            charStagger={4}
+            fontSize={226}
             fontWeight={900}
             letterSpacing="-8px"
-            colorScheme="white"
+            colorScheme="plum-to-pink"
           />
         </div>
 
         {/* Tagline */}
         <div style={{
           transform: `rotate(${rotZIn(frame, 170, 26, 8)}deg)`,
-          opacity: interpolate(frame, [168, 182], [0, 1], {
+          opacity: interpolate(frame, [118, 132], [0, 1], {
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",
           }),
         }}>
           <TypewriterText
             text="AI 行為智能 · 精準人才適配"
-            startFrame={170}
-            charStagger={3}
-            fontSize={52}
+            startFrame={120}
+            charStagger={2}
+            fontSize={46}
             fontWeight={600}
-            colorScheme="white-to-cyan"
+            colorScheme="plum-to-pink"
           />
         </div>
 
         {/* Team section */}
         <div style={{
-          opacity: interpolate(frame, [210, 223], [0, 1], {
+          opacity: interpolate(frame, [150, 164], [0, 1], {
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",
           }),
           display: "flex", flexDirection: "column", alignItems: "center", gap: 12,
-          marginTop: 32,
+          marginTop: 22,
         }}>
           {/* Separator */}
           <div style={{
@@ -97,23 +97,23 @@ export const S0_Intro: React.FC = () => {
           {/* Team name */}
           <TypewriterText
             text="讓他煮"
-            startFrame={230}
-            charStagger={4}
-            fontSize={120}
+            startFrame={168}
+            charStagger={3}
+            fontSize={98}
             fontWeight={900}
             letterSpacing="-3px"
-            colorScheme="white-to-blue"
+            colorScheme="plum-to-pink"
           />
 
           {/* University */}
           <div style={{
-            opacity: interpolate(frame, [255, 268], [0, 1], {
+            opacity: interpolate(frame, [196, 210], [0, 1], {
               extrapolateLeft: "clamp",
               extrapolateRight: "clamp",
             }),
-            fontSize: 20,
+            fontSize: 19,
             fontFamily: fonts.mono,
-            color: colors.dimWhite,
+            color: colors.hcFgMuted,
             letterSpacing: "1.5px",
           }}>
             國立臺灣科技大學 · 資管系 × 資工系 × 企管系 · 2026

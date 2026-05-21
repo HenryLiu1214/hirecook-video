@@ -39,7 +39,7 @@ export const HandCursor: React.FC<HandCursorProps> = ({
     const local = (e - i * segDur) / segDur;
     const a = path[i], b = path[i + 1];
     const t = Math.max(0, Math.min(1, local));
-    const eased = Easing.inOut(Easing.cubic)(t);
+    const eased = Easing.out(Easing.cubic)(t);
     x = a.x + (b.x - a.x) * eased;
     y = a.y + (b.y - a.y) * eased;
   }
@@ -48,20 +48,18 @@ export const HandCursor: React.FC<HandCursorProps> = ({
   const opOut = interpolate(e, [duration - fadeOut, duration], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const op = Math.min(opIn, opOut);
 
-  // tap scale: nearest clickAt
-  let tap = 1;
   let ringOp = 0;
+  let ringScale = 1;
   for (const ct of clickAt) {
     const d = e - ct;
     if (d >= -4 && d <= 18) {
-      tap = Math.min(tap, interpolate(d, [-4, 0, 6, 18], [1, 0.78, 1, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
       ringOp = Math.max(ringOp, interpolate(d, [0, 4, 18], [0, 0.55, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
+      ringScale = Math.max(ringScale, interpolate(d, [0, 18], [0.55, 1.45], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
     }
   }
 
   return (
-    <>
-      {/* Click ripple */}
+    <div style={{ opacity: op, pointerEvents: "none" }}>
       <div style={{
         position: "absolute",
         left: x - 24,
@@ -71,31 +69,10 @@ export const HandCursor: React.FC<HandCursorProps> = ({
         borderRadius: "50%",
         border: "2px solid #2151F5",
         opacity: ringOp,
+        transform: `scale(${ringScale})`,
+        boxShadow: "0 0 0 8px rgba(33,81,245,0.10)",
         pointerEvents: "none",
       }} />
-      {/* Cursor */}
-      <div
-        style={{
-          position: "absolute",
-          left: x,
-          top: y,
-          opacity: op,
-          transform: `scale(${tap})`,
-          transformOrigin: "20% 20%",
-          pointerEvents: "none",
-          filter: "drop-shadow(0 4px 12px rgba(8,16,40,0.35))",
-        }}
-      >
-        <svg width={size} height={size * 1.2} viewBox="0 0 28 34">
-          <path
-            d="M5 3 L5 23 L10 18 L13 27 L17 25 L14 16 L21 16 Z"
-            fill="#FFFFFF"
-            stroke="#0B1020"
-            strokeWidth={1.5}
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
-    </>
+    </div>
   );
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Composition, Series, AbsoluteFill, Audio, staticFile } from "remotion";
+import { Composition, Series, AbsoluteFill, Audio, staticFile, interpolate } from "remotion";
 import { FPS, DURATION_IN_FRAMES, WIDTH, HEIGHT, SCENES } from "./tokens";
 import { S0_Intro } from "./scenes/S0_Intro";
 import { S1_PainPoints } from "./scenes/S1_PainPoints";
@@ -12,7 +12,15 @@ import { SubtitleBar } from "./components/SubtitleBar";
 const HireCookVideo: React.FC = () => {
   return (
     <AbsoluteFill>
-      <Audio src={staticFile("music.wav")} volume={0.26} />
+      <Audio
+        src={staticFile("雲端啟動.mp3")}
+        volume={(f) => {
+          // Fade-in over first 2s (120f), fade-out over last 4s (240f)
+          const fadeIn  = interpolate(f, [0, 120], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+          const fadeOut = interpolate(f, [DURATION_IN_FRAMES - 240, DURATION_IN_FRAMES], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+          return 0.30 * Math.min(fadeIn, fadeOut);
+        }}
+      />
       <Series>
         <Series.Sequence durationInFrames={SCENES.s0.end - SCENES.s0.start}>
           <S0_Intro />

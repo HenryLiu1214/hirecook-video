@@ -4,6 +4,8 @@ import { SUBTITLES } from "../subtitles";
 import { colors, fonts } from "../tokens";
 
 export const SubtitleBar: React.FC = () => {
+  // Subtitles disabled — voiceover TBD
+  return null;
   const frame = useCurrentFrame();
 
   const current = SUBTITLES.find((s) => frame >= s.from && frame <= s.to);

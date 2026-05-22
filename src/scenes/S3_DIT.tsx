@@ -1,5 +1,5 @@
 import React from "react";
-import { useCurrentFrame, useVideoConfig, interpolate, Easing, AbsoluteFill, Sequence } from "remotion";
+import { useCurrentFrame, useVideoConfig, interpolate, Easing, AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
 import { colors, fonts } from "../tokens";
 import { BgCalm } from "../components/BgCalm";
 import { LucideIcon } from "../components/LucideIcon";
@@ -294,8 +294,13 @@ const SliderRow: React.FC<{
   const thumbOp = interpolate(localFrame, [barStart, barStart + 10], [0, 1], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   });
+  
   return (
     <div style={{ opacity: op, display: "flex", flexDirection: "column", gap: 4 }}>
+      {/* Slider audio */}
+      <Sequence from={barStart} layout="none">
+        <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MECHSwtch_Tech Rotary Switch Turn Metal Small Spot Light x9 Variations_ASD.wav")} volume={(f) => interpolate(f, [0, 50], [0.15, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} />
+      </Sequence>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span style={{ fontSize: 18, color: "#0B1020", fontWeight: 600, fontFamily: fonts.display }}>{label}</span>
         <span style={{ fontSize: 16, color, fontWeight: 700, fontFamily: fonts.mono }}>{Math.round(w)}</span>
@@ -862,10 +867,11 @@ const B2LeftC: React.FC<{ lf: number }> = ({ lf }) => {
 const B2Define: React.FC = () => {
   const frame = useCurrentFrame();
   const m = momentAnim(frame, 0, 16, 1140, 1164);
+  const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
   // ── Timeline: no intro, directly show the COMPLETE interface ──
-  const sceneOp = interpolate(frame, [0, 24, 1140, 1164], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const cardOp  = interpolate(frame, [0, 30, 1140, 1164], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const sceneOp = interpolate(frame, [0, 24, 1140, 1164], [0, 1, 1, 0], cl);
+  const cardOp  = interpolate(frame, [0, 30, 1140, 1164], [0, 1, 1, 0], cl);
 
   // Phase boundaries (whole-interface steps) — left panel crossfades, no flash
   const PB = 440, PC = 780;
@@ -939,9 +945,23 @@ const B2Define: React.FC = () => {
     <AbsoluteFill style={{ opacity: sceneOp }}>
       <BgCalm theme="light" tint="blue" />
 
+      {/* AI Tech Noise for Phase B and C */}
+      <Audio
+        src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNErie_GHOSTS Noise Electro-Magnetic Turbulence_ASD.wav")}
+        volume={(f) => {
+          if (f < 440) return 0;
+          return interpolate(f, [440, 480, 1140, 1164], [0, 0.12, 0.12, 0], cl);
+        }}
+      />
+      {/* UI Clicks */}
+      <Sequence from={40} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/COMCell_Tech Button Switch Lock Iphone x5 Variations_ASD.wav")} volume={(f) => interpolate(f, [0, 30], [0.15, 0], cl)} /></Sequence>
+      <Sequence from={160} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/COMCell_Tech Button Switch Lock Iphone x5 Variations_ASD.wav")} volume={(f) => interpolate(f, [0, 30], [0.15, 0], cl)} /></Sequence>
+      <Sequence from={260} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/COMCell_Tech Button Switch Lock Iphone x5 Variations_ASD.wav")} volume={(f) => interpolate(f, [0, 30], [0.15, 0], cl)} /></Sequence>
 
-
-      {/* ── Floating explanation text (dynamic, not a fixed header) ── */}
+      {/* Confirm Chime (UI completion) */}
+      <Sequence from={897} layout="none">
+        <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNErie_Magic Generic Potion, Explosion, Burst, Alchemy, Small Bubbles 03_ASD.wav")} volume={0.4} />
+      </Sequence>      {/* ── Floating explanation text (dynamic, not a fixed header) ── */}
       {active && calloutOp > 0.01 && (
         <div style={{
           position: "absolute", zIndex: 9, top: 286, width: 560, padding: "28px 32px",
@@ -1045,6 +1065,12 @@ const B3Bridge: React.FC = () => {
   return (
     <AbsoluteFill style={{ opacity: rootOp * outOp }}>
       <BgCalm theme="dark" tint="blue" />
+
+      {/* Riser transition */}
+      <Audio 
+        src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNRise_Sfx Rise Tension, Transition, Processed Bell, Reverse, High 01_ASD.wav")}
+        volume={(f) => interpolate(f, [0, 24, 336, 360], [0, 0.35, 0.35, 0], cl)} 
+      />
 
       {/* P1: 有了環境，下一步—— */}
       <AbsoluteFill style={{ opacity: p1Op, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -1241,6 +1267,14 @@ const B4Interact: React.FC = () => {
     <AbsoluteFill style={{ opacity: m.opacity }}>
       <BgCalm theme="dark" tint="blue" />
 
+      {/* Room Tone for Remote Meeting Q2 */}
+      <Sequence from={280} durationInFrames={260} layout="none">
+        <Audio 
+          src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/AMBPubl_Room Tone Hotel Staircase, Quiet, 5Am, Chiang Mai, Thailand_ASD.wav")} 
+          volume={(f) => interpolate(f, [0, 30, 230, 260], [0, 0.25, 0.25, 0], cl)} 
+        />
+      </Sequence>
+
       <AbsoluteFill style={{ transform: m.transform }}>
         
         <div style={{ width: "100%", height: "100%", position: "absolute", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -1374,6 +1408,17 @@ const B5Capture: React.FC = () => {
   return (
     <AbsoluteFill style={{ opacity: m.opacity }}>
       <BgCalm theme="dark" tint="blue" />
+      
+      {/* Deep Impact & Flashback */}
+      <Audio 
+        src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNBram_Face in the Mirror Impact_ASD_XForce_x06.wav")} 
+        volume={(f) => interpolate(f, [190, 214], [0.4, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} 
+      />
+      <Audio 
+        src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/WHSH_Sfx Transition Flashback, Remembrance, Deep 02_ASD.wav")} 
+        volume={(f) => interpolate(f, [190, 214], [0.4, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} 
+      />
+
       <AbsoluteFill style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 44 }}>
         {/* Glow halo behind circle — brand blue luminance */}
         <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -1465,6 +1510,12 @@ const B6Bridge: React.FC = () => {
     <AbsoluteFill style={{ opacity: rootOp * outOp }}>
       <BgCalm theme="dark" tint="blue" />
 
+      {/* Swell Riser Transition */}
+      <Audio 
+        src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNEthr_GHOSTS Swell Riser Vaporous_ASD.wav")}
+        volume={(f) => interpolate(f, [0, 24, 336, 360], [0, 0.45, 0.45, 0], cl)} 
+      />
+
       {/* P1: 不知道 / 背後的標準答案是什麼 */}
       <AbsoluteFill style={{ opacity: p1Op, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 12 }}>
@@ -1553,7 +1604,10 @@ const B7TailorTerminal: React.FC<{ lf: number }> = ({ lf }) => {
           <span style={{ marginLeft: 12, fontSize: 13, fontFamily: fonts.mono, color: "rgba(255,255,255,0.30)" }}>hirecook · ai-engine · v4.3</span>
         </div>
         {TERMINAL_LINES.map((l, i) => (
-          <TerminalLine key={i} text={l.text} startF={l.start} lf={lf} highlight={l.text.includes("完成") || l.text.startsWith("  適配") || l.text.startsWith("  6個月") || l.text.startsWith("  錯配")} />
+          <React.Fragment key={i}>
+            <TerminalLine text={l.text} startF={l.start} lf={lf} highlight={l.text.includes("完成") || l.text.startsWith("  適配") || l.text.startsWith("  6個月") || l.text.startsWith("  錯配")} />
+
+          </React.Fragment>
         ))}
       </div>
     </div>
@@ -1652,6 +1706,17 @@ const B7Tailor: React.FC = () => {
   return (
     <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform }}>
       <BgCalm theme="dark" tint="blue" />
+
+      {/* AI Terminal Noise */}
+      <Audio
+        src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNErie_GHOSTS Noise Electro-Magnetic Turbulence_ASD.wav")}
+        volume={(f) => interpolate(f, [0, 20, terminalEnd, terminalEnd + 20], [0, 0.15, 0.15, 0], cl)}
+      />
+      {/* Fit Score Chime Reveal */}
+      <Sequence from={terminalEnd + 120} layout="none">
+        <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic White Fairy Dust, Chime, Shimmer, Cliche, Short, Appear 05_ASD.wav")} volume={0.3} />
+      </Sequence>
+
       <AbsoluteFill style={{ opacity: bgLightOp }}>
         <BgCalm theme="light" tint="blue" />
       </AbsoluteFill>
@@ -1877,6 +1942,29 @@ const B7Tailor: React.FC = () => {
 export const S3_DIT: React.FC = () => {
   return (
     <AbsoluteFill>
+      {/* ── Global SFX ── */}
+      {/* B0: DIT step cards appearing */}
+      {[110, 125, 140].map((f) => (
+        <Sequence key={`b0card-${f}`} from={f} layout="none">
+          <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic Generic Building Block, Aura, Glyph, Activation, Shimmer, Metal Ring, Short, Medium 03_ASD.wav")} volume={0.22} />
+        </Sequence>
+      ))}
+      {/* B4: SJT card entrances (Q1 at B4+0=1752, Q2 at B4+280=2032) */}
+      {[1752, 2032].map((f) => (
+        <Sequence key={`sjt-${f}`} from={f} layout="none">
+          <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/WHSH_Magic Air Whoosh, Twirl, Wind Gust, Tremolo 03_ASD.wav")} volume={0.22} />
+        </Sequence>
+      ))}
+      {/* B4: SJT answer clicks (Q1 click at B4+200=1952, Q2 click at B4+420=2172) */}
+      {[1952, 2172].map((f) => (
+        <Sequence key={`click-${f}`} from={f} layout="none">
+          <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/COMCell_Tech Button Switch Lock Iphone x5 Variations_ASD.wav")} volume={0.25} />
+        </Sequence>
+      ))}
+      {/* B4: processing ambient — loading bar at B4+500=global 2252 */}
+      <Sequence from={2252} durationInFrames={110} layout="none">
+        <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNEthr_GHOSTS Breath Pulsating_ASD.wav")} volume={(f) => interpolate(f, [0, 20, 90, 110], [0, 0.18, 0.18, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} />
+      </Sequence>
       {/* S3 total: 4018f. B2Define extended back to 1164f to give ample time for the final confirm step. All subsequent sequences shifted by +150f. */}
       <Sequence from={0}    durationInFrames={300}  layout="none"><B0Overview /></Sequence>
       <Sequence from={276}  durationInFrames={1164} layout="none"><B2Define /></Sequence>

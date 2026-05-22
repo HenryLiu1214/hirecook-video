@@ -1,5 +1,5 @@
 import React from "react";
-import { useCurrentFrame, useVideoConfig, interpolate, Easing, AbsoluteFill, Img, staticFile } from "remotion";
+import { useCurrentFrame, useVideoConfig, interpolate, Easing, AbsoluteFill, Img, staticFile, Audio, Sequence } from "remotion";
 import { colors, fonts } from "../tokens";
 import { BgCalm } from "../components/BgCalm";
 import { TypewriterText } from "../components/TypewriterText";
@@ -32,6 +32,14 @@ export const S0_Intro: React.FC = () => {
   return (
     <AbsoluteFill style={{ background: colors.hcCanvas }}>
       <BgCalm theme="light" tint="blue" />
+
+      {/* ── Audio ── */}
+
+      <Sequence from={0} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNDron_Double Bass, Bowed, Drone, Harmonic, Low Pitch, Bow Hair, Soft, Constant, Cu 01_ASD.wav")} volume={(f) => interpolate(f, [0, 150, 180, 240], [0.1, 0.2, 0.2, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} /></Sequence>
+      <Sequence from={10} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic White Fairy Dust, Chime, Shimmer, Cliche, Short, Appear 05_ASD.wav")} volume={0.25} /></Sequence>
+      <Sequence from={160} layout="none">
+        <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNBram_Face in the Mirror Impact_ASD_XForce_x06.wav")} volume={0.4} />
+      </Sequence>
 
       {/* Main content — centered column */}
       <div style={{
@@ -116,7 +124,7 @@ export const S0_Intro: React.FC = () => {
             color: colors.hcFgMuted,
             letterSpacing: "1.5px",
           }}>
-            國立臺灣科技大學 · 資管系 × 資工系 × 企管系 · 2026
+            國立臺灣科技大學 · 資管系 × 企管系 · 2026
           </div>
         </div>
       </div>

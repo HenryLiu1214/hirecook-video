@@ -1,5 +1,5 @@
 import React from "react";
-import { useCurrentFrame, interpolate, Easing, AbsoluteFill, Sequence } from "remotion";
+import { useCurrentFrame, interpolate, Easing, AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
 import { colors, fonts } from "../tokens";
 import { BgCalm } from "../components/BgCalm";
 import { TypewriterText } from "../components/TypewriterText";
@@ -70,6 +70,10 @@ const HiringMistakeStats: React.FC = () => {
     <div style={{ position: "absolute", inset: 0, opacity: 0.16 + light * 0.06, backgroundImage: "radial-gradient(circle, rgba(111,227,245,0.38) 1px, transparent 1px)", backgroundSize: "34px 34px" }} />
 
     <div style={{ position: "absolute", left: 0, right: 0, top: 370, transform: `translateY(${titleY}px) scale(${titleScale})`, transformOrigin: "center center", textAlign: "center", perspective: "1400px" }}>
+      {/* Typing & Impact Audio */}
+
+      <Sequence from={35} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/VEGETree_Magic Foliage Ent, Living Tree, Footstep, Fall, Large, Impact, Heavy 04_ASD.wav")} volume={0.4} /></Sequence>
+
       <div style={{ opacity: interpolate(frame, [0, 16, 108, 136], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), color: colors.hcRisk, fontFamily: fonts.mono, fontSize: 24, fontWeight: 800, letterSpacing: "0.14em" }}>PAIN POINT</div>
       <div style={{ marginTop: 16, transform: `rotate(${rotZIn(frame, 12, 28, -8)}deg) rotateX(${rotXSettle(frame, 12, 32)}deg)` }}>
         <TypewriterText text="招募錯誤" startFrame={12} charStagger={4} fontSize={176} fontWeight={850} letterSpacing="-0.055em" colorScheme={light > 0.5 ? "plum-to-pink" : "white-to-blue"} />
@@ -397,6 +401,21 @@ const Hidden: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ background: bg, clipPath: slashWipe(frame, 0, 24) }}>
+      {/* ── Audio ── */}
+      {/* Iceberg Flip Flashback */}
+      <Sequence from={324} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/WHSH_Sfx Transition Flashback, Remembrance, Deep 02_ASD.wav")} volume={0.45} /></Sequence>
+      {/* Deep Impact for "水面下" reveal */}
+      <Sequence from={450} layout="none">
+        <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNBram_Face in the Mirror Impact_ASD_XForce_x06.wav")} volume={0.45} />
+        <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/LIQBubl_Liquid Bubble Glasses Air Sources, Stereo Spread, Release Sequence_ASD.wav")} volume={0.35} />
+      </Sequence>
+      {/* Keyword shimmer: each iceberg keyword appearing */}
+      {[22, 230, 512, 690].map((f) => (
+        <Sequence key={`kw-${f}`} from={f} layout="none">
+          <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic Generic Building Block, Aura, Glyph, Activation, Shimmer, Metal Ring, Short, Medium 03_ASD.wav")} volume={0.22} />
+        </Sequence>
+      ))}
+
       {/* Ambient glow + dot grid */}
       <div style={{ position: "absolute", inset: 0, opacity: dark, background: "radial-gradient(ellipse 80% 70% at 50% 54%, rgba(33,81,245,0.34), transparent 68%)" }} />
       <div style={{ position: "absolute", inset: 0, opacity: 0.18 + dark * 0.16, backgroundImage: "radial-gradient(circle, rgba(33,81,245,0.55) 1px, transparent 1px)", backgroundSize: "34px 34px" }} />
@@ -463,12 +482,35 @@ const Hidden: React.FC = () => {
   );
 };
 
-export const S1_PainPoints: React.FC = () => <AbsoluteFill>
-  {/* ── Beats ── */}
-  <Sequence from={0}    durationInFrames={384} layout="none"><HiringMistakeStats /></Sequence>
-  <Sequence from={360}  durationInFrames={204} layout="none"><Audience /></Sequence>
-  <Sequence from={540}  durationInFrames={204} layout="none"><GutFeeling /></Sequence>
+export const S1_PainPoints: React.FC = () => {
+  const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
+  return (
+    <AbsoluteFill>
+      {/* ── Audio ── */}
+      {/* Stat cards popping */}
+      {[154, 164, 174].map((f) => (
+        <Sequence key={`card-${f}`} from={f} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/FOLYMisc_Rustle Studio Performed Whoosh Thorny Branches X18_ASD.wav")} volume={0.25} /></Sequence>
+      ))}
+      {/* Slash wipes — all panel transitions share the same whoosh */}
+      {[360, 540, 720, 900].map((f) => (
+        <Sequence key={`wipe-${f}`} from={f} layout="none">
+          <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/WHSH_Magic Air Whoosh, Twirl, Wind Gust, Tremolo 03_ASD.wav")} volume={0.32} />
+        </Sequence>
+      ))}
+      {/* Riser building into iceberg reveal */}
+      <Sequence from={693} layout="none">
+        <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNRise_Sfx Rise Tension, Transition, Processed Bell, Reverse, High 01_ASD.wav")} volume={(f) => interpolate(f, [0, 59, 60, 80], [0, 0.4, 0.4, 0], cl)} />
+      </Sequence>
+
+
+      {/* ── Beats ── */}
+      <Sequence from={0}    durationInFrames={384} layout="none"><HiringMistakeStats /></Sequence>
+      <Sequence from={360}  durationInFrames={204} layout="none"><Audience /></Sequence>
+      <Sequence from={540}  durationInFrames={204} layout="none"><GutFeeling /></Sequence>
+
   <Sequence from={720}  durationInFrames={210} layout="none"><Pills /></Sequence>
   <Sequence from={900} durationInFrames={240} layout="none"><Transition /></Sequence>
   <Sequence from={1110} durationInFrames={900} layout="none"><Hidden /></Sequence>
-</AbsoluteFill>;
+    </AbsoluteFill>
+  );
+};

@@ -1,5 +1,5 @@
 import React from "react";
-import { useCurrentFrame, interpolate, Easing, AbsoluteFill, Sequence, Img, staticFile } from "remotion";
+import { useCurrentFrame, interpolate, Easing, AbsoluteFill, Sequence, Img, staticFile, Audio } from "remotion";
 import { colors, fonts } from "../tokens";
 import { BgCalm } from "../components/BgCalm";
 import { HcLogoMark } from "../components/HcLogoMark";
@@ -166,9 +166,32 @@ const CTA: React.FC = () => {
 };
 
 export const S5_CTA: React.FC = () => {
+  const frame = useCurrentFrame();
+  const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
+
   return (
     <AbsoluteFill>
       <BgCalm theme="light" tint="blue" />
+      
+      {/* ── Audio ── */}
+      {/* Vision Swell */}
+      <Sequence from={0} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNEthr_GHOSTS Swell Riser Vaporous_ASD.wav")} volume={(f) => interpolate(f, [0, 80], [0, 0.35], cl)} /></Sequence>
+      {/* SDG8 image bounce-in */}
+      <Sequence from={10} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic Generic Building Block, Aura, Glyph, Activation, Shimmer, Metal Ring, Short, Medium 03_ASD.wav")} volume={0.25} /></Sequence>
+      
+      {/* Brand Core Impact */}
+      <Sequence from={240} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic Generic Building Block, Aura, Glyph, Activation, Shimmer, Metal Ring, Short, Medium 03_ASD.wav")} volume={0.35} /></Sequence>
+      
+      {/* CTA final Logo & Button appear (480 + 270 = 750) */}
+      <Sequence from={750} layout="none">
+        <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic White Fairy Dust, Chime, Shimmer, Cliche, Short, Appear 05_ASD.wav")} volume={0.4} />
+      </Sequence>
+      
+      {/* ── Additional Micro-Interactions ── */}
+      <Sequence from={490} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/GAMEMisc_Dice On Metal, Throw And Roll, Standard, 1 One Dice, x3 Variations_ASD.wav")} volume={0.3} /></Sequence>
+      <Sequence from={630} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/GAMEMisc_Dice On Metal, Throw And Roll, Standard, 1 One Dice, x3 Variations_ASD.wav")} volume={0.3} /></Sequence>
+      <Sequence from={517} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNRise_Magic Energy Spell, Electricity, Large, Cast, Charge, Projectile 02_ASD.wav")} volume={0.25} /></Sequence>
+
       <Sequence from={0} durationInFrames={240} layout="none"><Vision /></Sequence>
       <Sequence from={240} durationInFrames={240} layout="none"><BrandCore /></Sequence>
       <Sequence from={480} durationInFrames={552} layout="none"><CTA /></Sequence>

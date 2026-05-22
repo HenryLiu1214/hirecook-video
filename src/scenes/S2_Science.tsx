@@ -1,5 +1,5 @@
 import React from "react";
-import { useCurrentFrame, interpolate, Easing, AbsoluteFill, Sequence, Video, staticFile } from "remotion";
+import { useCurrentFrame, interpolate, Easing, AbsoluteFill, Sequence, Video, staticFile, Audio } from "remotion";
 import { colors, fonts } from "../tokens";
 import { BgCalm } from "../components/BgCalm";
 import { HcLogoMark } from "../components/HcLogoMark";
@@ -365,7 +365,7 @@ const OvercookedPlay: React.FC = () => {
     <div style={{ position: "absolute", right: 94, top: 148, width: 1080, height: 675, borderRadius: 26, overflow: "hidden", background: "#FFFFFF", border: "1px solid rgba(111,227,245,0.24)", boxShadow: "0 34px 100px rgba(5,7,12,0.24)" }}>
       <Video
         src={staticFile("overcooked-worksim.mp4")}
-        muted
+        volume={(f) => interpolate(f, [0, 40, 560, 600], [0, 0.65, 0.65, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}
         style={{
           position: "absolute",
           inset: 0,
@@ -566,9 +566,37 @@ const ScienceClose: React.FC = () => {
 
 export const S2_Science: React.FC = () => {
   const frame = useCurrentFrame();
+  const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
+  
   return <AbsoluteFill>
     {/* Actual S2 contents wiping in over the previous scene */}
     <AbsoluteFill style={{ clipPath: slashWipe(frame, 0, 36) }}>
+      
+      {/* ── Audio ── */}
+      <Sequence from={0} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/EXPLDsgn_Magic Generic Spell, Medium, Poof, Explosion, Ignition, Burst, Natural Echo 04_ASD.wav")} volume={0.4} /></Sequence>
+
+      {/* Formula chips */}
+      {[456, 466, 476].map(f => (
+        <Sequence key={f} from={f} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic Generic Building Block, Aura, Glyph, Activation, Shimmer, Metal Ring, Short, Medium 03_ASD.wav")} volume={0.25} /></Sequence>
+      ))}
+      
+      {/* P-E Fit Merge Swell */}
+      <Sequence from={416} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNEthr_GHOSTS Swell Riser Vaporous_ASD.wav")} volume={(f) => interpolate(f, [0, 60], [0, 0.45], cl)} /></Sequence>
+      {/* P-E Fit 決定適配 typewriter reveal (PE local 120 = S2 global 780) */}
+      <Sequence from={780} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic White Fairy Dust, Chime, Shimmer, Cliche, Short, Appear 05_ASD.wav")} volume={0.22} /></Sequence>
+      
+      {/* Fingerprint complete */}
+      <Sequence from={2146} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic White Fairy Dust, Chime, Shimmer, Cliche, Short, Appear 05_ASD.wav")} volume={0.3} /></Sequence>
+      {/* BEST PAPER award reveal */}
+      <Sequence from={2190} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/ROCKCrsh_Magic Earth Impact, Large Projectile, Slow 05_ASD.wav")} volume={0.3} /></Sequence>
+      {/* FIT circle seal appear */}
+      <Sequence from={2514} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic Generic Building Block, Aura, Glyph, Activation, Shimmer, Metal Ring, Short, Medium 03_ASD.wav")} volume={0.3} /></Sequence>
+      {/* ScienceClose: Right Person reveal */}
+      <Sequence from={2706} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGSpel_Magic Cartoon Spell, Teleport, Transition, Shinny, Short, Composite 01_ASD.wav")} volume={0.3} /></Sequence>
+
+      {/* MBTI Injection Suck-in */}
+      <Sequence from={882} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNEthr_GHOSTS Breath Pulsating_ASD.wav")} volume={(f) => interpolate(f, [0, 60], [0, 0.4], cl)} /></Sequence>
+
       <Sequence from={0} durationInFrames={300} layout="none"><AbsoluteFill><BgCalm theme="light" tint="blue" /></AbsoluteFill></Sequence>
       <Sequence from={300} durationInFrames={2580} layout="none"><AbsoluteFill><BgCalm theme="dark" tint="blue" /></AbsoluteFill></Sequence>
       <Sequence from={0} durationInFrames={300} layout="none"><BigBeat text="MBTI" sub="Personality signal，不是錄用結論，是模擬輸入" size={214} /></Sequence>

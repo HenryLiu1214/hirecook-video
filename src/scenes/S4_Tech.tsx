@@ -1,5 +1,5 @@
 import React from "react";
-import { useCurrentFrame, interpolate, AbsoluteFill, Sequence, Easing } from "remotion";
+import { useCurrentFrame, interpolate, AbsoluteFill, Sequence, Easing, Audio, staticFile } from "remotion";
 import { colors, fonts } from "../tokens";
 import { BgCalm } from "../components/BgCalm";
 import { TypewriterText } from "../components/TypewriterText";
@@ -127,8 +127,39 @@ const BehavioralIntelligence: React.FC<{ start: number }> = ({ start }) => {
 };
 
 export const S4_Tech: React.FC = () => {
+  const frame = useCurrentFrame();
+  const cl = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
+
   return (
     <AbsoluteFill>
+      {/* ── Audio ── */}
+      {/* Statement 0 — aligns with typewriter startFrame=10 */}
+      <Sequence from={10} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic Generic Building Block, Aura, Glyph, Activation, Shimmer, Metal Ring, Short, Medium 03_ASD.wav")} volume={0.3} /></Sequence>
+      
+      {/* Statement 240 Riser & Wipe */}
+      <Sequence from={180} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNRise_Sfx Rise Tension, Transition, Processed Bell, Reverse, High 01_ASD.wav")} volume={(f) => interpolate(f, [0, 59, 60, 80], [0, 0.4, 0.4, 0], cl)} /></Sequence>
+      <Sequence from={240} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/WHSH_Magic Air Whoosh, Twirl, Wind Gust, Tremolo 03_ASD.wav")} volume={0.32} /></Sequence>
+      
+      {/* Gut Feeling 480 Scratch & Wipe */}
+      <Sequence from={420} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNRise_Sfx Rise Tension, Transition, Processed Bell, Reverse, High 01_ASD.wav")} volume={(f) => interpolate(f, [0, 59, 60, 80], [0, 0.4, 0.4, 0], cl)} /></Sequence>
+      <Sequence from={480} layout="none">
+        <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/ROCKCrsh_Magic Earth Impact, Large Projectile, Slow 05_ASD.wav")} volume={0.35} />
+        <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/WHSH_Sfx Transition Flashback, Remembrance, Deep 02_ASD.wav")} volume={0.4} />
+      </Sequence>
+      
+      {/* Behavioral Intelligence 660 Swell & Deep Impact */}
+      <Sequence from={376} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNEthr_GHOSTS Swell Riser Vaporous_ASD.wav")} volume={(f) => interpolate(f, [0, 59, 60, 80], [0, 0.4, 0.4, 0], cl)} /></Sequence>
+      <Sequence from={626} layout="none">
+        <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNEthr_Magic Black Impact, Projectile, Creature, Fast 04_ASD.wav")} volume={0.45} />
+      </Sequence>
+
+      {/* ── Additional Micro-Interactions ── */}
+
+      {/* Strike out gut feeling with fire whoosh */}
+      <Sequence from={504} layout="none">
+        <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/FIREWhsh_Magic Fire Whoosh, Small Fireball, Close To Far, Tail, Short 02_ASD.wav")} volume={0.4} />
+      </Sequence>
+
       {/* 
         We rely on z-index stacking. 
         Each layer stays mounted so it acts as the solid background for the next layer's clip-path wipe.

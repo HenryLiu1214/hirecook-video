@@ -8,7 +8,11 @@
     "preview": "npx remotion studio"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@fontsource/noto-sans-tc": "^5.2.9",
     "@remotion/cli": "^4.0.0",
+    "@remotion/fonts": "^4.0.464",
     "@remotion/google-fonts": "^4.0.464",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

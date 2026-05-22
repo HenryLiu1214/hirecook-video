@@ -19,18 +19,18 @@ const Vision: React.FC = () => {
   const imgOp = interpolate(frame, [40, 50], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ opacity, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
-      <div style={{ position: "relative", display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <AbsoluteFill style={{ fontFamily: fonts.display, opacity, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+      <div style={{ fontFamily: fonts.display, position: "relative", display: "flex", justifyContent: "center", alignItems: "center" }}>
         
         {/* The SDG Image scaling up */}
-        <div style={{ 
+        <div style={{ fontFamily: fonts.display, 
           transform: `scale(${interpolate(frame, [10, 40], [0, 1], { easing: Easing.out(Easing.back(1.5)), extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`,
           boxShadow: "0 24px 80px rgba(8,16,40,0.15)",
           borderRadius: 12,
           overflow: "hidden",
           background: "#FFF",
         }}>
-          <Img src={staticFile("sdg8.png")} style={{ width: 360, height: 360, objectFit: "cover" }} />
+          <Img src={staticFile("sdg8.png")} style={{ fontFamily: fonts.display, width: 360, height: 360, objectFit: "cover" }} />
         </div>
 
       </div>
@@ -63,7 +63,7 @@ const BrandCore: React.FC = () => {
   const text2Op = interpolate(frame, [110, 130], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   
   return (
-    <AbsoluteFill style={{ opacity, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${camScale})` }}>
+    <AbsoluteFill style={{ fontFamily: fonts.display, opacity, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${camScale})` }}>
       <div style={{ 
         position: "absolute",
         fontFamily: fonts.display, 
@@ -105,11 +105,11 @@ const CTA: React.FC = () => {
   const rippleOp = interpolate(frame, [310, 400], [0.5, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+    <AbsoluteFill style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
       
       {/* Metric 1 */}
       {frame >= 10 && frame < 170 && (
-        <div style={{ position: "absolute", clipPath: m1Clip, opacity: m1Op, display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ fontFamily: fonts.display, position: "absolute", clipPath: m1Clip, opacity: m1Op, display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div style={{ fontFamily: fonts.display, fontSize: 40, fontWeight: 700, color: colors.hcFgMuted, marginBottom: 10 }}>防堵錯配</div>
           <div style={{ fontFamily: fonts.mono, fontSize: 130, fontWeight: 800, color: colors.hcBlueDark, fontVariantNumeric: "tabular-nums" }}>回本 6 倍</div>
         </div>
@@ -117,7 +117,7 @@ const CTA: React.FC = () => {
 
       {/* Metric 2 */}
       {frame >= 150 && frame < 290 && (
-        <div style={{ position: "absolute", clipPath: m2Clip, opacity: m2Op, display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ fontFamily: fonts.display, position: "absolute", clipPath: m2Clip, opacity: m2Op, display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div style={{ fontFamily: fonts.display, fontSize: 40, fontWeight: 700, color: colors.hcFgMuted, marginBottom: 10 }}>政府專案補助</div>
           <div style={{ fontFamily: fonts.mono, fontSize: 130, fontWeight: 800, color: colors.hcBlue, fontVariantNumeric: "tabular-nums" }}>首年 0 成本</div>
         </div>
@@ -125,14 +125,14 @@ const CTA: React.FC = () => {
 
       {/* Final Logo and Button */}
       {frame >= 270 && (
-        <div style={{ position: "absolute", display: "flex", flexDirection: "column", alignItems: "center", transform: `scale(${finalScale})` }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 30, marginBottom: 60 }}>
+        <div style={{ fontFamily: fonts.display, position: "absolute", display: "flex", flexDirection: "column", alignItems: "center", transform: `scale(${finalScale})` }}>
+          <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", gap: 30, marginBottom: 60 }}>
             <HcLogoMark size={110} />
             <div style={{ fontFamily: fonts.display, fontSize: 140, fontWeight: 900, color: colors.hcBlueDark, letterSpacing: "-0.04em" }}>HireCook</div>
           </div>
 
-          <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ position: "absolute", width: ripple, height: ripple, borderRadius: "50%", border: `2px solid ${colors.hcCyan}`, opacity: rippleOp }} />
+          <div style={{ fontFamily: fonts.display, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ fontFamily: fonts.display, position: "absolute", width: ripple, height: ripple, borderRadius: "50%", border: `2px solid ${colors.hcCyan}`, opacity: rippleOp }} />
             <div style={{ 
               padding: "24px 60px", 
               borderRadius: 999, 

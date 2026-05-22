@@ -39,7 +39,7 @@ export const PillBanner: React.FC<PillBannerProps> = ({
 
   return (
     <div
-      style={{
+      style={{ fontFamily: fonts.display,
         opacity: pillOp,
         transform: `scale(${pillScale})`,
         position: "relative",
@@ -50,7 +50,7 @@ export const PillBanner: React.FC<PillBannerProps> = ({
     >
       {/* Pill shape */}
       <div
-        style={{
+        style={{ fontFamily: fonts.display,
           width,
           background: "rgba(20, 16, 40, 0.85)",
           border: `1px solid ${accentColor}44`,
@@ -67,7 +67,7 @@ export const PillBanner: React.FC<PillBannerProps> = ({
       >
         {/* Inner glow top edge */}
         <div
-          style={{
+          style={{ fontFamily: fonts.display,
             position: "absolute",
             top: 0,
             left: "20%",
@@ -90,7 +90,7 @@ export const PillBanner: React.FC<PillBannerProps> = ({
 
       {/* Bottom glow bleed */}
       <div
-        style={{
+        style={{ fontFamily: fonts.display,
           width: width * 0.7 * glowPulse,
           height: 80,
           marginTop: -30,

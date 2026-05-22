@@ -68,7 +68,7 @@ export const GiantText: React.FC<GiantTextProps> = ({
 
   return (
     <div
-      style={{
+      style={{ fontFamily: fonts.display,
         opacity: op,
         transform: `scale(${scale})`,
         textAlign: align,
@@ -82,7 +82,7 @@ export const GiantText: React.FC<GiantTextProps> = ({
       {/* Glow bloom behind text */}
       {glowColor && (
         <div
-          style={{
+          style={{ fontFamily: fonts.display,
             position: "absolute",
             inset: "-20%",
             background: `radial-gradient(ellipse, ${glowColor}33 0%, transparent 70%)`,

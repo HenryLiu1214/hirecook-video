@@ -21,12 +21,12 @@ const Statement: React.FC<{ english: string; chinese: string; isLight: boolean; 
   const subColor = isLight ? colors.hcBlue : colors.hcCyanBright;
 
   return (
-    <AbsoluteFill style={{ 
+    <AbsoluteFill style={{ fontFamily: fonts.display, 
       clipPath: clip,
       zIndex: start // Ensure later segments stack on top
     }}>
       <BgCalm theme={isLight ? "light" : "dark"} tint="blue" />
-      <AbsoluteFill style={{ 
+      <AbsoluteFill style={{ fontFamily: fonts.display, 
         display: "flex", 
         alignItems: "center", 
         justifyContent: "center",
@@ -61,14 +61,14 @@ const GutFeeling: React.FC<{ start: number }> = ({ start }) => {
   const lineDraw = interpolate(frame, [start + 45, start + 60], [0, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ clipPath: clip, zIndex: start }}>
+    <AbsoluteFill style={{ fontFamily: fonts.display, clipPath: clip, zIndex: start }}>
       <BgCalm theme="dark" tint="blue" />
-      <AbsoluteFill style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ position: "relative", transform: `scale(${gutScale})` }}>
+      <AbsoluteFill style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontFamily: fonts.display, position: "relative", transform: `scale(${gutScale})` }}>
           <div style={{ fontFamily: fonts.display, fontSize: 130, fontWeight: 900, color: colors.pureWhite, letterSpacing: "-0.02em" }}>
             GUT FEELING
           </div>
-          <div style={{ 
+          <div style={{ fontFamily: fonts.display, 
             position: "absolute", 
             top: "43%", 
             left: "-5%", 
@@ -79,7 +79,7 @@ const GutFeeling: React.FC<{ start: number }> = ({ start }) => {
             boxShadow: `0 0 24px ${colors.hcRisk}`,
             borderRadius: 10
           }} />
-          <div style={{ 
+          <div style={{ fontFamily: fonts.display, 
             textAlign: "center", 
             marginTop: 20,
             color: colors.hcRisk,
@@ -104,14 +104,14 @@ const BehavioralIntelligence: React.FC<{ start: number }> = ({ start }) => {
   const camScale = cameraPush(frame, start, 500, 1.10);
 
   return (
-    <AbsoluteFill style={{ clipPath: clip, zIndex: start }}>
+    <AbsoluteFill style={{ fontFamily: fonts.display, clipPath: clip, zIndex: start }}>
       <BgCalm theme="light" tint="blue" />
-      <AbsoluteFill style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ position: "relative", transform: `scale(${biScale}) scale(${camScale})`, display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <AbsoluteFill style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontFamily: fonts.display, position: "relative", transform: `scale(${biScale}) scale(${camScale})`, display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div style={{ fontFamily: fonts.display, fontSize: 110, fontWeight: 900, color: colors.hcBlueDark, letterSpacing: "-0.02em" }}>
             BEHAVIORAL INTELLIGENCE
           </div>
-          <div style={{ 
+          <div style={{ fontFamily: fonts.display, 
             marginTop: 24,
             color: colors.hcBlue,
             fontSize: 42,

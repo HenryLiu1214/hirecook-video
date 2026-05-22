@@ -30,7 +30,7 @@ export const S0_Intro: React.FC = () => {
   });
 
   return (
-    <AbsoluteFill style={{ background: colors.hcCanvas }}>
+    <AbsoluteFill style={{ fontFamily: fonts.display, background: colors.hcCanvas }}>
       <BgCalm theme="light" tint="blue" />
 
       {/* ── Audio ── */}
@@ -42,18 +42,18 @@ export const S0_Intro: React.FC = () => {
       </Sequence>
 
       {/* Main content — centered column */}
-      <div style={{
+      <div style={{ fontFamily: fonts.display,
         position: "absolute", inset: 0,
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8,
         perspective: "1400px",
       }}>
         {/* Logo mark */}
-        <div style={{ opacity: logoOp, transform: `scale(${logoSc})`, marginBottom: 8 }}>
-          <Img src={staticFile("logo-mark.svg")} style={{ width: 136, height: 136 }} />
+        <div style={{ fontFamily: fonts.display, opacity: logoOp, transform: `scale(${logoSc})`, marginBottom: 8 }}>
+          <Img src={staticFile("logo-mark.svg")} style={{ fontFamily: fonts.display, width: 136, height: 136 }} />
         </div>
 
         {/* HireCook wordmark */}
-        <div style={{
+        <div style={{ fontFamily: fonts.display,
           transform: `scale(${breathe(t)}) rotate(${rotZIn(frame, 20, 34, -10)}deg) rotateX(${rotXSettle(frame, 20, 36)}deg)`,
         }}>
           <TypewriterText
@@ -68,7 +68,7 @@ export const S0_Intro: React.FC = () => {
         </div>
 
         {/* Tagline */}
-        <div style={{
+        <div style={{ fontFamily: fonts.display,
           transform: `rotate(${rotZIn(frame, 170, 26, 8)}deg)`,
           opacity: interpolate(frame, [118, 132], [0, 1], {
             extrapolateLeft: "clamp",
@@ -86,7 +86,7 @@ export const S0_Intro: React.FC = () => {
         </div>
 
         {/* Team section */}
-        <div style={{
+        <div style={{ fontFamily: fonts.display,
           opacity: interpolate(frame, [150, 164], [0, 1], {
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",
@@ -95,7 +95,7 @@ export const S0_Intro: React.FC = () => {
           marginTop: 22,
         }}>
           {/* Separator */}
-          <div style={{
+          <div style={{ fontFamily: fonts.display,
             height: 1,
             background: colors.hcBlue,
             opacity: 0.6,

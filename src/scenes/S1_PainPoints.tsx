@@ -24,15 +24,15 @@ const Counter: React.FC<{ value: number; suffix?: string; decimals?: number; sta
     const decPart = Math.round((n - intPart) * 10);
     return (
       <div style={{ transform: `scale(${sc})`, display: "flex", alignItems: "baseline", justifyContent: "center", fontFamily: fonts.mono, color, lineHeight: 0.9, fontVariantNumeric: "tabular-nums" }}>
-        <span style={{ fontSize, fontWeight: 800, letterSpacing: "-0.04em" }}>{intPart}</span>
-        <span style={{ fontSize: fontSize * 0.62, fontWeight: 800, margin: "0 2px" }}>.</span>
-        <span style={{ fontSize: fontSize * 0.72, fontWeight: 800, letterSpacing: "-0.02em" }}>{decPart}</span>
-        <span style={{ fontSize: fontSize * 0.42, fontWeight: 800, marginLeft: 10 }}>{suffix}</span>
+        <span style={{ fontFamily: fonts.mono, fontSize, fontWeight: 800, letterSpacing: "-0.04em" }}>{intPart}</span>
+        <span style={{ fontFamily: fonts.mono, fontSize: fontSize * 0.62, fontWeight: 800, margin: "0 2px" }}>.</span>
+        <span style={{ fontFamily: fonts.mono, fontSize: fontSize * 0.72, fontWeight: 800, letterSpacing: "-0.02em" }}>{decPart}</span>
+        <span style={{ fontFamily: fonts.mono, fontSize: fontSize * 0.42, fontWeight: 800, marginLeft: 10 }}>{suffix}</span>
       </div>
     );
   }
   const text = Math.round(n).toString();
-  return <div style={{ transform: `scale(${sc})`, fontSize, lineHeight: 0.9, fontWeight: 800, letterSpacing: "-0.025em", fontVariantNumeric: "tabular-nums", fontFamily: fonts.mono, color }}>{text}<span style={{ fontSize: fontSize * 0.42, color, marginLeft: 10 }}>{suffix}</span></div>;
+  return <div style={{ transform: `scale(${sc})`, fontSize, lineHeight: 0.9, fontWeight: 800, letterSpacing: "-0.025em", fontVariantNumeric: "tabular-nums", fontFamily: fonts.mono, color }}>{text}<span style={{ fontFamily: fonts.mono, fontSize: fontSize * 0.42, color, marginLeft: 10 }}>{suffix}</span></div>;
 };
 
 const HiringMistake: React.FC = () => {
@@ -40,12 +40,12 @@ const HiringMistake: React.FC = () => {
   const m = momentAnim(frame, 0, 8, 168, 180);
   const burnOp = interpolate(frame, [86, 100], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const burnY = interpolate(frame, [86, 106], [28, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 20, perspective: "1400px" }}>
+  return <AbsoluteFill style={{ fontFamily: fonts.display, opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 20, perspective: "1400px" }}>
     <div style={{ color: colors.hcRisk, fontFamily: fonts.mono, fontSize: 24, fontWeight: 800, letterSpacing: "0.14em" }}>PAIN POINT</div>
-    <div style={{ transform: `rotate(${rotZIn(frame, 12, 28, -8)}deg) rotateX(${rotXSettle(frame, 12, 32)}deg)` }}>
+    <div style={{ fontFamily: fonts.display, transform: `rotate(${rotZIn(frame, 12, 28, -8)}deg) rotateX(${rotXSettle(frame, 12, 32)}deg)` }}>
       <TypewriterText text="招募錯誤" startFrame={12} charStagger={4} fontSize={176} fontWeight={850} letterSpacing="-0.055em" colorScheme="white-to-blue" />
     </div>
-    <div style={{ opacity: burnOp, transform: `translateY(${burnY}px)`, color: colors.hcRisk, fontSize: 76, fontWeight: 850, letterSpacing: "-0.04em" }}>
+    <div style={{ opacity: burnOp, transform: `translateY(${burnY}px)`, color: colors.hcRisk, fontFamily: fonts.display, fontSize: 76, fontWeight: 850, letterSpacing: "-0.04em" }}>
       = 直接燒錢！
     </div>
   </AbsoluteFill>;
@@ -64,32 +64,32 @@ const HiringMistakeStats: React.FC = () => {
     { min: 65.4, max: 65.4, decimals: 1, unit: "%", label: "半年留任", sub: "留不住人", color: colors.hcRisk },
     { min: 20, max: 30, decimals: 0, unit: "萬", label: "單次錯配", sub: "現金代價", color: colors.hcBlue },
   ];
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, overflow: "hidden" }}>
-    <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 42%, rgba(33,81,245,0.34), transparent 50%), linear-gradient(180deg, #071225 0%, #0D1430 100%)" }} />
-    <div style={{ position: "absolute", inset: 0, opacity: light, background: "radial-gradient(circle at 50% 42%, rgba(33,81,245,0.10), transparent 52%), linear-gradient(180deg, #FFFFFF 0%, #F7F8FB 62%, #EAF0FF 100%)" }} />
-    <div style={{ position: "absolute", inset: 0, opacity: 0.16 + light * 0.06, backgroundImage: "radial-gradient(circle, rgba(111,227,245,0.38) 1px, transparent 1px)", backgroundSize: "34px 34px" }} />
+  return <AbsoluteFill style={{ fontFamily: fonts.display, opacity: m.opacity, transform: m.transform, overflow: "hidden" }}>
+    <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 42%, rgba(33,81,245,0.34), transparent 50%), linear-gradient(180deg, #071225 0%, #0D1430 100%)" }} />
+    <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, opacity: light, background: "radial-gradient(circle at 50% 42%, rgba(33,81,245,0.10), transparent 52%), linear-gradient(180deg, #FFFFFF 0%, #F7F8FB 62%, #EAF0FF 100%)" }} />
+    <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, opacity: 0.16 + light * 0.06, backgroundImage: "radial-gradient(circle, rgba(111,227,245,0.38) 1px, transparent 1px)", backgroundSize: "34px 34px" }} />
 
-    <div style={{ position: "absolute", left: 0, right: 0, top: 370, transform: `translateY(${titleY}px) scale(${titleScale})`, transformOrigin: "center center", textAlign: "center", perspective: "1400px" }}>
+    <div style={{ fontFamily: fonts.display, position: "absolute", left: 0, right: 0, top: 370, transform: `translateY(${titleY}px) scale(${titleScale})`, transformOrigin: "center center", textAlign: "center", perspective: "1400px" }}>
       {/* Typing & Impact Audio */}
 
       <Sequence from={35} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/VEGETree_Magic Foliage Ent, Living Tree, Footstep, Fall, Large, Impact, Heavy 04_ASD.wav")} volume={0.4} /></Sequence>
 
       <div style={{ opacity: interpolate(frame, [0, 16, 108, 136], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), color: colors.hcRisk, fontFamily: fonts.mono, fontSize: 24, fontWeight: 800, letterSpacing: "0.14em" }}>PAIN POINT</div>
-      <div style={{ marginTop: 16, transform: `rotate(${rotZIn(frame, 12, 28, -8)}deg) rotateX(${rotXSettle(frame, 12, 32)}deg)` }}>
+      <div style={{ fontFamily: fonts.display, marginTop: 16, transform: `rotate(${rotZIn(frame, 12, 28, -8)}deg) rotateX(${rotXSettle(frame, 12, 32)}deg)` }}>
         <TypewriterText text="招募錯誤" startFrame={12} charStagger={4} fontSize={176} fontWeight={850} letterSpacing="-0.055em" colorScheme={light > 0.5 ? "plum-to-pink" : "white-to-blue"} />
       </div>
-      <div style={{ opacity: burnOp, transform: `translateY(${burnY}px)`, color: colors.hcRisk, fontSize: 76, fontWeight: 850, letterSpacing: "-0.04em" }}>
+      <div style={{ opacity: burnOp, transform: `translateY(${burnY}px)`, color: colors.hcRisk, fontFamily: fonts.display, fontSize: 76, fontWeight: 850, letterSpacing: "-0.04em" }}>
         = 直接燒錢！
       </div>
     </div>
 
-    <div style={{ position: "absolute", left: 0, right: 0, top: 460, display: "flex", justifyContent: "center", gap: 24 }}>
+    <div style={{ fontFamily: fonts.display, position: "absolute", left: 0, right: 0, top: 460, display: "flex", justifyContent: "center", gap: 24 }}>
       {items.map((it, i) => {
         const op = interpolate(frame, [154 + i * 10, 170 + i * 10], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
         const y = interpolate(frame, [154 + i * 10, 188 + i * 10], [44, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
         const sc = interpolate(frame, [154 + i * 10, 188 + i * 10], [0.9, 1], { easing: Easing.out(Easing.back(1.12)), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
         return (
-          <div key={it.label} style={{
+          <div key={it.label} style={{ fontFamily: fonts.display,
             opacity: op,
             transform: `translateY(${y}px) scale(${sc})`,
             width: 420,
@@ -107,8 +107,8 @@ const HiringMistakeStats: React.FC = () => {
             boxSizing: "border-box" as const,
           }}>
             <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", color: it.color, fontFamily: fonts.mono, lineHeight: 0.9 }}>
-              {it.label === "單次錯配" && <span style={{ fontSize: 28, fontWeight: 800, marginRight: 8 }}>NT$</span>}
-              <span style={{ fontSize: it.label === "單次錯配" ? 70 : 86, fontWeight: 850, letterSpacing: "-0.04em" }}>
+              {it.label === "單次錯配" && <span style={{ fontFamily: fonts.mono, fontSize: 28, fontWeight: 800, marginRight: 8 }}>NT$</span>}
+              <span style={{ fontFamily: fonts.mono, fontSize: it.label === "單次錯配" ? 70 : 86, fontWeight: 850, letterSpacing: "-0.04em" }}>
                 {(() => {
                   const start = 170 + i * 10;
                   const a = interpolate(frame, [start, start + 54], [0, it.min], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -117,15 +117,15 @@ const HiringMistakeStats: React.FC = () => {
                   return it.min === it.max ? fmt(a) : `${fmt(a)}–${fmt(b)}`;
                 })()}
               </span>
-              <span style={{ fontSize: 34, fontWeight: 800, marginLeft: 8 }}>{it.unit}</span>
+              <span style={{ fontFamily: fonts.mono, fontSize: 34, fontWeight: 800, marginLeft: 8 }}>{it.unit}</span>
             </div>
-            <div style={{ color: colors.hcFgPrimary, fontSize: 32, fontWeight: 800 }}>{it.label}</div>
-            <div style={{ color: colors.hcFgMuted, fontSize: 20, fontWeight: 500, textAlign: "center", lineHeight: 1.45 }}>{it.sub}</div>
+            <div style={{ fontFamily: fonts.display, color: colors.hcFgPrimary, fontSize: 32, fontWeight: 800 }}>{it.label}</div>
+            <div style={{ fontFamily: fonts.display, color: colors.hcFgMuted, fontSize: 20, fontWeight: 500, textAlign: "center", lineHeight: 1.45 }}>{it.sub}</div>
           </div>
         );
       })}
     </div>
-    <div style={{
+    <div style={{ fontFamily: fonts.display,
       position: "absolute",
       left: 0,
       right: 0,
@@ -147,15 +147,15 @@ const Audience: React.FC = () => {
   const m = momentAnim(frame, 0, 8, 9998, 9999);
   const industryOp = interpolate(frame, [76, 90], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const industryY = interpolate(frame, [76, 96], [24, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return <AbsoluteFill style={{ opacity: m.opacity, clipPath: slashWipe(frame, 0, 24), transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 22, perspective: "1400px" }}>
+  return <AbsoluteFill style={{ fontFamily: fonts.display, opacity: m.opacity, clipPath: slashWipe(frame, 0, 24), transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 22, perspective: "1400px" }}>
     <BgCalm theme="light" tint="blue" />
     <div style={{ fontFamily: fonts.mono, color: colors.hcFgMuted, fontSize: 23, letterSpacing: "0.14em", textTransform: "uppercase" }}>TARGET CUSTOMER</div>
-    <div style={{ transform: `rotate(${rotZIn(frame, 18, 26, -7)}deg) rotateX(${rotXSettle(frame, 18, 30)}deg)` }}>
+    <div style={{ fontFamily: fonts.display, transform: `rotate(${rotZIn(frame, 18, 26, -7)}deg) rotateX(${rotXSettle(frame, 18, 30)}deg)` }}>
       <TypewriterText text="成長型中小企業" startFrame={18} charStagger={3} fontSize={176} fontWeight={850} letterSpacing="-0.055em" colorScheme="plum-to-pink" />
     </div>
-    <div style={{ opacity: industryOp, transform: `translateY(${industryY}px)`, display: "flex", gap: 14, alignItems: "center", color: colors.hcFgSecondary, fontSize: 34, fontWeight: 650 }}>
+    <div style={{ fontFamily: fonts.display, opacity: industryOp, transform: `translateY(${industryY}px)`, display: "flex", gap: 14, alignItems: "center", color: colors.hcFgSecondary, fontSize: 34, fontWeight: 650 }}>
       <span style={{ fontFamily: fonts.mono, color: colors.hcBlue }}>30–150 人</span>
-      <span style={{ color: colors.hcFgFaint }}>·</span>
+      <span style={{ fontFamily: fonts.display, color: colors.hcFgFaint }}>·</span>
       <span>電子資訊業 / 專業服務業</span>
     </div>
   </AbsoluteFill>;
@@ -170,20 +170,20 @@ const GutFeeling: React.FC = () => {
   ];
   const subOp = interpolate(frame, [116, 130], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const subY = interpolate(frame, [116, 136], [24, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return <AbsoluteFill style={{ opacity: m.opacity, clipPath: slashWipe(frame, 0, 24), transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 26, perspective: "1400px" }}>
+  return <AbsoluteFill style={{ fontFamily: fonts.display, opacity: m.opacity, clipPath: slashWipe(frame, 0, 24), transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 26, perspective: "1400px" }}>
     <BgCalm theme="light" tint="blue" />
     <div style={{ color: colors.hcFgMuted, fontFamily: fonts.mono, fontSize: 23, letterSpacing: "0.14em" }}>WHO MAKES THE HIRING CALL</div>
-    <div style={{ transform: `scale(${breathe(frame / 60, 1, 0.006)}) rotate(${rotZIn(frame, 14, 28, -8)}deg) rotateX(${rotXSettle(frame, 14, 34)}deg)` }}>
+    <div style={{ fontFamily: fonts.display, transform: `scale(${breathe(frame / 60, 1, 0.006)}) rotate(${rotZIn(frame, 14, 28, -8)}deg) rotateX(${rotXSettle(frame, 14, 34)}deg)` }}>
       <TypewriterText text="營運導向決策者" startFrame={14} charStagger={3} fontSize={154} fontWeight={850} letterSpacing="-0.055em" colorScheme="plum-to-pink" />
     </div>
-    <div style={{ display: "flex", gap: 16 }}>
+    <div style={{ fontFamily: fonts.display, display: "flex", gap: 16 }}>
       {chips.map((p, i) => {
         const op = interpolate(frame, [82 + i * 10, 94 + i * 10], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
         const y = interpolate(frame, [82 + i * 10, 102 + i * 10], [26, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
         return <div key={p.label} style={{ opacity: op, transform: `translateY(${y}px) rotate(${rotZIn(frame, 82 + i * 10, 18, i ? 4 : -4)}deg)`, padding: "14px 28px", borderRadius: 999, border: `1px solid ${p.color}33`, background: `${p.color}10`, color: p.color, fontFamily: fonts.mono, fontSize: 28, fontWeight: 800 }}>{p.label}</div>;
       })}
     </div>
-    <div style={{ opacity: subOp, transform: `translateY(${subY}px)`, color: colors.hcFgSecondary, fontSize: 32, fontWeight: 650 }}>
+    <div style={{ fontFamily: fonts.display, opacity: subOp, transform: `translateY(${subY}px)`, color: colors.hcFgSecondary, fontSize: 32, fontWeight: 650 }}>
       他們要判斷的，是下一位新人
     </div>
   </AbsoluteFill>;
@@ -194,13 +194,13 @@ const Pills: React.FC = () => {
   const m = momentAnim(frame, 0, 8, 9998, 9999);
   const qOp = interpolate(frame, [92, 106], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const qY = interpolate(frame, [92, 112], [30, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return <AbsoluteFill style={{ opacity: m.opacity, clipPath: slashWipe(frame, 0, 24), transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 24, perspective: "1400px" }}>
+  return <AbsoluteFill style={{ fontFamily: fonts.display, opacity: m.opacity, clipPath: slashWipe(frame, 0, 24), transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 24, perspective: "1400px" }}>
     <BgCalm theme="light" tint="blue" />
     <div style={{ color: colors.hcFgMuted, fontFamily: fonts.mono, fontSize: 23, letterSpacing: "0.14em" }}>ABOUT THE NEW HIRE</div>
-    <div style={{ transform: `rotate(${rotZIn(frame, 18, 28, -7)}deg) rotateX(${rotXSettle(frame, 18, 32)}deg)` }}>
+    <div style={{ fontFamily: fonts.display, transform: `rotate(${rotZIn(frame, 18, 28, -7)}deg) rotateX(${rotXSettle(frame, 18, 32)}deg)` }}>
       <TypewriterText text={"這位新人\n六個月後還在嗎？"} startFrame={18} charStagger={3} fontSize={132} fontWeight={850} letterSpacing="-0.055em" colorScheme="plum-to-pink" lineHeight={0.92} />
     </div>
-    <div style={{ opacity: qOp, transform: `translateY(${qY}px)`, fontSize: 34, fontWeight: 650, color: colors.hcFgSecondary }}>
+    <div style={{ fontFamily: fonts.display, opacity: qOp, transform: `translateY(${qY}px)`, fontSize: 34, fontWeight: 650, color: colors.hcFgSecondary }}>
       決策者需要的不是面試印象，是留任答案
     </div>
   </AbsoluteFill>;
@@ -217,9 +217,9 @@ const Transition: React.FC = () => {
   const subY = interpolate(frame, [16, 36], [24, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ clipPath: wipe, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 32 }}>
+    <AbsoluteFill style={{ fontFamily: fonts.display, clipPath: wipe, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 32 }}>
       <BgCalm theme="dark" tint="blue" />
-      <div style={{
+      <div style={{ fontFamily: fonts.display,
         opacity: subOp,
         transform: `translateY(${subY}px)`,
         color: "rgba(255, 255, 255, 0.85)",
@@ -235,12 +235,12 @@ const Transition: React.FC = () => {
 const StatCard: React.FC<{ icon: React.ComponentProps<typeof LucideIcon>["name"]; eyebrow: string; value: number; decimals?: number; suffix: string; caption: string; color: string }> = ({ icon, eyebrow, value, decimals = 0, suffix, caption, color }) => {
   const frame = useCurrentFrame();
   const m = momentAnim(frame, 0, 8, 168, 180);
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center" }}>
-    <div style={{ ...card, width: 980, minHeight: 470, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 22 }}>
-      <div style={{ width: 72, height: 72, borderRadius: 16, background: `${color}12`, border: `1px solid ${color}33`, display: "flex", alignItems: "center", justifyContent: "center", color }}><LucideIcon name={icon} size={38} /></div>
+  return <AbsoluteFill style={{ fontFamily: fonts.display, opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ fontFamily: fonts.display, ...card, width: 980, minHeight: 470, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 22 }}>
+      <div style={{ fontFamily: fonts.display, width: 72, height: 72, borderRadius: 16, background: `${color}12`, border: `1px solid ${color}33`, display: "flex", alignItems: "center", justifyContent: "center", color }}><LucideIcon name={icon} size={38} /></div>
       <div style={{ color: colors.hcFgMuted, fontFamily: fonts.mono, fontSize: 22, letterSpacing: "0.14em" }}>{eyebrow}</div>
       <Counter value={value} decimals={decimals} suffix={suffix} color={color} />
-      <div style={{ color: colors.hcFgSecondary, fontSize: 36, fontWeight: 600 }}>{caption}</div>
+      <div style={{ fontFamily: fonts.display, color: colors.hcFgSecondary, fontSize: 36, fontWeight: 600 }}>{caption}</div>
     </div>
   </AbsoluteFill>;
 };
@@ -248,16 +248,16 @@ const StatCard: React.FC<{ icon: React.ComponentProps<typeof LucideIcon>["name"]
 const Cost: React.FC = () => {
   const frame = useCurrentFrame();
   const m = momentAnim(frame, 0, 8, 168, 180);
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center" }}>
-    <div style={{ ...card, width: 980, minHeight: 470, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 24 }}>
-      <div style={{ width: 72, height: 72, borderRadius: 16, background: `${colors.hcRisk}12`, border: `1px solid ${colors.hcRisk}33`, display: "flex", alignItems: "center", justifyContent: "center", color: colors.hcRisk }}><LucideIcon name="coins" size={38} /></div>
+  return <AbsoluteFill style={{ fontFamily: fonts.display, opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ fontFamily: fonts.display, ...card, width: 980, minHeight: 470, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 24 }}>
+      <div style={{ fontFamily: fonts.display, width: 72, height: 72, borderRadius: 16, background: `${colors.hcRisk}12`, border: `1px solid ${colors.hcRisk}33`, display: "flex", alignItems: "center", justifyContent: "center", color: colors.hcRisk }}><LucideIcon name="coins" size={38} /></div>
       <div style={{ color: colors.hcFgMuted, fontFamily: fonts.mono, fontSize: 22, letterSpacing: "0.14em" }}>代價高</div>
-      <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+      <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "baseline", gap: 12 }}>
         <span style={{ fontFamily: fonts.mono, fontSize: 62, fontWeight: 700, color: colors.hcRisk }}>NT$</span>
         <Counter value={30} fontSize={210} color={colors.hcRisk} />
         <span style={{ fontFamily: fonts.display, fontSize: 82, fontWeight: 800, color: colors.hcRisk }}>萬</span>
       </div>
-      <div style={{ color: colors.hcFgSecondary, fontSize: 36, fontWeight: 600 }}>單次錯配成本</div>
+      <div style={{ fontFamily: fonts.display, color: colors.hcFgSecondary, fontSize: 36, fontWeight: 600 }}>單次錯配成本</div>
     </div>
   </AbsoluteFill>;
 };
@@ -270,17 +270,17 @@ const StatsTogether: React.FC = () => {
     { min: 65.4, max: 65.4, decimals: 1, unit: "%", label: "半年留任", sub: "留不住人", color: colors.hcRisk },
     { min: 20, max: 30, decimals: 0, unit: "萬", label: "單次錯配", sub: "現金代價", color: colors.hcBlue },
   ];
-  return <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 34 }}>
-    <div style={{ transform: `rotate(${rotZIn(frame, 8, 26, -5)}deg) rotateX(${rotXSettle(frame, 8, 30)}deg)` }}>
+  return <AbsoluteFill style={{ fontFamily: fonts.display, opacity: m.opacity, transform: m.transform, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 34 }}>
+    <div style={{ fontFamily: fonts.display, transform: `rotate(${rotZIn(frame, 8, 26, -5)}deg) rotateX(${rotXSettle(frame, 8, 30)}deg)` }}>
       <TypewriterText text="招募錯誤" startFrame={8} charStagger={3} fontSize={116} fontWeight={850} letterSpacing="-0.055em" colorScheme="plum-to-pink" />
     </div>
-    <div style={{ display: "flex", gap: 18 }}>
+    <div style={{ fontFamily: fonts.display, display: "flex", gap: 18 }}>
       {items.map((it, i) => {
         const op = interpolate(frame, [78 + i * 12, 92 + i * 12], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
         const y = interpolate(frame, [78 + i * 12, 102 + i * 12], [34, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
         const sc = interpolate(frame, [78 + i * 12, 102 + i * 12], [0.9, 1], { easing: Easing.out(Easing.back(1.12)), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
         return (
-          <div key={it.label} style={{
+          <div key={it.label} style={{ fontFamily: fonts.display,
             opacity: op,
             transform: `translateY(${y}px) scale(${sc})`,
             width: 360,
@@ -298,8 +298,8 @@ const StatsTogether: React.FC = () => {
             boxSizing: "border-box" as const,
           }}>
             <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", color: it.color, fontFamily: fonts.mono, lineHeight: 0.9 }}>
-              {it.label === "單次錯配" && <span style={{ fontSize: 26, fontWeight: 800, marginRight: 8 }}>NT$</span>}
-              <span style={{ fontSize: 76, fontWeight: 850, letterSpacing: "-0.04em" }}>
+              {it.label === "單次錯配" && <span style={{ fontFamily: fonts.mono, fontSize: 26, fontWeight: 800, marginRight: 8 }}>NT$</span>}
+              <span style={{ fontFamily: fonts.mono, fontSize: 76, fontWeight: 850, letterSpacing: "-0.04em" }}>
                 {(() => {
                   const start = 92 + i * 12;
                   const a = interpolate(frame, [start, start + 54], [0, it.min], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -308,15 +308,15 @@ const StatsTogether: React.FC = () => {
                   return it.min === it.max ? fmt(a) : `${fmt(a)}–${fmt(b)}`;
                 })()}
               </span>
-              <span style={{ fontSize: 32, fontWeight: 800, marginLeft: 6 }}>{it.unit}</span>
+              <span style={{ fontFamily: fonts.mono, fontSize: 32, fontWeight: 800, marginLeft: 6 }}>{it.unit}</span>
             </div>
-            <div style={{ color: colors.hcFgPrimary, fontSize: 28, fontWeight: 750 }}>{it.label}</div>
-            <div style={{ color: colors.hcFgMuted, fontSize: 18, fontWeight: 500, textAlign: "center", lineHeight: 1.45 }}>{it.sub}</div>
+            <div style={{ fontFamily: fonts.display, color: colors.hcFgPrimary, fontSize: 28, fontWeight: 750 }}>{it.label}</div>
+            <div style={{ fontFamily: fonts.display, color: colors.hcFgMuted, fontSize: 18, fontWeight: 500, textAlign: "center", lineHeight: 1.45 }}>{it.sub}</div>
           </div>
         );
       })}
     </div>
-    <div style={{
+    <div style={{ fontFamily: fonts.display,
       opacity: interpolate(frame, [150, 164], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
       color: colors.hcFgSecondary,
       fontSize: 42,
@@ -353,7 +353,7 @@ const Hidden: React.FC = () => {
   const belowOp  = interpolate(frame, [504, 524, 860, 880], [0, 1, 1, 0], cl);
 
   const Iceberg = ({ deep }: { deep: boolean }) => (
-    <svg width="760" height="860" viewBox="0 0 760 860" style={{ overflow: "visible" }}>
+    <svg width="760" height="860" viewBox="0 0 760 860" style={{ fontFamily: fonts.display, overflow: "visible" }}>
       <defs>
         <linearGradient id={deep ? "iceDeepA" : "iceTopA"} x1="160" y1="70" x2="570" y2="820" gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor={deep ? "#A9C6FF" : "#FFFFFF"} />
@@ -400,7 +400,7 @@ const Hidden: React.FC = () => {
   //         kw4 start=690 noExit   → reads 690→860 = 170f (2.8s) before belowOp fade
 
   return (
-    <AbsoluteFill style={{ background: bg, clipPath: slashWipe(frame, 0, 24) }}>
+    <AbsoluteFill style={{ fontFamily: fonts.display, background: bg, clipPath: slashWipe(frame, 0, 24) }}>
       {/* ── Audio ── */}
       {/* Iceberg Flip Flashback */}
       <Sequence from={324} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/WHSH_Sfx Transition Flashback, Remembrance, Deep 02_ASD.wav")} volume={0.45} /></Sequence>
@@ -417,34 +417,34 @@ const Hidden: React.FC = () => {
       ))}
 
       {/* Ambient glow + dot grid */}
-      <div style={{ position: "absolute", inset: 0, opacity: dark, background: "radial-gradient(ellipse 80% 70% at 50% 54%, rgba(33,81,245,0.34), transparent 68%)" }} />
-      <div style={{ position: "absolute", inset: 0, opacity: 0.18 + dark * 0.16, backgroundImage: "radial-gradient(circle, rgba(33,81,245,0.55) 1px, transparent 1px)", backgroundSize: "34px 34px" }} />
+      <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, opacity: dark, background: "radial-gradient(ellipse 80% 70% at 50% 54%, rgba(33,81,245,0.34), transparent 68%)" }} />
+      <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, opacity: 0.18 + dark * 0.16, backgroundImage: "radial-gradient(circle, rgba(33,81,245,0.55) 1px, transparent 1px)", backgroundSize: "34px 34px" }} />
 
       {/* Iceberg — left on enter, slides right during flip */}
-      <div style={{ position: "absolute", left: iceX, top: 90, width: 760, height: 860, perspective: "1500px", opacity: interpolate(frame, [0, 14], [0, 1], cl) }}>
-        <div style={{ transform: `rotateY(${flipY}deg) rotateZ(-2deg)`, transformStyle: "preserve-3d" as const, transformOrigin: "50% 50%", opacity: dark < 0.5 ? 0.88 : 0.62 }}>
-          <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden" as const }}><Iceberg deep={false} /></div>
-          <div style={{ position: "absolute", inset: 0, transform: "rotateY(180deg)", backfaceVisibility: "hidden" as const }}><Iceberg deep /></div>
+      <div style={{ fontFamily: fonts.display, position: "absolute", left: iceX, top: 90, width: 760, height: 860, perspective: "1500px", opacity: interpolate(frame, [0, 14], [0, 1], cl) }}>
+        <div style={{ fontFamily: fonts.display, transform: `rotateY(${flipY}deg) rotateZ(-2deg)`, transformStyle: "preserve-3d" as const, transformOrigin: "50% 50%", opacity: dark < 0.5 ? 0.88 : 0.62 }}>
+          <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, backfaceVisibility: "hidden" as const }}><Iceberg deep={false} /></div>
+          <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, transform: "rotateY(180deg)", backfaceVisibility: "hidden" as const }}><Iceberg deep /></div>
         </div>
       </div>
 
       {/* Water-line: left edge above / right edge below */}
-      <div style={{ position: "absolute", left: 0, right: 1060, top: 396, height: 3, opacity: aboveOp * 0.6, background: "rgba(33,81,245,0.35)", borderRadius: 2 }} />
-      <div style={{ position: "absolute", left: 960, right: 0, top: 396, height: 3, opacity: belowOp * 0.7, background: "rgba(111,227,245,0.55)", borderRadius: 2 }} />
+      <div style={{ fontFamily: fonts.display, position: "absolute", left: 0, right: 1060, top: 396, height: 3, opacity: aboveOp * 0.6, background: "rgba(33,81,245,0.35)", borderRadius: 2 }} />
+      <div style={{ fontFamily: fonts.display, position: "absolute", left: 960, right: 0, top: 396, height: 3, opacity: belowOp * 0.7, background: "rgba(111,227,245,0.55)", borderRadius: 2 }} />
 
       {/* ── ABOVE THE WATER — right panel, iceberg is on the left ── */}
-      <div style={{
+      <div style={{ fontFamily: fonts.display,
         opacity: aboveOp, position: "absolute",
         top: 0, bottom: 0, left: 840, right: 0,
         display: "flex", flexDirection: "column", justifyContent: "center",
         paddingLeft: 72, paddingRight: 80,
       }}>
         <div style={{ color: colors.hcBlue, fontFamily: fonts.mono, fontSize: 18, fontWeight: 800, letterSpacing: "0.2em", marginBottom: 36 }}>ABOVE THE WATER</div>
-        <div style={{ position: "relative", height: 160 }}>
+        <div style={{ fontFamily: fonts.display, position: "relative", height: 160 }}>
           {kw("履歷包裝", 22,  148, colors.hcFgPrimary, 190)}
           {kw("自陳測驗", 230, 148, colors.hcBlue, 0, true)}
         </div>
-        <div style={{
+        <div style={{ fontFamily: fonts.display,
           marginTop: 44,
           opacity: interpolate(frame, [360, 378], [0, 1], cl),
           color: colors.hcRisk, fontSize: 34, fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.35,
@@ -461,18 +461,18 @@ const Hidden: React.FC = () => {
       }}>水面下</div>
 
       {/* ── BELOW THE WATER — left panel, iceberg has moved to the right ── */}
-      <div style={{
+      <div style={{ fontFamily: fonts.display,
         opacity: belowOp, position: "absolute",
         top: 0, bottom: 0, left: 0, width: 960,
         display: "flex", flexDirection: "column", justifyContent: "center",
         paddingLeft: 92, paddingRight: 40,
       }}>
         <div style={{ color: colors.hcCyanBright, fontFamily: fonts.mono, fontSize: 18, fontWeight: 800, letterSpacing: "0.2em", marginBottom: 36 }}>BELOW THE WATER</div>
-        <div style={{ position: "relative", height: 160 }}>
+        <div style={{ fontFamily: fonts.display, position: "relative", height: 160 }}>
           {kw("P-E Fit",  512, 148, colors.hcCyanBright, 160)}
           {kw("人際協作", 690, 148, "#FFFFFF", 0, true)}
         </div>
-        <div style={{
+        <div style={{ fontFamily: fonts.display,
           marginTop: 44,
           opacity: interpolate(frame, [780, 798], [0, 1], cl),
           color: colors.hcRisk, fontSize: 34, fontWeight: 900, letterSpacing: "-0.045em",

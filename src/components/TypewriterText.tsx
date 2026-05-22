@@ -131,7 +131,7 @@ export const TypewriterText: React.FC<TypewriterTextProps> = ({
         return (
           <span
             key={i}
-            style={{
+            style={{ fontFamily: fonts.display,
               display: "inline-block",
               opacity: op,
               transform: `translateY(${ty}em) scale(${sc})`,
@@ -144,7 +144,7 @@ export const TypewriterText: React.FC<TypewriterTextProps> = ({
       })}
       {showCursor && !allDone && elapsed >= 0 && (
         <span
-          style={{
+          style={{ fontFamily: fonts.display,
             display: "inline-block",
             width: "0.06em",
             height: "0.82em",

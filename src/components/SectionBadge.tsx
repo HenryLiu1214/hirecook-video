@@ -26,7 +26,7 @@ export const SectionBadge: React.FC<SectionBadgeProps> = ({
 
   return (
     <div
-      style={{
+      style={{ fontFamily: fonts.display,
         position: "absolute",
         top: 52,
         left: 72,

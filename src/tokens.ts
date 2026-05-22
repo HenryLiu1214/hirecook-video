@@ -58,8 +58,8 @@ export const colors = {
 };
 
 export const fonts = {
-  display: "'Inter', 'Noto Sans TC', sans-serif",
-  mono: "'JetBrains Mono', 'Courier New', 'Noto Sans TC', monospace",
+  display: "'HC Inter', 'PingFang TC', 'Heiti TC', 'Microsoft JhengHei', sans-serif",
+  mono: "'HC JetBrains Mono', 'PingFang TC', 'Heiti TC', 'Microsoft JhengHei', monospace",
 };
 
 // Scene timing (frames @ 60fps) — 3:09.4 trimmed cut

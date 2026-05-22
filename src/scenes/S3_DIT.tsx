@@ -74,7 +74,7 @@ const HexRadar: React.FC<{
   });
 
   return (
-    <svg width={size} height={size} style={{ overflow: "visible" }}>
+    <svg width={size} height={size} style={{ fontFamily: fonts.display, overflow: "visible" }}>
       {ringPolygons.map((pts, i) => (
         <polygon key={i} points={pts} fill="none" stroke="rgba(8,16,40,0.06)" strokeWidth={1} />
       ))}
@@ -160,7 +160,7 @@ const PEMapRadar: React.FC<{
   });
 
   return (
-    <svg width={size} height={size} style={{ overflow: "visible" }}>
+    <svg width={size} height={size} style={{ fontFamily: fonts.display, overflow: "visible" }}>
       {ringPolygons.map((pts, i) => (
         <polygon key={i} points={pts} fill="none" stroke="rgba(8,16,40,0.06)" strokeWidth={1} />
       ))}
@@ -244,7 +244,7 @@ const mbtiFitCrossLB: Partial<Record<string, number>> = {
 // LiveMBTIGrid — reacts to sliderProgress (0→1) and flashes cells on threshold crossing
 const LiveMBTIGrid: React.FC<{ progress: number; lB: number }> = ({ progress, lB }) => {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 5 }}>
+    <div style={{ fontFamily: fonts.display, display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 5 }}>
       {mbtiTypes.map((type) => {
         const score = Math.round(mbtiBase[type] + progress * (mbtiFinal[type] - mbtiBase[type]));
         const isFit = score >= 75;
@@ -259,7 +259,7 @@ const LiveMBTIGrid: React.FC<{ progress: number; lB: number }> = ({ progress, lB
           ? 1 + 0.16 * Math.max(0, 1 - since / 20)
           : 1;
         return (
-          <div key={type} style={{
+          <div key={type} style={{ fontFamily: fonts.display,
             transform: `scale(${flashSc})`,
             background: bg, border: `1px solid ${border}`, borderRadius: 7,
             padding: "7px 10px", display: "flex", justifyContent: "space-between", alignItems: "center",
@@ -296,19 +296,19 @@ const SliderRow: React.FC<{
   });
   
   return (
-    <div style={{ opacity: op, display: "flex", flexDirection: "column", gap: 4 }}>
+    <div style={{ fontFamily: fonts.display, opacity: op, display: "flex", flexDirection: "column", gap: 4 }}>
       {/* Slider audio */}
       <Sequence from={barStart} layout="none">
         <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MECHSwtch_Tech Rotary Switch Turn Metal Small Spot Light x9 Variations_ASD.wav")} volume={(f) => interpolate(f, [0, 50], [0.15, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} />
       </Sequence>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div style={{ fontFamily: fonts.display, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span style={{ fontSize: 18, color: "#0B1020", fontWeight: 600, fontFamily: fonts.display }}>{label}</span>
         <span style={{ fontSize: 16, color, fontWeight: 700, fontFamily: fonts.mono }}>{Math.round(w)}</span>
       </div>
-      <div style={{ height: 8, background: "rgba(8,16,40,0.06)", borderRadius: 9999, position: "relative" }}>
-        <div style={{ height: "100%", width: `${w}%`, background: color, borderRadius: 9999 }} />
+      <div style={{ fontFamily: fonts.display, height: 8, background: "rgba(8,16,40,0.06)", borderRadius: 9999, position: "relative" }}>
+        <div style={{ fontFamily: fonts.display, height: "100%", width: `${w}%`, background: color, borderRadius: 9999 }} />
         {/* Arrival pulse — fires as the slider lands on its value */}
-        <div style={{
+        <div style={{ fontFamily: fonts.display,
           position: "absolute", left: `${w}%`, top: "50%",
           width: 18, height: 18, marginLeft: -9, marginTop: -9, borderRadius: "50%",
           border: `2px solid ${color}`,
@@ -317,7 +317,7 @@ const SliderRow: React.FC<{
           pointerEvents: "none",
         }} />
         {/* Draggable thumb handle */}
-        <div style={{
+        <div style={{ fontFamily: fonts.display,
           position: "absolute",
           left: `${w}%`,
           top: "50%",
@@ -331,7 +331,7 @@ const SliderRow: React.FC<{
           zIndex: 1,
         }} />
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{ fontFamily: fonts.display, display: "flex", justifyContent: "space-between" }}>
         <span style={{ fontSize: 11, fontFamily: fonts.mono, color: "#8C95AE" }}>{leftLabel}</span>
         <span style={{ fontSize: 11, fontFamily: fonts.mono, color: "#8C95AE" }}>{rightLabel}</span>
       </div>
@@ -367,7 +367,7 @@ const KPICard: React.FC<{
   // Signal dot pulse
   const dotGlow = signal ? 0.5 + 0.5 * Math.sin(localFrame * 0.18) : 0;
   return (
-    <div style={{
+    <div style={{ fontFamily: fonts.display,
       opacity: op,
       transform: `scale(${sc})`,
       background: "#FFFFFF",
@@ -380,9 +380,9 @@ const KPICard: React.FC<{
       gap: 6,
       flex: 1,
     }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+      <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", gap: 6 }}>
         {signal && (
-          <div style={{
+          <div style={{ fontFamily: fonts.display,
             width: 7, height: 7, borderRadius: "50%",
             background: "#00B4D8",
             boxShadow: `0 0 ${4 + 6 * dotGlow}px rgba(0,180,216,${0.6 + 0.4 * dotGlow})`,
@@ -391,11 +391,11 @@ const KPICard: React.FC<{
         )}
         <span style={{ fontSize: 14, fontFamily: fonts.mono, color: "#5C677F", letterSpacing: "0.12em", textTransform: "uppercase" as const }}>{eyebrow}</span>
       </div>
-      <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+      <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "baseline", gap: 4 }}>
         <span style={{ fontSize: 48, fontFamily: fonts.mono, fontWeight: 700, color: "#0B1020", lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{displayVal}</span>
         <span style={{ fontSize: 16, fontFamily: fonts.mono, color: "#8C95AE" }}>{unit}</span>
       </div>
-      <span style={{ fontSize: 14, color: "#5C677F" }}>{sub}</span>
+      <span style={{ fontFamily: fonts.display, fontSize: 14, color: "#5C677F" }}>{sub}</span>
       {delta && (
         <span style={{ fontSize: 13, fontFamily: fonts.mono, fontWeight: 700, color: isPositive ? "#1B7A4D" : "#B83A2E" }}>
           {isPositive ? "↗" : "↘"} {delta}
@@ -423,12 +423,12 @@ const XAIDriver: React.FC<{
   const barColor = isPositive ? "#1B7A4D" : "#B83A2E";
   const valColor = isPositive ? "#1B7A4D" : "#B83A2E";
   return (
-    <div style={{ opacity: op, display: "flex", alignItems: "center", gap: 12 }}>
+    <div style={{ fontFamily: fonts.display, opacity: op, display: "flex", alignItems: "center", gap: 12 }}>
       <span style={{ fontSize: 16, color: "#364159", fontFamily: fonts.display, width: 130, flexShrink: 0 }}>{name}</span>
-      <div style={{ position: "relative", width: 240, height: 20, flexShrink: 0 }}>
-        <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: 2, background: "rgba(8,16,40,0.06)", transform: "translateX(-50%)" }} />
+      <div style={{ fontFamily: fonts.display, position: "relative", width: 240, height: 20, flexShrink: 0 }}>
+        <div style={{ fontFamily: fonts.display, position: "absolute", left: "50%", top: 0, bottom: 0, width: 2, background: "rgba(8,16,40,0.06)", transform: "translateX(-50%)" }} />
         {isPositive ? (
-          <div style={{
+          <div style={{ fontFamily: fonts.display,
             position: "absolute",
             left: "50%",
             top: "50%",
@@ -439,7 +439,7 @@ const XAIDriver: React.FC<{
             transform: "translateY(-50%)",
           }} />
         ) : (
-          <div style={{
+          <div style={{ fontFamily: fonts.display,
             position: "absolute",
             right: "50%",
             top: "50%",
@@ -506,44 +506,44 @@ const B0Overview: React.FC = () => {
 
   return (
     <AbsoluteFill>
-      <div style={{ position: "absolute", inset: 0, background: "#05070C" }} />
-      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 82% 60% at 50% 38%, rgba(33,81,245,0.22) 0%, transparent 70%)" }} />
-      <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(156,182,255,0.045) 1px, transparent 1px)", backgroundSize: "40px 40px", opacity: 0.6 }} />
+      <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, background: "#05070C" }} />
+      <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, background: "radial-gradient(ellipse 82% 60% at 50% 38%, rgba(33,81,245,0.22) 0%, transparent 70%)" }} />
+      <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(156,182,255,0.045) 1px, transparent 1px)", backgroundSize: "40px 40px", opacity: 0.6 }} />
 
-      <AbsoluteFill style={{ opacity: m.opacity }}>
+      <AbsoluteFill style={{ fontFamily: fonts.display, opacity: m.opacity }}>
 
         {/* ── Phase 0: Title ── */}
-        <AbsoluteFill style={{ opacity: p0Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+        <AbsoluteFill style={{ fontFamily: fonts.display, opacity: p0Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
           <div style={{ position: "absolute", fontSize: 520, fontWeight: 900, fontFamily: fonts.mono, color: ds.blue, opacity: 0.04, lineHeight: 1, letterSpacing: "-20px", userSelect: "none" as const }}>DIT</div>
-          <div style={{ marginBottom: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 16px", borderRadius: 999, border: "1px solid rgba(0,180,216,0.30)", background: "rgba(0,180,216,0.06)" }}>
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 8px ${ds.cyan}` }} />
+          <div style={{ fontFamily: fonts.display, marginBottom: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 16px", borderRadius: 999, border: "1px solid rgba(0,180,216,0.30)", background: "rgba(0,180,216,0.06)" }}>
+            <div style={{ fontFamily: fonts.display, width: 6, height: 6, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 8px ${ds.cyan}` }} />
             <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#6FE3F5", letterSpacing: "0.24em" }}>HOW HIRECOOK WORKS</span>
           </div>
           <div style={{ fontSize: 110, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-5px", lineHeight: 1.08, textAlign: "center" as const }}>
-            三個步驟<br /><span style={{ color: ds.cyan }}>一份決策手冊</span>
+            三個步驟<br /><span style={{ fontFamily: fonts.display, color: ds.cyan }}>一份決策手冊</span>
           </div>
         </AbsoluteFill>
 
         {/* ── Phase 1: Side-by-side Global Roadmap ── */}
-        <AbsoluteFill style={{ opacity: p1Op, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${zoomSc}) translate(${zoomX}px, ${zoomY}px)` }}>
+        <AbsoluteFill style={{ fontFamily: fonts.display, opacity: p1Op, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${zoomSc}) translate(${zoomX}px, ${zoomY}px)` }}>
           <div style={{ position: "absolute", top: 120, fontSize: 30, fontWeight: 800, color: "rgba(255,255,255,0.7)", fontFamily: fonts.display, letterSpacing: "0.25em", opacity: titleOp }}>GLOBAL WORKFLOW</div>
-          <div style={{ display: "flex", gap: 32, width: 1440 }}>
+          <div style={{ fontFamily: fonts.display, display: "flex", gap: 32, width: 1440 }}>
             {steps.map((s) => {
               const cardOp = interpolate(frame, [s.delay, s.delay + 20], [0, 1], cl);
               const cardY = interpolate(frame, [s.delay, s.delay + 24], [40, 0], { easing: Easing.out(Easing.cubic), ...cl });
               return (
-                <div key={s.id} style={{ flex: 1, opacity: cardOp, transform: `translateY(${cardY}px)`, display: "flex", flexDirection: "column", alignItems: "center", padding: "56px 40px", borderRadius: 24, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", position: "relative", overflow: "hidden" }}>
+                <div key={s.id} style={{ fontFamily: fonts.display, flex: 1, opacity: cardOp, transform: `translateY(${cardY}px)`, display: "flex", flexDirection: "column", alignItems: "center", padding: "56px 40px", borderRadius: 24, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", position: "relative", overflow: "hidden" }}>
                   <div style={{ position: "absolute", right: -40, top: -20, fontSize: 320, fontWeight: 900, fontFamily: fonts.mono, color: s.c, opacity: 0.05, lineHeight: 1, letterSpacing: "-10px", userSelect: "none" as const }}>{s.id}</div>
                   
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 12px", borderRadius: 999, border: `1px solid ${s.c}44`, background: `${s.c}1A`, marginBottom: 32, zIndex: 1 }}>
-                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: s.c, boxShadow: `0 0 8px ${s.c}` }} />
+                  <div style={{ fontFamily: fonts.display, display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 12px", borderRadius: 999, border: `1px solid ${s.c}44`, background: `${s.c}1A`, marginBottom: 32, zIndex: 1 }}>
+                    <span style={{ fontFamily: fonts.display, width: 6, height: 6, borderRadius: "50%", background: s.c, boxShadow: `0 0 8px ${s.c}` }} />
                     <span style={{ fontSize: 12, fontFamily: fonts.mono, color: s.c, letterSpacing: "0.15em" }}>{s.tag}</span>
                   </div>
                   
                   <div style={{ fontSize: 44, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-2px", textAlign: "center", zIndex: 1, whiteSpace: "nowrap" as const }}>{s.title}</div>
                   
-                  <div style={{ opacity: detailOp, display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
-                    <div style={{ width: "100%", height: 1, background: `linear-gradient(90deg, transparent, ${s.c}88, transparent)`, margin: "40px 0", zIndex: 1 }} />
+                  <div style={{ fontFamily: fonts.display, opacity: detailOp, display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+                    <div style={{ fontFamily: fonts.display, width: "100%", height: 1, background: `linear-gradient(90deg, transparent, ${s.c}88, transparent)`, margin: "40px 0", zIndex: 1 }} />
                     <div style={{ fontSize: 12, fontFamily: fonts.mono, color: "rgba(255,255,255,0.4)", letterSpacing: "0.18em", marginBottom: 12, zIndex: 1 }}>OUTPUT</div>
                     <div style={{ fontSize: 28, fontFamily: fonts.mono, fontWeight: 700, color: s.c, zIndex: 1 }}>{s.out}</div>
                   </div>
@@ -582,22 +582,22 @@ const B2RightPanel: React.FC<{
   const radarRing = radarGlow ? "0 0 0 2.5px rgba(0,180,216,0.55), 0 0 40px rgba(0,180,216,0.22)" : "none";
   const gridRing  = gridGlow  ? "0 0 0 2.5px rgba(0,180,216,0.55), 0 0 40px rgba(0,180,216,0.22)" : "none";
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 14, width: 480, flexShrink: 0 }}>
+    <div style={{ fontFamily: fonts.display, display: "flex", flexDirection: "column", gap: 14, width: 480, flexShrink: 0 }}>
       {/* Radar card */}
-      <div style={{
+      <div style={{ fontFamily: fonts.display,
         background: "#FFFFFF", borderRadius: 12, padding: "20px 24px",
         border: "1px solid rgba(8,16,40,0.06)", boxShadow: `0 4px 24px rgba(8,16,40,0.08), ${radarRing}`,
         display: "flex", flexDirection: "column", gap: 12, opacity: radarDim, transition: "none",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-          <div style={{ width: 7, height: 7, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 6px ${ds.cyan}`, flexShrink: 0 }} />
+        <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", gap: 7 }}>
+          <div style={{ fontFamily: fonts.display, width: 7, height: 7, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 6px ${ds.cyan}`, flexShrink: 0 }} />
           <span style={{ fontSize: 12, fontFamily: fonts.mono, color: ds.fgMuted, letterSpacing: "0.12em", textTransform: "uppercase" as const }}>即時預覽 · 環境指紋</span>
         </div>
-        <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
-          <div style={{ position: "relative" as const, width: 220, height: 220, flexShrink: 0 }}>
+        <div style={{ fontFamily: fonts.display, display: "flex", gap: 20, alignItems: "center" }}>
+          <div style={{ fontFamily: fonts.display, position: "relative" as const, width: 220, height: 220, flexShrink: 0 }}>
             {sliderProgress > 0.02 && sliderProgress < 0.99 && [0, 1].map((k) => {
               const ph = ((lB + k * 22) % 44) / 44;
-              return <div key={k} style={{
+              return <div key={k} style={{ fontFamily: fonts.display,
                 position: "absolute" as const, left: "50%", top: "50%",
                 width: 196, height: 196, marginLeft: -98, marginTop: -98, borderRadius: "50%",
                 border: `1.5px solid ${ds.cyan}`,
@@ -607,12 +607,12 @@ const B2RightPanel: React.FC<{
             })}
             <HexRadar size={220} values={liveEnvVals} labels={envLabels} color={ds.blue} fillColor="rgba(33,81,245,0.14)" prog={hexProg} />
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+          <div style={{ fontFamily: fonts.display, display: "flex", flexDirection: "column", gap: 4 }}>
+            <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "baseline", gap: 4 }}>
               <span style={{ fontSize: 56, fontFamily: fonts.mono, fontWeight: 700, color: ds.blue, fontVariantNumeric: "tabular-nums", lineHeight: 1 }}>{pressureScore}</span>
               <span style={{ fontSize: 16, fontFamily: fonts.mono, color: ds.fgFaint }}>/100</span>
             </div>
-            <span style={{ fontSize: 12, color: ds.fgMuted }}>綜合壓力指數</span>
+            <span style={{ fontFamily: fonts.display, fontSize: 12, color: ds.fgMuted }}>綜合壓力指數</span>
             {sliderProgress > 0.1 && (
               <span style={{
                 fontSize: 11, color: ds.fgSecondary, fontFamily: fonts.display, lineHeight: 1.5,
@@ -625,16 +625,16 @@ const B2RightPanel: React.FC<{
         </div>
       </div>
       {/* MBTI grid card */}
-      <div style={{
+      <div style={{ fontFamily: fonts.display,
         background: "#FFFFFF", borderRadius: 12, padding: "16px 20px",
         border: "1px solid rgba(8,16,40,0.06)", boxShadow: `0 4px 24px rgba(8,16,40,0.08), ${gridRing}`,
         display: "flex", flexDirection: "column", gap: 10, opacity: gridDim, transition: "none",
       }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ fontFamily: fonts.display, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontSize: 12, fontFamily: fonts.mono, color: ds.fgMuted, letterSpacing: "0.10em", textTransform: "uppercase" as const }}>人格適配 · 16 型</span>
           {sliderProgress > 0.02 && sliderProgress < 0.99 ? (
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 ${4 + 5 * (0.5 + 0.5 * Math.sin(lB * 0.4))}px ${ds.cyan}` }} />
+            <span style={{ fontFamily: fonts.display, display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <span style={{ fontFamily: fonts.display, width: 6, height: 6, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 ${4 + 5 * (0.5 + 0.5 * Math.sin(lB * 0.4))}px ${ds.cyan}` }} />
               <span style={{ fontSize: 11, fontFamily: fonts.mono, color: "#066B7C" }}>即時重算中</span>
             </span>
           ) : (
@@ -649,13 +649,13 @@ const B2RightPanel: React.FC<{
         }}>
           拖動環境滑桿，系統即時重算每一型人格在此職位的預測適配。
         </div>
-        <div style={{ display: "flex", gap: 16, marginTop: 2 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#1B7A4D" }} />
+        <div style={{ fontFamily: fonts.display, display: "flex", gap: 16, marginTop: 2 }}>
+          <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", gap: 5 }}>
+            <div style={{ fontFamily: fonts.display, width: 8, height: 8, borderRadius: "50%", background: "#1B7A4D" }} />
             <span style={{ fontSize: 10, fontFamily: fonts.mono, color: ds.fgMuted }}>最佳適配</span>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#B83A2E" }} />
+          <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", gap: 5 }}>
+            <div style={{ fontFamily: fonts.display, width: 8, height: 8, borderRadius: "50%", background: "#B83A2E" }} />
             <span style={{ fontSize: 10, fontFamily: fonts.mono, color: ds.fgMuted }}>摩擦風險</span>
           </div>
         </div>
@@ -674,30 +674,30 @@ const AppBar: React.FC<{ step: 0 | 1 | 2; op: number; embedded?: boolean }> = ({
     { n: "03", label: "確認送出", done: step > 2, active: step === 2 },
   ];
   return (
-    <div style={{ ...(embedded ? {} : { position: "absolute" as const, top: 0, left: 0, right: 0 }), opacity: op, zIndex: 10 }}>
+    <div style={{ fontFamily: fonts.display, ...(embedded ? {} : { position: "absolute" as const, top: 0, left: 0, right: 0 }), opacity: op, zIndex: 10 }}>
       {/* Top bar */}
-      <div style={{ height: 52, background: "#FFFFFF", borderBottom: "1px solid rgba(8,16,40,0.06)", display: "flex", alignItems: "center", padding: "0 32px", gap: 24 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 9, flexShrink: 0 }}>
-          <div style={{ width: 22, height: 22, borderRadius: 5, background: "linear-gradient(135deg,#1430A0,#2151F5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ fontFamily: fonts.display, height: 52, background: "#FFFFFF", borderBottom: "1px solid rgba(8,16,40,0.06)", display: "flex", alignItems: "center", padding: "0 32px", gap: 24 }}>
+        <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", gap: 9, flexShrink: 0 }}>
+          <div style={{ fontFamily: fonts.display, width: 22, height: 22, borderRadius: 5, background: "linear-gradient(135deg,#1430A0,#2151F5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <span style={{ fontSize: 9, fontFamily: fonts.mono, fontWeight: 800, color: "#FFF" }}>HC</span>
           </div>
           <span style={{ fontSize: 14, fontWeight: 700, color: ds.fgPrimary, fontFamily: fonts.display }}>HireCook</span>
         </div>
         <span style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.fgFaint, letterSpacing: "0.10em" }}>ROLE ENVIRONMENTS · NEW ENVIRONMENT</span>
-        <div style={{ flex: 1 }} />
-        <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 11px", borderRadius: 999, border: "1px solid rgba(0,180,216,0.28)", background: "rgba(0,180,216,0.06)" }}>
-          <div style={{ width: 6, height: 6, borderRadius: "50%", background: ds.cyan, opacity: dotPulse, boxShadow: `0 0 ${4 + 5 * dotPulse}px ${ds.cyan}` }} />
+        <div style={{ fontFamily: fonts.display, flex: 1 }} />
+        <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", gap: 6, padding: "4px 11px", borderRadius: 999, border: "1px solid rgba(0,180,216,0.28)", background: "rgba(0,180,216,0.06)" }}>
+          <div style={{ fontFamily: fonts.display, width: 6, height: 6, borderRadius: "50%", background: ds.cyan, opacity: dotPulse, boxShadow: `0 0 ${4 + 5 * dotPulse}px ${ds.cyan}` }} />
           <span style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.cyan, letterSpacing: "0.08em" }}>inference active</span>
         </div>
       </div>
       {/* Step tabs */}
-      <div style={{ background: "#FFFFFF", borderBottom: "1px solid rgba(8,16,40,0.05)", padding: "10px 32px 0", display: "flex", alignItems: "center" }}>
+      <div style={{ fontFamily: fonts.display, background: "#FFFFFF", borderBottom: "1px solid rgba(8,16,40,0.05)", padding: "10px 32px 0", display: "flex", alignItems: "center" }}>
         {steps.map((s, i) => (
           <React.Fragment key={s.n}>
-            {i > 0 && <div style={{ width: 40, height: 1, background: s.done || s.active ? ds.blue : "rgba(8,16,40,0.10)", margin: "0 4px", marginBottom: 10 }} />}
-            <div style={{ display: "flex", alignItems: "center", gap: 6, paddingBottom: 10, borderBottom: s.active ? `2px solid ${ds.blue}` : "2px solid transparent" }}>
-              <div style={{ width: 20, height: 20, borderRadius: "50%", background: s.done || s.active ? ds.blue : "transparent", border: `1.5px solid ${s.done || s.active ? ds.blue : "rgba(8,16,40,0.18)"}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                {s.done ? <span style={{ fontSize: 10, color: "#FFF" }}>✓</span> : <span style={{ fontSize: 9, fontFamily: fonts.mono, fontWeight: 700, color: s.active ? "#FFF" : ds.fgFaint }}>{s.n}</span>}
+            {i > 0 && <div style={{ fontFamily: fonts.display, width: 40, height: 1, background: s.done || s.active ? ds.blue : "rgba(8,16,40,0.10)", margin: "0 4px", marginBottom: 10 }} />}
+            <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", gap: 6, paddingBottom: 10, borderBottom: s.active ? `2px solid ${ds.blue}` : "2px solid transparent" }}>
+              <div style={{ fontFamily: fonts.display, width: 20, height: 20, borderRadius: "50%", background: s.done || s.active ? ds.blue : "transparent", border: `1.5px solid ${s.done || s.active ? ds.blue : "rgba(8,16,40,0.18)"}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {s.done ? <span style={{ fontFamily: fonts.display, fontSize: 10, color: "#FFF" }}>✓</span> : <span style={{ fontSize: 9, fontFamily: fonts.mono, fontWeight: 700, color: s.active ? "#FFF" : ds.fgFaint }}>{s.n}</span>}
               </div>
               <span style={{ fontSize: 12, fontFamily: fonts.display, fontWeight: s.active ? 600 : 400, color: s.active ? ds.fgPrimary : ds.fgMuted }}>{s.label}</span>
             </div>
@@ -740,7 +740,7 @@ const B2LeftA: React.FC<{ lf: number }> = ({ lf }) => {
   const btnSc = interpolate(lf, [440, 444, 450], [1, 0.94, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
-    <div style={{
+    <div style={{ fontFamily: fonts.display,
       background: "#FFFFFF", borderRadius: 12, padding: "30px 32px",
       border: "1px solid rgba(8,16,40,0.06)", boxShadow: "0 4px 24px rgba(8,16,40,0.08)",
       flex: 1, display: "flex", flexDirection: "column", gap: 20, opacity: op,
@@ -748,39 +748,39 @@ const B2LeftA: React.FC<{ lf: number }> = ({ lf }) => {
     }}>
       <div style={{ fontSize: 13, fontFamily: fonts.mono, color: ds.fgMuted, letterSpacing: "0.12em", textTransform: "uppercase" as const }}>基本資料</div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+      <div style={{ fontFamily: fonts.display, display: "flex", flexDirection: "column", gap: 5 }}>
         <label style={{ fontSize: 14, color: ds.fgSecondary, fontFamily: fonts.display, fontWeight: 500 }}>職位名稱</label>
-        <div style={{ height: 44, borderRadius: 6, border: `1.5px solid ${showRole ? ds.blue : "rgba(8,16,40,0.14)"}`, padding: "0 14px", display: "flex", alignItems: "center", background: "#FAFBFD" }}>
+        <div style={{ fontFamily: fonts.display, height: 44, borderRadius: 6, border: `1.5px solid ${showRole ? ds.blue : "rgba(8,16,40,0.14)"}`, padding: "0 14px", display: "flex", alignItems: "center", background: "#FAFBFD" }}>
           {showRole ? <FieldTyped text="後端工程師 L3" startF={40} charDur={7} lf={lf} /> : <span style={{ color: ds.fgFaint, fontSize: 15, fontFamily: fonts.display }}>例：後端工程師 L3</span>}
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+      <div style={{ fontFamily: fonts.display, display: "flex", flexDirection: "column", gap: 5 }}>
         <label style={{ fontSize: 14, color: ds.fgSecondary, fontFamily: fonts.display, fontWeight: 500 }}>團隊背景</label>
-        <div style={{ height: 44, borderRadius: 6, border: `1.5px solid ${showTeam ? ds.blue : "rgba(8,16,40,0.14)"}`, padding: "0 14px", display: "flex", alignItems: "center", background: "#FAFBFD" }}>
+        <div style={{ fontFamily: fonts.display, height: 44, borderRadius: 6, border: `1.5px solid ${showTeam ? ds.blue : "rgba(8,16,40,0.14)"}`, padding: "0 14px", display: "flex", alignItems: "center", background: "#FAFBFD" }}>
           {showTeam ? <FieldTyped text="平台組 · 6 人" startF={160} charDur={6} lf={lf} /> : <span style={{ color: ds.fgFaint, fontSize: 15, fontFamily: fonts.display }}>例：平台組 · 6 人</span>}
         </div>
         <span style={{ fontSize: 11, color: ds.fgFaint, fontFamily: fonts.display }}>例：「平台組·6人，非同步優先，RFC 配對評審」</span>
       </div>
 
-      <div style={{ display: "flex", gap: 14, opacity: interpolate(lf, [260, 272], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 5 }}>
+      <div style={{ fontFamily: fonts.display, display: "flex", gap: 14, opacity: interpolate(lf, [260, 272], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) }}>
+        <div style={{ fontFamily: fonts.display, flex: 1, display: "flex", flexDirection: "column", gap: 5 }}>
           <label style={{ fontSize: 14, color: ds.fgSecondary, fontFamily: fonts.display, fontWeight: 500 }}>匯報對象</label>
-          <div style={{ height: 44, borderRadius: 6, border: "1.5px solid rgba(8,16,40,0.14)", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "#FAFBFD" }}>
+          <div style={{ fontFamily: fonts.display, height: 44, borderRadius: 6, border: "1.5px solid rgba(8,16,40,0.14)", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "#FAFBFD" }}>
             <span style={{ fontSize: 14, fontFamily: fonts.display, color: ds.fgPrimary }}>回報資深工程師</span>
-            <span style={{ fontSize: 11, color: ds.fgFaint }}>▾</span>
+            <span style={{ fontFamily: fonts.display, fontSize: 11, color: ds.fgFaint }}>▾</span>
           </div>
         </div>
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 5 }}>
+        <div style={{ fontFamily: fonts.display, flex: 1, display: "flex", flexDirection: "column", gap: 5 }}>
           <label style={{ fontSize: 14, color: ds.fgSecondary, fontFamily: fonts.display, fontWeight: 500 }}>招募急迫性</label>
-          <div style={{ height: 44, borderRadius: 6, border: "1.5px solid rgba(8,16,40,0.14)", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "#FAFBFD" }}>
+          <div style={{ fontFamily: fonts.display, height: 44, borderRadius: 6, border: "1.5px solid rgba(8,16,40,0.14)", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "#FAFBFD" }}>
             <span style={{ fontSize: 14, fontFamily: fonts.display, color: ds.fgPrimary }}>30 天內</span>
-            <span style={{ fontSize: 11, color: ds.fgFaint }}>▾</span>
+            <span style={{ fontFamily: fonts.display, fontSize: 11, color: ds.fgFaint }}>▾</span>
           </div>
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" }}>
+      <div style={{ fontFamily: fonts.display, display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" }}>
         <span style={{ fontSize: 13, color: ds.fgFaint, fontFamily: fonts.display }}>第 1 步，共 3 步</span>
         <div style={{ opacity: btnOp, transform: `scale(${btnSc})`, padding: "11px 28px", borderRadius: 7, background: ds.blue, color: "#FFF", fontSize: 15, fontFamily: fonts.display, fontWeight: 600, boxShadow: lf > 340 ? `0 0 0 ${2 + 4 * (0.5 + 0.5 * Math.sin(lf * 0.2))}px rgba(33,81,245,${0.18 + 0.12 * (0.5 + 0.5 * Math.sin(lf * 0.2))})` : "none" }}>繼續 →</div>
       </div>
@@ -795,7 +795,7 @@ const B2LeftB: React.FC<{ lf: number }> = ({ lf }) => {
   const btnSc = interpolate(lf, [450, 454, 460], [1, 0.93, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
-    <div style={{
+    <div style={{ fontFamily: fonts.display,
       background: "#FFFFFF", borderRadius: 12, padding: "26px 28px",
       border: "1px solid rgba(8,16,40,0.06)", boxShadow: "0 4px 24px rgba(8,16,40,0.08)",
       flex: 1, display: "flex", flexDirection: "column", gap: 14, opacity: op,
@@ -808,7 +808,7 @@ const B2LeftB: React.FC<{ lf: number }> = ({ lf }) => {
       {bSliders.map((s) => (
         <SliderRow key={s.label} label={s.label} leftLabel={s.leftLabel} rightLabel={s.rightLabel} value={s.target} localFrame={lf} barStart={s.barStart} color={s.color} />
       ))}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 4 }}>
+      <div style={{ fontFamily: fonts.display, display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 4 }}>
         <div style={{ padding: "9px 18px", borderRadius: 7, border: "1px solid rgba(8,16,40,0.14)", fontSize: 13, fontFamily: fonts.display, color: ds.fgSecondary }}>← 返回</div>
         <div style={{ opacity: btnOp, transform: `scale(${btnSc})`, padding: "11px 28px", borderRadius: 7, background: ds.blue, color: "#FFF", fontSize: 15, fontFamily: fonts.display, fontWeight: 600, boxShadow: lf > 408 ? `0 0 0 ${2 + 4 * (0.5 + 0.5 * Math.sin(lf * 0.2))}px rgba(33,81,245,${0.18 + 0.12 * (0.5 + 0.5 * Math.sin(lf * 0.2))})` : "none" }}>繼續 →</div>
       </div>
@@ -833,7 +833,7 @@ const B2LeftC: React.FC<{ lf: number }> = ({ lf }) => {
   const btnSc = interpolate(lf, [180, 184, 190], [1, 0.93, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
-    <div style={{
+    <div style={{ fontFamily: fonts.display,
       background: "#FFFFFF", borderRadius: 12, padding: "26px 28px",
       border: "1px solid rgba(8,16,40,0.06)", boxShadow: "0 4px 24px rgba(8,16,40,0.08)",
       flex: 1, display: "flex", flexDirection: "column", gap: 0, opacity: op,
@@ -841,7 +841,7 @@ const B2LeftC: React.FC<{ lf: number }> = ({ lf }) => {
     }}>
       <div style={{ fontSize: 13, fontFamily: fonts.mono, color: ds.fgMuted, letterSpacing: "0.12em", textTransform: "uppercase" as const, marginBottom: 14 }}>確認送出</div>
       {rows.map((row, i) => (
-        <div key={row.label} style={{
+        <div key={row.label} style={{ fontFamily: fonts.display,
           opacity: interpolate(lf, [i * 7, i * 7 + 12], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
           display: "flex", justifyContent: "space-between", alignItems: "center",
           padding: "10px 0",
@@ -851,7 +851,7 @@ const B2LeftC: React.FC<{ lf: number }> = ({ lf }) => {
           <span style={{ fontSize: 14, fontWeight: 500, color: ds.fgPrimary, fontFamily: fonts.display }}>{row.value}</span>
         </div>
       ))}
-      <div style={{ opacity: bannerOp, marginTop: 16, background: "#F0F4FE", borderRadius: 8, border: "1px solid rgba(33,81,245,0.15)", padding: "14px 18px" }}>
+      <div style={{ fontFamily: fonts.display, opacity: bannerOp, marginTop: 16, background: "#F0F4FE", borderRadius: 8, border: "1px solid rgba(33,81,245,0.15)", padding: "14px 18px" }}>
         <div style={{ fontSize: 17, fontWeight: 700, color: ds.fgPrimary, fontFamily: fonts.display, marginBottom: 4 }}>就緒，可以建模了。</div>
         <div style={{ fontSize: 12, color: ds.fgSecondary, fontFamily: fonts.display, lineHeight: 1.5, marginBottom: 12 }}>系統將生成環境指紋、16 種人格的適配分佈，以及摩擦風險提示。約需 12 秒。</div>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 20px", borderRadius: 7, background: ds.blue, color: "#FFF", fontSize: 14, fontFamily: fonts.display, fontWeight: 600, transform: `scale(${btnSc})`, boxShadow: lf > 130 ? `0 0 0 ${2 + 5 * (0.5 + 0.5 * Math.sin(lf * 0.2))}px rgba(33,81,245,${0.20 + 0.14 * (0.5 + 0.5 * Math.sin(lf * 0.2))})` : "none" }}>
@@ -942,7 +942,7 @@ const B2Define: React.FC = () => {
   const calloutSide: "left" | "right" = active?.panel === "left" ? "left" : "right";
 
   return (
-    <AbsoluteFill style={{ opacity: sceneOp }}>
+    <AbsoluteFill style={{ fontFamily: fonts.display, opacity: sceneOp }}>
       <BgCalm theme="light" tint="blue" />
 
       {/* AI Tech Noise for Phase B and C */}
@@ -963,7 +963,7 @@ const B2Define: React.FC = () => {
         <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNErie_Magic Generic Potion, Explosion, Burst, Alchemy, Small Bubbles 03_ASD.wav")} volume={0.4} />
       </Sequence>      {/* ── Floating explanation text (dynamic, not a fixed header) ── */}
       {active && calloutOp > 0.01 && (
-        <div style={{
+        <div style={{ fontFamily: fonts.display,
           position: "absolute", zIndex: 9, top: 286, width: 560, padding: "28px 32px",
           ...(calloutSide === "left" ? { left: 56 } : { right: 56 }),
           opacity: calloutOp * m.opacity, transform: `translateY(${calloutRise}px)`,
@@ -975,9 +975,9 @@ const B2Define: React.FC = () => {
           boxShadow: "0 24px 80px rgba(8,16,40,0.08)",
           ...(calloutSide === "left" ? { display: "flex", flexDirection: "column" as const, alignItems: "flex-end" } : {}),
         }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+          <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
             <span style={{ fontSize: 30, fontFamily: fonts.mono, fontWeight: 700, color: ds.blue }}>{active.n}</span>
-            <span style={{ width: 38, height: 2, background: `${ds.blue}50` }} />
+            <span style={{ fontFamily: fonts.display, width: 38, height: 2, background: `${ds.blue}50` }} />
           </div>
           <div style={{ fontSize: 52, fontWeight: 800, color: ds.fgPrimary, fontFamily: fonts.display, letterSpacing: "-2px", lineHeight: 1.12, whiteSpace: "nowrap" as const }}>{active.title}</div>
           <div style={{ marginTop: 14, fontSize: 21, color: ds.fgSecondary, fontFamily: fonts.display, lineHeight: 1.55, maxWidth: 400 }}>{active.desc}</div>
@@ -985,7 +985,7 @@ const B2Define: React.FC = () => {
       )}
 
       {/* ── The COMPLETE interface, with a camera that zooms into regions ── */}
-      <AbsoluteFill style={{ opacity: cardOp * m.opacity, display: "flex", alignItems: "center", justifyContent: "center", perspective: "1800px" }}>
+      <AbsoluteFill style={{ fontFamily: fonts.display, opacity: cardOp * m.opacity, display: "flex", alignItems: "center", justifyContent: "center", perspective: "1800px" }}>
         {(() => {
           const entryTiltX = interpolate(frame, [0, 55], [16, 1], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
           const baseY = interpolate(frame, [0, 55], [80, 28], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -994,23 +994,23 @@ const B2Define: React.FC = () => {
           const floatOsc = frame > 60 ? Math.sin(frame * 0.04) * floatAmp : 0;
           return (
             // Camera wrapper — scales about the focused region's origin, then returns
-            <div style={{ transformOrigin: "50% 50%", transform: `translate(${-camZoom * (camOx - 50)}%, ${-camZoom * (camOy - 50)}%) scale(${camZoom})` }}>
-              <div style={{
+            <div style={{ fontFamily: fonts.display, transformOrigin: "50% 50%", transform: `translate(${-camZoom * (camOx - 50)}%, ${-camZoom * (camOy - 50)}%) scale(${camZoom})` }}>
+              <div style={{ fontFamily: fonts.display,
                 transform: `translateY(${baseY + floatOsc}px) rotateX(${entryTiltX}deg) scale(0.92)`,
                 width: 1440, background: "#FFFFFF", borderRadius: 16,
                 boxShadow: "0 52px 150px rgba(0,0,0,0.72), 0 0 0 1px rgba(255,255,255,0.07)",
                 overflow: "hidden" as const, display: "flex", flexDirection: "column" as const,
               }}>
                 <AppBar step={appBarStep} op={1} embedded />
-                <div style={{ display: "flex", flexDirection: "row" as const, gap: 16, padding: "20px 24px", background: "#F5F6FA", flex: 1 }}>
+                <div style={{ fontFamily: fonts.display, display: "flex", flexDirection: "row" as const, gap: 16, padding: "20px 24px", background: "#F5F6FA", flex: 1 }}>
                   {/* Left slot — crossfaded panels overlaid, dim + glow per focus */}
-                  <div style={{ flex: 1, position: "relative" as const, display: "flex", borderRadius: 12, opacity: leftDim, boxShadow: ring(leftGlow), minHeight: 520 }}>
-                    {frame < PB + 18 && <div style={{ position: "absolute", inset: 0, display: "flex", opacity: aOp }}><B2LeftA lf={lA} /></div>}
-                    {frame >= PB - 18 && frame < PC + 18 && <div style={{ position: "absolute", inset: 0, display: "flex", opacity: bOp }}><B2LeftB lf={lB} /></div>}
-                    {frame >= PC - 18 && <div style={{ position: "absolute", inset: 0, display: "flex", opacity: cOp }}><B2LeftC lf={lC} /></div>}
+                  <div style={{ fontFamily: fonts.display, flex: 1, position: "relative" as const, display: "flex", borderRadius: 12, opacity: leftDim, boxShadow: ring(leftGlow), minHeight: 520 }}>
+                    {frame < PB + 18 && <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, display: "flex", opacity: aOp }}><B2LeftA lf={lA} /></div>}
+                    {frame >= PB - 18 && frame < PC + 18 && <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, display: "flex", opacity: bOp }}><B2LeftB lf={lB} /></div>}
+                    {frame >= PC - 18 && <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, display: "flex", opacity: cOp }}><B2LeftC lf={lC} /></div>}
                   </div>
                   {/* Right slot — per-section radar/grid glow */}
-                  <div style={{ flexShrink: 0, display: "flex", borderRadius: 12 }}>
+                  <div style={{ fontFamily: fonts.display, flexShrink: 0, display: "flex", borderRadius: 12 }}>
                     <B2RightPanel liveEnvVals={liveEnvVals} hexProg={hexProg} pressureScore={pressureScore} sliderProgress={sliderProgress} lB={panelLB} radarGlow={radarGlow} gridGlow={gridGlow} radarDim={radarDim} gridDim={gridDim} />
                   </div>
                 </div>
@@ -1033,9 +1033,9 @@ const PingDot: React.FC<{ frame: number; color?: string }> = ({ frame, color = "
   const ringSc = interpolate(frame, [6, 36], [0.5, 2.2], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const ringOp = interpolate(frame, [6, 20, 36], [0.6, 0.3, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
-    <div style={{ position: "relative", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", opacity: op, marginBottom: 28 }}>
-      <div style={{ position: "absolute", width: 24, height: 24, borderRadius: "50%", border: `1.5px solid ${color}`, transform: `scale(${ringSc})`, opacity: ringOp }} />
-      <div style={{ width: 14, height: 14, borderRadius: "50%", background: color, boxShadow: `0 0 18px ${color}`, transform: `scale(${sc})` }} />
+    <div style={{ fontFamily: fonts.display, position: "relative", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", opacity: op, marginBottom: 28 }}>
+      <div style={{ fontFamily: fonts.display, position: "absolute", width: 24, height: 24, borderRadius: "50%", border: `1.5px solid ${color}`, transform: `scale(${ringSc})`, opacity: ringOp }} />
+      <div style={{ fontFamily: fonts.display, width: 14, height: 14, borderRadius: "50%", background: color, boxShadow: `0 0 18px ${color}`, transform: `scale(${sc})` }} />
     </div>
   );
 };
@@ -1063,7 +1063,7 @@ const B3Bridge: React.FC = () => {
   const outOp = interpolate(frame, [336, 360], [1, 0], cl);
 
   return (
-    <AbsoluteFill style={{ opacity: rootOp * outOp }}>
+    <AbsoluteFill style={{ fontFamily: fonts.display, opacity: rootOp * outOp }}>
       <BgCalm theme="dark" tint="blue" />
 
       {/* Riser transition */}
@@ -1073,34 +1073,34 @@ const B3Bridge: React.FC = () => {
       />
 
       {/* P1: 有了環境，下一步—— */}
-      <AbsoluteFill style={{ opacity: p1Op, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 0 }}>
+      <AbsoluteFill style={{ fontFamily: fonts.display, opacity: p1Op, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", gap: 0 }}>
           <TypewriterText text="有了環境，下一步" startFrame={6} charStagger={2} fontSize={88} fontWeight={850} colorScheme="white" letterSpacing="-0.04em" />
-          <div style={{ width: p1DashW, height: 8, background: `linear-gradient(90deg, ${colors.hcCyanBright}, transparent)`, borderRadius: 4, marginLeft: 8, boxShadow: `0 0 24px ${colors.hcCyanBright}` }} />
+          <div style={{ fontFamily: fonts.display, width: p1DashW, height: 8, background: `linear-gradient(90deg, ${colors.hcCyanBright}, transparent)`, borderRadius: 4, marginLeft: 8, boxShadow: `0 0 24px ${colors.hcCyanBright}` }} />
         </div>
       </AbsoluteFill>
 
       {/* P2: STEP 02 · INTERACT + 求職者視角 */}
-      <AbsoluteFill style={{ opacity: p2Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -150px)" }}>
+      <AbsoluteFill style={{ fontFamily: fonts.display, opacity: p2Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontFamily: fonts.display, position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -150px)" }}>
           <PingDot frame={Math.max(0, frame - 78)} color="#5B8AFF" />
         </div>
-        <div style={{ marginBottom: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 16px", borderRadius: 999, border: "1px solid rgba(91,138,255,0.40)", background: "rgba(91,138,255,0.15)" }}>
-          <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#5B8AFF", boxShadow: "0 0 8px #5B8AFF" }} />
+        <div style={{ fontFamily: fonts.display, marginBottom: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 16px", borderRadius: 999, border: "1px solid rgba(91,138,255,0.40)", background: "rgba(91,138,255,0.15)" }}>
+          <div style={{ fontFamily: fonts.display, width: 6, height: 6, borderRadius: "50%", background: "#5B8AFF", boxShadow: "0 0 8px #5B8AFF" }} />
           <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#9CB6FF", letterSpacing: "0.24em" }}>STEP 02 · INTERACT</span>
         </div>
         <TypewriterText text="求職者視角" startFrame={88} charStagger={3} fontSize={110} fontWeight={800} colorScheme="white-to-cyan" />
       </AbsoluteFill>
 
       {/* P3: 他收到了—— 一份邀請 */}
-      <AbsoluteFill style={{ opacity: p3Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12 }}>
-        <div style={{ color: colors.dimWhite, fontSize: 36, fontWeight: 700, letterSpacing: "-0.02em" }}>他收到了——</div>
-        <div style={{ color: "#FFFFFF", fontSize: 96, fontWeight: 900, letterSpacing: "-0.06em", opacity: p3SubOp, transform: `translateY(${p3SubY}px)` }}>一份邀請</div>
+      <AbsoluteFill style={{ fontFamily: fonts.display, opacity: p3Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12 }}>
+        <div style={{ fontFamily: fonts.display, color: colors.dimWhite, fontSize: 36, fontWeight: 700, letterSpacing: "-0.02em" }}>他收到了——</div>
+        <div style={{ fontFamily: fonts.display, color: "#FFFFFF", fontSize: 96, fontWeight: 900, letterSpacing: "-0.06em", opacity: p3SubOp, transform: `translateY(${p3SubY}px)` }}>一份邀請</div>
       </AbsoluteFill>
 
       {/* P4: SJT 情境測驗 */}
-      <AbsoluteFill style={{ opacity: p4Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -150px)" }}>
+      <AbsoluteFill style={{ fontFamily: fonts.display, opacity: p4Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontFamily: fonts.display, position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -150px)" }}>
           <PingDot frame={Math.max(0, frame - 234)} color="#5B8AFF" />
         </div>
         <TypewriterText text="SJT 情境測驗" startFrame={244} charStagger={3} fontSize={110} fontWeight={800} colorScheme="white-to-cyan" />
@@ -1145,34 +1145,34 @@ const SJTCard: React.FC<{
   const breathe = Math.sin(localFrame / 30) * 3;
 
   return (
-    <div style={{
+    <div style={{ fontFamily: fonts.display,
       opacity: cardOp,
       transform: `translateY(${cardY + breathe}px) scale(${cardSc}) perspective(1000px) rotateX(${cardRotX}deg)`,
       width: 1100, borderRadius: 12, overflow: "hidden" as const, position: "relative" as const,
       boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)",
     }}>
       {/* Header */}
-      <div style={{ background: "#131826", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "14px 24px", display: "flex", alignItems: "center", gap: 12 }}>
-        <div style={{ width: 26, height: 26, borderRadius: 6, background: "linear-gradient(135deg,#1430A0,#2151F5)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+      <div style={{ fontFamily: fonts.display, background: "#131826", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "14px 24px", display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{ fontFamily: fonts.display, width: 26, height: 26, borderRadius: 6, background: "linear-gradient(135deg,#1430A0,#2151F5)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
           <span style={{ fontSize: 11, fontFamily: fonts.mono, fontWeight: 700, color: "#FFF" }}>HC</span>
         </div>
         <span style={{ fontSize: 14, fontWeight: 600, color: colors.softWhite, fontFamily: fonts.display }}>HireCook</span>
         <span style={{ fontSize: 13, fontFamily: fonts.mono, color: colors.dimWhite }}>後端工程師 L3 · Aurora Robotics</span>
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{ fontFamily: fonts.display, marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ fontSize: 12, fontFamily: fonts.mono, color: colors.dimWhite }}>{questionNum} / {totalQ}</span>
-          <div style={{ width: 120, height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 9999 }}>
-            <div style={{ height: "100%", width: `${progressPct}%`, background: ds.blue, borderRadius: 9999, transition: "none" }} />
+          <div style={{ fontFamily: fonts.display, width: 120, height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 9999 }}>
+            <div style={{ fontFamily: fonts.display, height: "100%", width: `${progressPct}%`, background: ds.blue, borderRadius: 9999, transition: "none" }} />
           </div>
           <div style={{ padding: "4px 10px", borderRadius: 4, border: "1px solid rgba(255,255,255,0.10)", fontSize: 12, fontFamily: fonts.mono, color: ds.fgFaint }}>儲存並離開</div>
         </div>
       </div>
 
       {/* Body */}
-      <div style={{ background: "#1A2030", padding: "28px 32px", display: "flex", flexDirection: "column", gap: 16 }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 8 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <div style={{ fontFamily: fonts.display, background: "#1A2030", padding: "28px 32px", display: "flex", flexDirection: "column", gap: 16 }}>
+        <div style={{ fontFamily: fonts.display, display: "flex", flexDirection: "column", gap: 16, marginBottom: 8 }}>
+          <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ fontSize: 12, fontFamily: fonts.mono, color: ds.fgMuted, letterSpacing: "0.10em", textTransform: "uppercase" as const }}>{tag}</span>
-            <div style={{ width: 5, height: 5, borderRadius: "50%", background: ds.cyan }} />
+            <div style={{ fontFamily: fonts.display, width: 5, height: 5, borderRadius: "50%", background: ds.cyan }} />
             <span style={{ fontSize: 12, fontFamily: fonts.mono, color: ds.fgMuted }}>沒有明顯正確答案 · 選你真實會做的</span>
           </div>
           <div style={{ fontSize: 26, color: colors.softWhite, lineHeight: 1.6, fontFamily: fonts.display }}>{scenario}</div>
@@ -1191,7 +1191,7 @@ const SJTCard: React.FC<{
           const rippleOp = selected ? interpolate(localFrame, [clickFrame, clickFrame + 16, clickFrame + 48], [0.45, 0.22, 0], cl) : 0;
           
           return (
-            <div key={opt.letter} style={{
+            <div key={opt.letter} style={{ fontFamily: fonts.display,
               opacity: optOp, transform: `translateY(${optY}px) scale(${pop})`,
               display: "flex", alignItems: "center", gap: 14, height: 58, boxSizing: "border-box" as const, padding: "0 18px", borderRadius: 10,
               background: selected ? "rgba(33,81,245,0.18)" : "rgba(255,255,255,0.03)",
@@ -1200,23 +1200,23 @@ const SJTCard: React.FC<{
               position: "relative" as const, overflow: "hidden" as const, transition: "none",
             }}>
               {selected && (
-                <div style={{
+                <div style={{ fontFamily: fonts.display,
                   position: "absolute", left: "50%", top: "50%", width: 80, height: 80, borderRadius: "50%",
                   background: "rgba(33,81,245,0.40)", transform: `translate(-50%, -50%) scale(${rippleSc})`, opacity: rippleOp, pointerEvents: "none",
                 }} />
               )}
-              <div style={{ width: 34, height: 34, borderRadius: 8, background: selected ? ds.blue : "rgba(255,255,255,0.06)", border: `1.5px solid ${selected ? ds.blue : "rgba(255,255,255,0.10)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 1, transition: "none" }}>
+              <div style={{ fontFamily: fonts.display, width: 34, height: 34, borderRadius: 8, background: selected ? ds.blue : "rgba(255,255,255,0.06)", border: `1.5px solid ${selected ? ds.blue : "rgba(255,255,255,0.10)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, zIndex: 1, transition: "none" }}>
                 <span style={{ fontSize: 15, fontFamily: fonts.mono, fontWeight: 700, color: "#FFF" }}>{opt.letter}</span>
               </div>
               <span style={{ fontSize: 22, color: selected ? colors.softWhite : colors.dimWhite, fontFamily: fonts.display, flex: 1, zIndex: 1 }}>{opt.text}</span>
-              {selected && <span style={{ fontSize: 20, color: ds.cyan, fontWeight: 700, transform: `scale(${tickSc})`, display: "inline-block", zIndex: 1 }}>✓</span>}
+              {selected && <span style={{ fontFamily: fonts.display, fontSize: 20, color: ds.cyan, fontWeight: 700, transform: `scale(${tickSc})`, display: "inline-block", zIndex: 1 }}>✓</span>}
             </div>
           );
         })}
 
         {/* Capture sweep bar */}
         {selectedLetter !== null && (
-          <div style={{
+          <div style={{ fontFamily: fonts.display,
             height: 2, borderRadius: 1, background: `linear-gradient(90deg,${ds.blue},${ds.cyan})`,
             width: `${interpolate(localFrame, [clickFrame + 2, clickFrame + 70], [0, 100], { easing: Easing.out(Easing.cubic), ...cl })}%`,
           }} />
@@ -1264,7 +1264,7 @@ const B4Interact: React.FC = () => {
   const wireRot = frame * 0.4;
 
   return (
-    <AbsoluteFill style={{ opacity: m.opacity }}>
+    <AbsoluteFill style={{ fontFamily: fonts.display, opacity: m.opacity }}>
       <BgCalm theme="dark" tint="blue" />
 
       {/* Room Tone for Remote Meeting Q2 */}
@@ -1275,12 +1275,12 @@ const B4Interact: React.FC = () => {
         />
       </Sequence>
 
-      <AbsoluteFill style={{ transform: m.transform }}>
+      <AbsoluteFill style={{ fontFamily: fonts.display, transform: m.transform }}>
         
-        <div style={{ width: "100%", height: "100%", position: "absolute", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontFamily: fonts.display, width: "100%", height: "100%", position: "absolute", display: "flex", alignItems: "center", justifyContent: "center" }}>
           
           {showQ1 && (
-            <div style={{ position: "absolute", transform: `translateX(${q1ExitX}px) scale(${q1ExitSc})`, opacity: q1ExitOp, zIndex: 10 }}>
+            <div style={{ fontFamily: fonts.display, position: "absolute", transform: `translateX(${q1ExitX}px) scale(${q1ExitSc})`, opacity: q1ExitOp, zIndex: 10 }}>
               <SJTCard
                 questionNum="07" tag="情境 07 · 廚房 · 截止日碰撞"
                 scenario="你負責備餐，傳菜員已在出餐口等待。配菜那端的隊友突然發現食材不夠，開始重備，但沒有開口說。廚師長正在計時，三分鐘後這桌就超時了。"
@@ -1302,7 +1302,7 @@ const B4Interact: React.FC = () => {
           )}
 
           {showQ2 && (
-            <div style={{ position: "absolute", transform: `translateX(${q2EnterX + q2ExitX}px) scale(${q2EnterSc * q2ExitSc})`, opacity: q2EnterOp * q2ExitOp, zIndex: 20 }}>
+            <div style={{ fontFamily: fonts.display, position: "absolute", transform: `translateX(${q2EnterX + q2ExitX}px) scale(${q2EnterSc * q2ExitSc})`, opacity: q2EnterOp * q2ExitOp, zIndex: 20 }}>
               <SJTCard
                 questionNum="08" tag="情境 08 · 遠端會議 · 技術分歧"
                 scenario="你在跨時區的視訊設計評審中，提出的架構方案遭到資深工程師當場否決，理由簡短且缺乏解釋。其他人保持沉默，主持人正準備繼續下一議題。"
@@ -1336,30 +1336,30 @@ const B4Interact: React.FC = () => {
           const loadOp = interpolate(lF, [0, 20, 180, 200], [0, 1, 1, 0], cl);
 
           return (
-            <AbsoluteFill style={{ opacity: loadOp, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 54 }}>
+            <AbsoluteFill style={{ fontFamily: fonts.display, opacity: loadOp, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 54 }}>
               
-              <div style={{ position: "relative", width: 140, height: 140, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ fontFamily: fonts.display, position: "relative", width: 140, height: 140, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 {/* Rotating 3D Hexagon wireframe illusion */}
-                <div style={{ position: "absolute", width: "100%", height: "100%", transform: `rotateZ(${wireRot}deg) rotateX(60deg)`, border: "2px solid rgba(0,180,216,0.3)", borderRadius: "50%" }} />
-                <div style={{ position: "absolute", width: "100%", height: "100%", transform: `rotateZ(${-wireRot * 0.8}deg) rotateY(60deg)`, border: "2px solid rgba(33,81,245,0.4)", borderRadius: "50%" }} />
+                <div style={{ fontFamily: fonts.display, position: "absolute", width: "100%", height: "100%", transform: `rotateZ(${wireRot}deg) rotateX(60deg)`, border: "2px solid rgba(0,180,216,0.3)", borderRadius: "50%" }} />
+                <div style={{ fontFamily: fonts.display, position: "absolute", width: "100%", height: "100%", transform: `rotateZ(${-wireRot * 0.8}deg) rotateY(60deg)`, border: "2px solid rgba(33,81,245,0.4)", borderRadius: "50%" }} />
                 <LucideIcon name="target" size={56} color="#FFF" />
               </div>
 
               <TypewriterText text="分析行為指紋中…" startFrame={qFrame - 490} charStagger={3} fontSize={56} fontWeight={700} colorScheme="white-to-cyan" />
               
-              <div style={{ width: 480, height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 9999 }}>
-                <div style={{ height: "100%", width: `${smoothProg}%`, background: `linear-gradient(90deg,${ds.blue},${ds.cyan})`, borderRadius: 9999, transition: "none" }} />
+              <div style={{ fontFamily: fonts.display, width: 480, height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 9999 }}>
+                <div style={{ fontFamily: fonts.display, height: "100%", width: `${smoothProg}%`, background: `linear-gradient(90deg,${ds.blue},${ds.cyan})`, borderRadius: 9999, transition: "none" }} />
               </div>
 
-              <div style={{ height: 40, overflow: "hidden", position: "relative", width: 400, display: "flex", justifyContent: "center" }}>
+              <div style={{ fontFamily: fonts.display, height: 40, overflow: "hidden", position: "relative", width: 400, display: "flex", justifyContent: "center" }}>
                 {lF >= 30 && traits.map((t, i) => {
                   const tLocal = lF - (30 + i * traitCycle);
                   if (tLocal < 0 || tLocal > traitCycle + 12) return null;
                   const tY = interpolate(tLocal, [0, 8, traitCycle, traitCycle + 8], [30, 0, 0, -30], cl);
                   const tOp = interpolate(tLocal, [0, 8, traitCycle, traitCycle + 8], [0, 1, 1, 0], cl);
                   return (
-                    <div key={t} style={{ position: "absolute", opacity: tOp, transform: `translateY(${tY}px)`, display: "flex", alignItems: "center", gap: 12 }}>
-                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 10px ${ds.cyan}` }} />
+                    <div key={t} style={{ fontFamily: fonts.display, position: "absolute", opacity: tOp, transform: `translateY(${tY}px)`, display: "flex", alignItems: "center", gap: 12 }}>
+                      <div style={{ fontFamily: fonts.display, width: 8, height: 8, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 10px ${ds.cyan}` }} />
                       <span style={{ fontSize: 24, fontFamily: fonts.mono, color: "rgba(255,255,255,0.70)", letterSpacing: "0.14em" }}>{t}</span>
                     </div>
                   );
@@ -1406,7 +1406,7 @@ const B5Capture: React.FC = () => {
   const textY  = interpolate(frame, [50, 70], [28, 0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ opacity: m.opacity }}>
+    <AbsoluteFill style={{ fontFamily: fonts.display, opacity: m.opacity }}>
       <BgCalm theme="dark" tint="blue" />
       
       {/* Deep Impact & Flashback */}
@@ -1419,10 +1419,10 @@ const B5Capture: React.FC = () => {
         volume={(f) => interpolate(f, [190, 214], [0.4, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} 
       />
 
-      <AbsoluteFill style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 44 }}>
+      <AbsoluteFill style={{ fontFamily: fonts.display, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 44 }}>
         {/* Glow halo behind circle — brand blue luminance */}
-        <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div style={{
+        <div style={{ fontFamily: fonts.display, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ fontFamily: fonts.display,
             position: "absolute",
             width: 260, height: 260,
             borderRadius: "50%",
@@ -1436,7 +1436,7 @@ const B5Capture: React.FC = () => {
             const rSc = interpolate(frame - delay, [18, 64], [0.7, 2.0], { easing: Easing.out(Easing.cubic), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
             const rOp = interpolate(frame - delay, [18, 40, 64], [0.55, 0.28, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
             return (
-              <div key={k} style={{
+              <div key={k} style={{ fontFamily: fonts.display,
                 position: "absolute", width: 130, height: 130, borderRadius: "50%",
                 border: "1.5px solid #6FE3F5",
                 transform: `scale(${rSc})`, opacity: rOp,
@@ -1444,7 +1444,7 @@ const B5Capture: React.FC = () => {
             );
           })}
           {/* Brand-blue circle */}
-          <div style={{
+          <div style={{ fontFamily: fonts.display,
             width: 110, height: 110, borderRadius: "50%",
             background: "#2151F5",
             boxShadow: "0 0 0 1px rgba(255,255,255,0.10), 0 0 40px rgba(33,81,245,0.55)",
@@ -1452,7 +1452,7 @@ const B5Capture: React.FC = () => {
             display: "flex", alignItems: "center", justifyContent: "center",
           }}>
             {/* Checkmark */}
-            <div style={{ opacity: tickOp, transform: `scale(${tickSc})` }}>
+            <div style={{ fontFamily: fonts.display, opacity: tickOp, transform: `scale(${tickSc})` }}>
               <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
                 <polyline
                   points="12,28 22,38 40,16"
@@ -1467,7 +1467,7 @@ const B5Capture: React.FC = () => {
         </div>
 
         {/* Text */}
-        <div style={{ opacity: textOp, transform: `translateY(${textY}px)`, textAlign: "center" as const }}>
+        <div style={{ fontFamily: fonts.display, opacity: textOp, transform: `translateY(${textY}px)`, textAlign: "center" as const }}>
           <div style={{ fontSize: 72, fontWeight: 800, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-2px", lineHeight: 1.1 }}>
             行為指紋捕捉完成
           </div>
@@ -1507,7 +1507,7 @@ const B6Bridge: React.FC = () => {
   const p3Op = interpolate(frame, [216, 234, 346, 360], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ opacity: rootOp * outOp }}>
+    <AbsoluteFill style={{ fontFamily: fonts.display, opacity: rootOp * outOp }}>
       <BgCalm theme="dark" tint="blue" />
 
       {/* Swell Riser Transition */}
@@ -1517,28 +1517,28 @@ const B6Bridge: React.FC = () => {
       />
 
       {/* P1: 不知道 / 背後的標準答案是什麼 */}
-      <AbsoluteFill style={{ opacity: p1Op, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 12 }}>
-          <div style={{ color: colors.dimWhite, fontSize: 64, fontWeight: 700, letterSpacing: "-0.02em" }}>不知道</div>
-          <div style={{ color: colors.hcCyanBright, fontSize: 88, fontWeight: 900, letterSpacing: "-0.04em", opacity: p1Line2Op, transform: `translateY(${p1Line2Y}px)`, textShadow: `0 0 36px ${colors.hcCyanBright}44` }}>背後的標準答案是什麼</div>
+      <AbsoluteFill style={{ fontFamily: fonts.display, opacity: p1Op, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontFamily: fonts.display, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 12 }}>
+          <div style={{ fontFamily: fonts.display, color: colors.dimWhite, fontSize: 64, fontWeight: 700, letterSpacing: "-0.02em" }}>不知道</div>
+          <div style={{ fontFamily: fonts.display, color: colors.hcCyanBright, fontSize: 88, fontWeight: 900, letterSpacing: "-0.04em", opacity: p1Line2Op, transform: `translateY(${p1Line2Y}px)`, textShadow: `0 0 36px ${colors.hcCyanBright}44` }}>背後的標準答案是什麼</div>
         </div>
       </AbsoluteFill>
 
       {/* P2: 接著，給主管一份手冊—— */}
-      <AbsoluteFill style={{ opacity: p2Op, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 0 }}>
+      <AbsoluteFill style={{ fontFamily: fonts.display, opacity: p2Op, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", gap: 0 }}>
           <TypewriterText text="接著，給主管一份手冊" startFrame={118} charStagger={2} fontSize={88} fontWeight={850} colorScheme="white" letterSpacing="-0.04em" />
-          <div style={{ width: p2DashW, height: 8, background: `linear-gradient(90deg, ${colors.hcCyanBright}, transparent)`, borderRadius: 4, marginLeft: 8, boxShadow: `0 0 24px ${colors.hcCyanBright}` }} />
+          <div style={{ fontFamily: fonts.display, width: p2DashW, height: 8, background: `linear-gradient(90deg, ${colors.hcCyanBright}, transparent)`, borderRadius: 4, marginLeft: 8, boxShadow: `0 0 24px ${colors.hcCyanBright}` }} />
         </div>
       </AbsoluteFill>
 
       {/* P3: STEP 03 · TARGET + P×E 交叉分析 */}
-      <AbsoluteFill style={{ opacity: p3Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -150px)" }}>
+      <AbsoluteFill style={{ fontFamily: fonts.display, opacity: p3Op, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ fontFamily: fonts.display, position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -150px)" }}>
           <PingDot frame={Math.max(0, frame - 216)} color={ds.fit} />
         </div>
-        <div style={{ marginBottom: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 16px", borderRadius: 999, border: `1px solid ${ds.fit}40`, background: `${ds.fit}15` }}>
-          <div style={{ width: 6, height: 6, borderRadius: "50%", background: ds.fit, boxShadow: `0 0 8px ${ds.fit}` }} />
+        <div style={{ fontFamily: fonts.display, marginBottom: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 16px", borderRadius: 999, border: `1px solid ${ds.fit}40`, background: `${ds.fit}15` }}>
+          <div style={{ fontFamily: fonts.display, width: 6, height: 6, borderRadius: "50%", background: ds.fit, boxShadow: `0 0 8px ${ds.fit}` }} />
           <span style={{ fontSize: 13, fontFamily: fonts.mono, color: ds.fit, letterSpacing: "0.24em" }}>STEP 03 · TARGET</span>
         </div>
         <TypewriterText text="P×E 交叉分析" startFrame={226} charStagger={3} fontSize={110} fontWeight={800} colorScheme="white-to-cyan" />
@@ -1570,7 +1570,7 @@ const TERMINAL_LINES = [
 ];
 
 const TerminalLine: React.FC<{ text: string; startF: number; highlight?: boolean; lf: number }> = ({ text, startF, highlight, lf }) => {
-  if (!text) return <div style={{ height: 10 }} />;
+  if (!text) return <div style={{ fontFamily: fonts.display, height: 10 }} />;
   const n = Math.floor(interpolate(lf, [startF, startF + text.length * 0.8], [0, text.length], {
     extrapolateLeft: "clamp", extrapolateRight: "clamp",
   }));
@@ -1590,16 +1590,16 @@ const TerminalLine: React.FC<{ text: string; startF: number; highlight?: boolean
 const B7TailorTerminal: React.FC<{ lf: number }> = ({ lf }) => {
   const op = interpolate(lf, [0, 14], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
-    <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", opacity: op }}>
-      <div style={{
+    <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", opacity: op }}>
+      <div style={{ fontFamily: fonts.display,
         background: "#0E121C", borderRadius: 12, padding: "36px 44px",
         border: "1px solid rgba(255,255,255,0.08)",
         boxShadow: "0 20px 80px rgba(0,0,0,0.4)",
         width: 760, boxSizing: "border-box" as const,
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 22 }}>
+        <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", gap: 7, marginBottom: 22 }}>
           {["#FF5F57","#FFBD2E","#28C840"].map((c) => (
-            <div key={c} style={{ width: 12, height: 12, borderRadius: "50%", background: c }} />
+            <div key={c} style={{ fontFamily: fonts.display, width: 12, height: 12, borderRadius: "50%", background: c }} />
           ))}
           <span style={{ marginLeft: 12, fontSize: 13, fontFamily: fonts.mono, color: "rgba(255,255,255,0.30)" }}>hirecook · ai-engine · v4.3</span>
         </div>
@@ -1704,7 +1704,7 @@ const B7Tailor: React.FC = () => {
   const bgLightOp = interpolate(lf, [0, 20], [0, 1], cl);
 
   return (
-    <AbsoluteFill style={{ opacity: m.opacity, transform: m.transform }}>
+    <AbsoluteFill style={{ fontFamily: fonts.display, opacity: m.opacity, transform: m.transform }}>
       <BgCalm theme="dark" tint="blue" />
 
       {/* AI Terminal Noise */}
@@ -1717,27 +1717,27 @@ const B7Tailor: React.FC = () => {
         <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic White Fairy Dust, Chime, Shimmer, Cliche, Short, Appear 05_ASD.wav")} volume={0.3} />
       </Sequence>
 
-      <AbsoluteFill style={{ opacity: bgLightOp }}>
+      <AbsoluteFill style={{ fontFamily: fonts.display, opacity: bgLightOp }}>
         <BgCalm theme="light" tint="blue" />
       </AbsoluteFill>
       <AbsoluteFill>
 
         {/* ── Phase A: terminal ── */}
         {showTerminal && (
-          <div style={{ position: "absolute", inset: 0, opacity: termOutOp, transform: `scale(${termOutSc})` }}>
-            <div style={{ position: "absolute", top: 70, left: 0, right: 0, zIndex: 6, display: "flex", flexDirection: "column", alignItems: "center", gap: 11, opacity: interpolate(terminalLF, [0, 15], [0, 1], cl) }}>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(0,180,216,0.35)", background: "rgba(0,180,216,0.07)" }}>
-                <span style={{ width: 6, height: 6, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 ${4 + 5 * (0.5 + 0.5 * Math.sin(frame * 0.18))}px ${ds.cyan}` }} />
+          <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, opacity: termOutOp, transform: `scale(${termOutSc})` }}>
+            <div style={{ fontFamily: fonts.display, position: "absolute", top: 70, left: 0, right: 0, zIndex: 6, display: "flex", flexDirection: "column", alignItems: "center", gap: 11, opacity: interpolate(terminalLF, [0, 15], [0, 1], cl) }}>
+              <div style={{ fontFamily: fonts.display, display: "inline-flex", alignItems: "center", gap: 10, padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(0,180,216,0.35)", background: "rgba(0,180,216,0.07)" }}>
+                <span style={{ fontFamily: fonts.display, width: 6, height: 6, borderRadius: "50%", background: ds.cyan, boxShadow: `0 0 ${4 + 5 * (0.5 + 0.5 * Math.sin(frame * 0.18))}px ${ds.cyan}` }} />
                 <span style={{ fontSize: 13, fontFamily: fonts.mono, color: "#6FE3F5", letterSpacing: "0.18em" }}>T · TARGET — AI 生成中</span>
               </div>
               <div style={{ fontSize: 48, fontWeight: 700, color: "#FFFFFF", fontFamily: fonts.display, letterSpacing: "-1.5px", lineHeight: 1.1, textAlign: "center" as const }}>為這個人，生成專屬管理手冊</div>
               <div style={{ fontSize: 19, color: "rgba(255,255,255,0.55)", fontFamily: fonts.display, lineHeight: 1.5, textAlign: "center" as const }}>結合環境向量與行為指紋，輸出可執行的 TAT 管理建議。</div>
             </div>
-            <div style={{ position: "absolute", inset: 0, paddingTop: 150 }}>
+            <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, paddingTop: 150 }}>
               <B7TailorTerminal lf={terminalLF} />
             </div>
             {terminalLF >= 160 && (
-              <div style={{
+              <div style={{ fontFamily: fonts.display,
                 position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
                 background: `rgba(14,18,28,${interpolate(terminalLF, [160, 175], [0, 0.75])})`,
                 backdropFilter: `blur(${interpolate(terminalLF, [160, 175], [0, 12])}px)`,
@@ -1758,11 +1758,11 @@ const B7Tailor: React.FC = () => {
 
         {/* ── Phase B: Full HC dashboard + camera tour ── */}
         {lf >= 0 && (
-          <AbsoluteFill style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <AbsoluteFill style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", justifyContent: "center" }}>
             {/* Camera zoom wrapper */}
-            <div style={{ transformOrigin: "50% 50%", transform: `translate(${-camZ * (camOx - 50)}%, ${-camZ * (camOy - 50)}%) scale(${camZ})` }}>
+            <div style={{ fontFamily: fonts.display, transformOrigin: "50% 50%", transform: `translate(${-camZ * (camOx - 50)}%, ${-camZ * (camOy - 50)}%) scale(${camZ})` }}>
               {/* Dashboard shell */}
-              <div style={{
+              <div style={{ fontFamily: fonts.display,
                 width: 1440, borderRadius: 16, overflow: "hidden" as const, position: "relative" as const,
                 background: "#FFFFFF",
                 boxShadow: "0 24px 80px rgba(8,16,40,0.11), 0 1px 0 rgba(8,16,40,0.06)",
@@ -1770,25 +1770,25 @@ const B7Tailor: React.FC = () => {
                 display: "flex", flexDirection: "column" as const,
               }}>
                 {/* Sweep overlay for transition */}
-                <div style={{ position: "absolute", inset: 0, zIndex: 100, opacity: interpolate(lf, [0, 6, 24, 30], [0, 1, 1, 0], cl), pointerEvents: "none" }}>
-                  <div style={{ position: "absolute", top: interpolate(lf, [0, 30], [0, 1000], cl), left: 0, right: 0, height: 4, background: ds.cyan, boxShadow: `0 0 24px 4px ${ds.cyan}` }} />
-                  <div style={{ position: "absolute", top: 0, height: interpolate(lf, [0, 30], [0, 1000], cl), left: 0, right: 0, background: "rgba(0,180,216,0.08)" }} />
+                <div style={{ fontFamily: fonts.display, position: "absolute", inset: 0, zIndex: 100, opacity: interpolate(lf, [0, 6, 24, 30], [0, 1, 1, 0], cl), pointerEvents: "none" }}>
+                  <div style={{ fontFamily: fonts.display, position: "absolute", top: interpolate(lf, [0, 30], [0, 1000], cl), left: 0, right: 0, height: 4, background: ds.cyan, boxShadow: `0 0 24px 4px ${ds.cyan}` }} />
+                  <div style={{ fontFamily: fonts.display, position: "absolute", top: 0, height: interpolate(lf, [0, 30], [0, 1000], cl), left: 0, right: 0, background: "rgba(0,180,216,0.08)" }} />
                 </div>
 
                 {/* ── Header ───────────────────────────────────── */}
-                <div style={{ height: 52, padding: "0 24px", display: "flex", alignItems: "center", gap: 12, borderBottom: "1px solid rgba(8,16,40,0.06)", flexShrink: 0 }}>
-                  <div style={{ width: 26, height: 26, borderRadius: 6, background: "linear-gradient(135deg,#1430A0,#2151F5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ fontFamily: fonts.display, height: 52, padding: "0 24px", display: "flex", alignItems: "center", gap: 12, borderBottom: "1px solid rgba(8,16,40,0.06)", flexShrink: 0 }}>
+                  <div style={{ fontFamily: fonts.display, width: 26, height: 26, borderRadius: 6, background: "linear-gradient(135deg,#1430A0,#2151F5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <span style={{ fontSize: 10, fontFamily: fonts.mono, fontWeight: 700, color: "#FFF" }}>HC</span>
                   </div>
                   <span style={{ fontSize: 13, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display }}>HireCook</span>
-                  <div style={{ width: 1, height: 16, background: "rgba(8,16,40,0.08)", margin: "0 2px" }} />
+                  <div style={{ fontFamily: fonts.display, width: 1, height: 16, background: "rgba(8,16,40,0.08)", margin: "0 2px" }} />
                   <span style={{ fontSize: 12, color: ds.fgMuted, fontFamily: fonts.mono }}>後端工程師 L3 · Aurora Robotics</span>
-                  <div style={{ width: 1, height: 16, background: "rgba(8,16,40,0.08)", margin: "0 2px" }} />
+                  <div style={{ fontFamily: fonts.display, width: 1, height: 16, background: "rgba(8,16,40,0.08)", margin: "0 2px" }} />
                   <span style={{ fontSize: 13, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display }}>陳威宇</span>
                   <span style={{ fontSize: 11, color: ds.fgFaint, fontFamily: fonts.mono, marginLeft: 2 }}>#CHD-047</span>
-                  <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
-                    <div style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "3px 10px", borderRadius: 5, background: "#E6F5EC", border: "1px solid rgba(27,122,77,0.22)" }}>
-                      <div style={{ width: 5, height: 5, borderRadius: "50%", background: ds.fit }} />
+                  <div style={{ fontFamily: fonts.display, marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
+                    <div style={{ fontFamily: fonts.display, display: "inline-flex", alignItems: "center", gap: 5, padding: "3px 10px", borderRadius: 5, background: "#E6F5EC", border: "1px solid rgba(27,122,77,0.22)" }}>
+                      <div style={{ fontFamily: fonts.display, width: 5, height: 5, borderRadius: "50%", background: ds.fit }} />
                       <span style={{ fontSize: 11, fontWeight: 600, color: "#146F3E", fontFamily: fonts.mono }}>適配</span>
                     </div>
                     <div style={{ padding: "3px 12px", borderRadius: 5, border: "1px solid rgba(8,16,40,0.08)", fontSize: 11, color: ds.fgMuted, fontFamily: fonts.mono }}>匯出報告</div>
@@ -1797,32 +1797,32 @@ const B7Tailor: React.FC = () => {
                 </div>
 
                 {/* ── KPI row ─────────────────────────────────── */}
-                <div style={{ display: "flex", borderBottom: "1px solid rgba(8,16,40,0.06)", flexShrink: 0, opacity: sOp("kpi"), boxShadow: sRing("kpi") }}>
+                <div style={{ fontFamily: fonts.display, display: "flex", borderBottom: "1px solid rgba(8,16,40,0.06)", flexShrink: 0, opacity: sOp("kpi"), boxShadow: sRing("kpi") }}>
                   {/* Fit Score */}
-                  <div style={{ flex: 1, padding: "18px 24px", borderRight: "1px solid rgba(8,16,40,0.06)", position: "relative" as const, opacity: interpolate(lf, [4, 24], [0, 1], cl), transform: `translateY(${interpolate(lf, [4, 30], [22, 0], { easing: Easing.out(Easing.cubic), ...cl })}px)` }}>
-                    <div style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, background: ds.fit, borderRadius: "0 2px 2px 0" }} />
+                  <div style={{ fontFamily: fonts.display, flex: 1, padding: "18px 24px", borderRight: "1px solid rgba(8,16,40,0.06)", position: "relative" as const, opacity: interpolate(lf, [4, 24], [0, 1], cl), transform: `translateY(${interpolate(lf, [4, 30], [22, 0], { easing: Easing.out(Easing.cubic), ...cl })}px)` }}>
+                    <div style={{ fontFamily: fonts.display, position: "absolute", left: 0, top: 8, bottom: 8, width: 3, background: ds.fit, borderRadius: "0 2px 2px 0" }} />
                     <div style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.fgFaint, letterSpacing: "0.08em", marginBottom: 5 }}>P×E 適配分數</div>
-                    <div style={{ display: "flex", alignItems: "baseline", gap: 3 }}>
+                    <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "baseline", gap: 3 }}>
                       <span style={{ fontSize: 44, fontFamily: fonts.mono, fontWeight: 800, color: ds.fit, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{fitScore.toFixed(1)}</span>
                       <span style={{ fontSize: 16, fontFamily: fonts.mono, color: ds.fgFaint }}>/100</span>
                     </div>
                     <div style={{ marginTop: 5, fontSize: 11, color: "#146F3E", fontFamily: fonts.mono }}>↑ 高出基準組 +18.2 分</div>
                   </div>
                   {/* Retention */}
-                  <div style={{ flex: 1, padding: "18px 24px", borderRight: "1px solid rgba(8,16,40,0.06)", position: "relative" as const, opacity: interpolate(lf, [12, 32], [0, 1], cl), transform: `translateY(${interpolate(lf, [12, 38], [22, 0], { easing: Easing.out(Easing.cubic), ...cl })}px)` }}>
-                    <div style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, background: ds.blue, borderRadius: "0 2px 2px 0" }} />
+                  <div style={{ fontFamily: fonts.display, flex: 1, padding: "18px 24px", borderRight: "1px solid rgba(8,16,40,0.06)", position: "relative" as const, opacity: interpolate(lf, [12, 32], [0, 1], cl), transform: `translateY(${interpolate(lf, [12, 38], [22, 0], { easing: Easing.out(Easing.cubic), ...cl })}px)` }}>
+                    <div style={{ fontFamily: fonts.display, position: "absolute", left: 0, top: 8, bottom: 8, width: 3, background: ds.blue, borderRadius: "0 2px 2px 0" }} />
                     <div style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.fgFaint, letterSpacing: "0.08em", marginBottom: 5 }}>6 個月留任率預測</div>
-                    <div style={{ display: "flex", alignItems: "baseline", gap: 3 }}>
+                    <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "baseline", gap: 3 }}>
                       <span style={{ fontSize: 44, fontFamily: fonts.mono, fontWeight: 800, color: ds.fgPrimary, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{Math.round(retPct)}</span>
                       <span style={{ fontSize: 16, fontFamily: fonts.mono, color: ds.fgFaint }}>%</span>
                     </div>
                     <div style={{ marginTop: 5, fontSize: 11, color: ds.blue, fontFamily: fonts.mono }}>對照基準 65.4% · ↑ +18.6pp</div>
                   </div>
                   {/* Cost */}
-                  <div style={{ flex: 1, padding: "18px 24px", position: "relative" as const, opacity: interpolate(lf, [20, 40], [0, 1], cl), transform: `translateY(${interpolate(lf, [20, 46], [22, 0], { easing: Easing.out(Easing.cubic), ...cl })}px)` }}>
-                    <div style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, background: ds.cyan, borderRadius: "0 2px 2px 0" }} />
+                  <div style={{ fontFamily: fonts.display, flex: 1, padding: "18px 24px", position: "relative" as const, opacity: interpolate(lf, [20, 40], [0, 1], cl), transform: `translateY(${interpolate(lf, [20, 46], [22, 0], { easing: Easing.out(Easing.cubic), ...cl })}px)` }}>
+                    <div style={{ fontFamily: fonts.display, position: "absolute", left: 0, top: 8, bottom: 8, width: 3, background: ds.cyan, borderRadius: "0 2px 2px 0" }} />
                     <div style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.fgFaint, letterSpacing: "0.08em", marginBottom: 5 }}>錯配成本節省（預期）</div>
-                    <div style={{ display: "flex", alignItems: "baseline", gap: 3 }}>
+                    <div style={{ fontFamily: fonts.display, display: "flex", alignItems: "baseline", gap: 3 }}>
                       <span style={{ fontSize: 20, fontFamily: fonts.mono, color: ds.fgFaint, alignSelf: "flex-end", marginBottom: 5 }}>NT$</span>
                       <span style={{ fontSize: 44, fontFamily: fonts.mono, fontWeight: 800, color: ds.fgPrimary, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{Math.round(costVal)}</span>
                       <span style={{ fontSize: 20, fontFamily: fonts.mono, color: ds.fgFaint }}>萬</span>
@@ -1832,20 +1832,20 @@ const B7Tailor: React.FC = () => {
                 </div>
 
                 {/* ── Middle row: P×E map + XAI drivers ──────── */}
-                <div style={{ display: "flex", flex: 1, minHeight: 360, overflow: "hidden" as const }}>
+                <div style={{ fontFamily: fonts.display, display: "flex", flex: 1, minHeight: 360, overflow: "hidden" as const }}>
                   {/* P×E radar */}
-                  <div style={{ width: "38%", padding: "22px 24px", borderRight: "1px solid rgba(8,16,40,0.06)", display: "flex", flexDirection: "column" as const, gap: 12, opacity: sOp("pemap"), boxShadow: sRing("pemap") }}>
+                  <div style={{ fontFamily: fonts.display, width: "38%", padding: "22px 24px", borderRight: "1px solid rgba(8,16,40,0.06)", display: "flex", flexDirection: "column" as const, gap: 12, opacity: sOp("pemap"), boxShadow: sRing("pemap") }}>
                     <div>
                       <div style={{ fontSize: 13, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display }}>P × E 人格環境疊合</div>
                       <div style={{ fontSize: 11, color: ds.fgMuted, fontFamily: fonts.mono, marginTop: 2 }}>高度吻合 · 適配信心 92%</div>
                     </div>
-                    <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <div style={{ fontFamily: fonts.display, flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <PEMapRadar size={270} pVals={pVals} eVals={eVals} prog={radarProg} />
                     </div>
-                    <div style={{ display: "flex", gap: 18 }}>
+                    <div style={{ fontFamily: fonts.display, display: "flex", gap: 18 }}>
                       {[{ color: ds.cyan, label: "P · 人格向量" }, { color: ds.blue, label: "E · 環境模型" }].map((leg) => (
-                        <div key={leg.label} style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                          <div style={{ width: 18, height: 2.5, background: leg.color, borderRadius: 2 }} />
+                        <div key={leg.label} style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", gap: 5 }}>
+                          <div style={{ fontFamily: fonts.display, width: 18, height: 2.5, background: leg.color, borderRadius: 2 }} />
                           <span style={{ fontSize: 11, fontFamily: fonts.mono, color: ds.fgMuted }}>{leg.label}</span>
                         </div>
                       ))}
@@ -1853,21 +1853,21 @@ const B7Tailor: React.FC = () => {
                   </div>
 
                   {/* XAI drivers */}
-                  <div style={{ flex: 1, padding: "22px 24px", display: "flex", flexDirection: "column" as const, opacity: sOp("xai"), boxShadow: sRing("xai") }}>
-                    <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontFamily: fonts.display, flex: 1, padding: "22px 24px", display: "flex", flexDirection: "column" as const, opacity: sOp("xai"), boxShadow: sRing("xai") }}>
+                    <div style={{ fontFamily: fonts.display, marginBottom: 14 }}>
                       <div style={{ fontSize: 13, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display }}>行為驅動因子解析</div>
                       <div style={{ fontSize: 11, color: ds.fgMuted, fontFamily: fonts.mono, marginTop: 2 }}>XAI 可解釋因子 · 驅動本次適配評估</div>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" as const, flex: 1, justifyContent: "space-between" }}>
+                    <div style={{ fontFamily: fonts.display, display: "flex", flexDirection: "column" as const, flex: 1, justifyContent: "space-between" }}>
                       {drivers.map((d, i) => {
                         const dOp  = interpolate(lf, [60 + i * 12, 76 + i * 12], [0, 1], cl);
                         const barW = interpolate(lf, [82 + i * 12, 170 + i * 12], [0, d.score], { easing: Easing.out(Easing.cubic), ...cl });
                         return (
-                          <div key={d.label} style={{ opacity: dOp, padding: "8px 0", borderBottom: i < drivers.length - 1 ? "1px solid rgba(8,16,40,0.06)" : "none", display: "flex", gap: 14, alignItems: "center" }}>
-                            <div style={{ width: 110, flexShrink: 0 }}>
+                          <div key={d.label} style={{ fontFamily: fonts.display, opacity: dOp, padding: "8px 0", borderBottom: i < drivers.length - 1 ? "1px solid rgba(8,16,40,0.06)" : "none", display: "flex", gap: 14, alignItems: "center" }}>
+                            <div style={{ fontFamily: fonts.display, width: 110, flexShrink: 0 }}>
                               <div style={{ fontSize: 12, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display, marginBottom: 5 }}>{d.label}</div>
-                              <div style={{ width: 90, height: 3.5, background: "rgba(8,16,40,0.06)", borderRadius: 2 }}>
-                                <div style={{ width: `${barW}%`, height: "100%", background: d.top ? ds.fit : ds.blue, borderRadius: 2 }} />
+                              <div style={{ fontFamily: fonts.display, width: 90, height: 3.5, background: "rgba(8,16,40,0.06)", borderRadius: 2 }}>
+                                <div style={{ fontFamily: fonts.display, width: `${barW}%`, height: "100%", background: d.top ? ds.fit : ds.blue, borderRadius: 2 }} />
                               </div>
                             </div>
                             <span style={{ fontSize: 20, fontFamily: fonts.mono, fontWeight: 700, color: d.top ? ds.fit : ds.fgPrimary, flexShrink: 0, minWidth: 32 }}>{d.score}</span>
@@ -1880,15 +1880,15 @@ const B7Tailor: React.FC = () => {
                 </div>
 
                 {/* ── Management recs ──────────────────────────── */}
-                <div style={{ borderTop: "1px solid rgba(8,16,40,0.06)", padding: "18px 24px", flexShrink: 0, opacity: sOp("recs"), boxShadow: sRing("recs") }}>
+                <div style={{ fontFamily: fonts.display, borderTop: "1px solid rgba(8,16,40,0.06)", padding: "18px 24px", flexShrink: 0, opacity: sOp("recs"), boxShadow: sRing("recs") }}>
                   <div style={{ fontSize: 13, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display, marginBottom: 12 }}>可執行管理建議 · 前 90 天</div>
-                  <div style={{ display: "flex", gap: 12 }}>
+                  <div style={{ fontFamily: fonts.display, display: "flex", gap: 12 }}>
                     {recs.map((r, i) => {
                       const rOp = interpolate(lf, [90 + i * 18, 110 + i * 18], [0, 1], cl);
                       const rY  = interpolate(lf, [90 + i * 18, 114 + i * 18], [16, 0], { easing: Easing.out(Easing.cubic), ...cl });
                       return (
-                        <div key={r.n} style={{ opacity: rOp, transform: `translateY(${rY}px)`, flex: 1, padding: "14px 16px", background: "#F7F8FB", borderRadius: 10, border: "1px solid rgba(8,16,40,0.06)" }}>
-                          <div style={{ marginBottom: 7 }}>
+                        <div key={r.n} style={{ fontFamily: fonts.display, opacity: rOp, transform: `translateY(${rY}px)`, flex: 1, padding: "14px 16px", background: "#F7F8FB", borderRadius: 10, border: "1px solid rgba(8,16,40,0.06)" }}>
+                          <div style={{ fontFamily: fonts.display, marginBottom: 7 }}>
                             <span style={{ fontSize: 10, fontFamily: fonts.mono, fontWeight: 700, color: ds.blue, padding: "2px 7px", borderRadius: 4, background: "rgba(33,81,245,0.10)" }}>{r.n}</span>
                           </div>
                           <div style={{ fontSize: 14, fontWeight: 600, color: ds.fgPrimary, fontFamily: fonts.display, lineHeight: 1.45, marginBottom: 5 }}>{r.text}</div>
@@ -1902,9 +1902,9 @@ const B7Tailor: React.FC = () => {
             </div>
 
             {/* ── Explanation Callout Overlay ── */}
-            <AbsoluteFill style={{ zIndex: 30, opacity: calloutOp, pointerEvents: "none" }}>
+            <AbsoluteFill style={{ fontFamily: fonts.display, zIndex: 30, opacity: calloutOp, pointerEvents: "none" }}>
               {b7Active && (
-                <div style={{
+                <div style={{ fontFamily: fonts.display,
                   position: "absolute",
                   top: b7Active.calloutPos === "bottom" ? "auto" : b7Active.calloutPos === "top" ? "12%" : "50%",
                   bottom: b7Active.calloutPos === "bottom" ? "10%" : "auto",
@@ -1922,7 +1922,7 @@ const B7Tailor: React.FC = () => {
                   boxShadow: "0 24px 80px rgba(8,16,40,0.08)",
                   padding: "24px 28px",
                 }}>
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ fontFamily: fonts.display, display: "inline-flex", alignItems: "center", gap: 8 }}>
                     <div style={{ width: 28, height: 28, borderRadius: "50%", background: ds.fit, color: "#FFF", fontSize: 13, fontFamily: fonts.mono, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>{b7Active.n}</div>
                     <span style={{ fontSize: 13, fontFamily: fonts.mono, color: ds.fit, letterSpacing: "0.15em", textTransform: "uppercase" as const }}>T · Target</span>
                   </div>

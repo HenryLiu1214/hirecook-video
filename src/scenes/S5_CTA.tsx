@@ -7,13 +7,13 @@ import { scalePunch, cameraPush, circleWipe } from "../anim";
 
 const Vision: React.FC = () => {
   const frame = useCurrentFrame();
-  
+
   // Exit fade out
   const opacity = interpolate(frame, [220, 240], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   // Big SDG 8 text scale punch
   const textScale = scalePunch(frame, 10, 40);
-  
+
   // Image sliding out from under text
   const imgY = interpolate(frame, [40, 70], [0, 180], { easing: Easing.out(Easing.back(1.5)), extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const imgOp = interpolate(frame, [40, 50], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -21,9 +21,10 @@ const Vision: React.FC = () => {
   return (
     <AbsoluteFill style={{ fontFamily: fonts.display, opacity, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
       <div style={{ fontFamily: fonts.display, position: "relative", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        
+
         {/* The SDG Image scaling up */}
-        <div style={{ fontFamily: fonts.display, 
+        <div style={{
+          fontFamily: fonts.display,
           transform: `scale(${interpolate(frame, [10, 40], [0, 1], { easing: Easing.out(Easing.back(1.5)), extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`,
           boxShadow: "0 24px 80px rgba(8,16,40,0.15)",
           borderRadius: 12,
@@ -35,13 +36,13 @@ const Vision: React.FC = () => {
 
       </div>
 
-      <div style={{ 
+      <div style={{
         marginTop: 60,
         opacity: interpolate(frame, [80, 100], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
         transform: `translateY(${interpolate(frame, [80, 100], [20, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`,
         color: colors.hcBlue, // Adjusted for light mode 
-        fontSize: 42, 
-        fontWeight: 700, 
+        fontSize: 42,
+        fontWeight: 700,
         letterSpacing: "0.05em",
         fontFamily: fonts.display
       }}>
@@ -54,31 +55,31 @@ const Vision: React.FC = () => {
 const BrandCore: React.FC = () => {
   const frame = useCurrentFrame();
   const opacity = interpolate(frame, [220, 240], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  
+
   // Camera push that slowly zooms in
   const camScale = cameraPush(frame, 0, 240, 1.2);
 
   // Transition from "能力決定錄取" to "性格決定留任"
   const text1Op = interpolate(frame, [20, 40, 100, 120], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const text2Op = interpolate(frame, [110, 130], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  
+
   return (
     <AbsoluteFill style={{ fontFamily: fonts.display, opacity, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${camScale})` }}>
-      <div style={{ 
+      <div style={{
         position: "absolute",
-        fontFamily: fonts.display, 
-        fontSize: 100, 
-        fontWeight: 850, 
+        fontFamily: fonts.display,
+        fontSize: 100,
+        fontWeight: 850,
         color: colors.hcFgPrimary, // Dark ink 
-        opacity: text1Op 
+        opacity: text1Op
       }}>
         能力決定錄取
       </div>
-      <div style={{ 
+      <div style={{
         position: "absolute",
-        fontFamily: fonts.display, 
-        fontSize: 110, 
-        fontWeight: 900, 
+        fontFamily: fonts.display,
+        fontSize: 110,
+        fontWeight: 900,
         color: colors.hcBlue, // Dark blue for contrast
         opacity: text2Op,
         textShadow: `0 10px 40px rgba(33,81,245,0.2)`
@@ -91,7 +92,7 @@ const BrandCore: React.FC = () => {
 
 const CTA: React.FC = () => {
   const frame = useCurrentFrame();
-  
+
   // Wipe metrics sequentially
   const m1Clip = circleWipe(frame, 10, 40);
   const m1Op = interpolate(frame, [140, 160], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -106,7 +107,7 @@ const CTA: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
-      
+
       {/* Metric 1 */}
       {frame >= 10 && frame < 170 && (
         <div style={{ fontFamily: fonts.display, position: "absolute", clipPath: m1Clip, opacity: m1Op, display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -133,13 +134,13 @@ const CTA: React.FC = () => {
 
           <div style={{ fontFamily: fonts.display, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div style={{ fontFamily: fonts.display, position: "absolute", width: ripple, height: ripple, borderRadius: "50%", border: `2px solid ${colors.hcCyan}`, opacity: rippleOp }} />
-            <div style={{ 
-              padding: "24px 60px", 
-              borderRadius: 999, 
-              background: `linear-gradient(135deg, ${colors.hcBlue}, ${colors.hcCyan})`, 
-              color: colors.pureWhite, 
-              fontSize: 36, 
-              fontWeight: 800, 
+            <div style={{
+              padding: "24px 60px",
+              borderRadius: 999,
+              background: `linear-gradient(135deg, ${colors.hcBlue}, ${colors.hcCyan})`,
+              color: colors.pureWhite,
+              fontSize: 36,
+              fontWeight: 800,
               boxShadow: `0 18px 40px rgba(33,81,245,0.3), inset 0 1px 0 rgba(255,255,255,0.3)`,
               fontFamily: fonts.display,
               zIndex: 2
@@ -147,14 +148,14 @@ const CTA: React.FC = () => {
               加入企業種子驗證計畫 →
             </div>
           </div>
-          
-          <div style={{ 
+
+          <div style={{
             opacity: interpolate(frame, [300, 320], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
-            color: colors.hcFgMuted, 
-            fontFamily: fonts.mono, 
-            fontSize: 16, 
-            letterSpacing: "0.15em", 
-            marginTop: 40 
+            color: colors.hcFgMuted,
+            fontFamily: fonts.mono,
+            fontSize: 16,
+            letterSpacing: "0.15em",
+            marginTop: 40
           }}>
             讓他煮 · 國立臺灣科技大學 · 2026
           </div>
@@ -172,21 +173,21 @@ export const S5_CTA: React.FC = () => {
   return (
     <AbsoluteFill>
       <BgCalm theme="light" tint="blue" />
-      
+
       {/* ── Audio ── */}
       {/* Vision Swell */}
       <Sequence from={0} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/DSGNEthr_GHOSTS Swell Riser Vaporous_ASD.wav")} volume={(f) => interpolate(f, [0, 80], [0, 0.35], cl)} /></Sequence>
       {/* SDG8 image bounce-in */}
       <Sequence from={10} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic Generic Building Block, Aura, Glyph, Activation, Shimmer, Metal Ring, Short, Medium 03_ASD.wav")} volume={0.25} /></Sequence>
-      
+
       {/* Brand Core Impact */}
       <Sequence from={240} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic Generic Building Block, Aura, Glyph, Activation, Shimmer, Metal Ring, Short, Medium 03_ASD.wav")} volume={0.35} /></Sequence>
-      
+
       {/* CTA final Logo & Button appear (480 + 270 = 750) */}
       <Sequence from={750} layout="none">
         <Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/MAGShim_Magic White Fairy Dust, Chime, Shimmer, Cliche, Short, Appear 05_ASD.wav")} volume={0.4} />
       </Sequence>
-      
+
       {/* ── Additional Micro-Interactions ── */}
       <Sequence from={490} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/GAMEMisc_Dice On Metal, Throw And Roll, Standard, 1 One Dice, x3 Variations_ASD.wav")} volume={0.3} /></Sequence>
       <Sequence from={630} layout="none"><Audio src={staticFile("Articulated--Starter_Pack_v2.0/Articulated--Starter_Pack--Sounds/GAMEMisc_Dice On Metal, Throw And Roll, Standard, 1 One Dice, x3 Variations_ASD.wav")} volume={0.3} /></Sequence>

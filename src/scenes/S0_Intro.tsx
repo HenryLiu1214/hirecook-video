@@ -42,7 +42,8 @@ export const S0_Intro: React.FC = () => {
       </Sequence>
 
       {/* Main content — centered column */}
-      <div style={{ fontFamily: fonts.display,
+      <div style={{
+        fontFamily: fonts.display,
         position: "absolute", inset: 0,
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8,
         perspective: "1400px",
@@ -53,7 +54,8 @@ export const S0_Intro: React.FC = () => {
         </div>
 
         {/* HireCook wordmark */}
-        <div style={{ fontFamily: fonts.display,
+        <div style={{
+          fontFamily: fonts.display,
           transform: `scale(${breathe(t)}) rotate(${rotZIn(frame, 20, 34, -10)}deg) rotateX(${rotXSettle(frame, 20, 36)}deg)`,
         }}>
           <TypewriterText
@@ -68,7 +70,8 @@ export const S0_Intro: React.FC = () => {
         </div>
 
         {/* Tagline */}
-        <div style={{ fontFamily: fonts.display,
+        <div style={{
+          fontFamily: fonts.display,
           transform: `rotate(${rotZIn(frame, 170, 26, 8)}deg)`,
           opacity: interpolate(frame, [118, 132], [0, 1], {
             extrapolateLeft: "clamp",
@@ -86,7 +89,8 @@ export const S0_Intro: React.FC = () => {
         </div>
 
         {/* Team section */}
-        <div style={{ fontFamily: fonts.display,
+        <div style={{
+          fontFamily: fonts.display,
           opacity: interpolate(frame, [150, 164], [0, 1], {
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",
@@ -95,7 +99,8 @@ export const S0_Intro: React.FC = () => {
           marginTop: 22,
         }}>
           {/* Separator */}
-          <div style={{ fontFamily: fonts.display,
+          <div style={{
+            fontFamily: fonts.display,
             height: 1,
             background: colors.hcBlue,
             opacity: 0.6,

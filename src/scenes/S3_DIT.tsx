@@ -1667,9 +1667,10 @@ const B7Tailor: React.FC = () => {
     [ 50,  15,  15,  54,  54,  54,  54,  85,  85,  50],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
-  // Idle float — keeps the dashboard alive on arrival, damped to 0 once the camera zooms in
-  const b7FloatAmp = interpolate(camZ, [1.02, 1.1], [3, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const b7Float = lf > 40 ? Math.sin(lf * 0.045) * b7FloatAmp : 0;
+  // Keep the rendered dashboard on whole pixels. Subpixel float + zoom makes
+  // thin SVG/text strokes shimmer hard in final renders.
+  const camX = Math.round(-camZ * ((camOx - 50) / 100) * 1440);
+  const camY = Math.round(-camZ * ((camOy - 50) / 100) * 720);
 
   // Section highlight / dim helpers
   const sOp = (sect: string): number => {
@@ -1760,13 +1761,13 @@ const B7Tailor: React.FC = () => {
         {lf >= 0 && (
           <AbsoluteFill style={{ fontFamily: fonts.display, display: "flex", alignItems: "center", justifyContent: "center" }}>
             {/* Camera zoom wrapper */}
-            <div style={{ fontFamily: fonts.display, transformOrigin: "50% 50%", transform: `translate(${-camZ * (camOx - 50)}%, ${-camZ * (camOy - 50)}%) scale(${camZ})` }}>
+            <div style={{ fontFamily: fonts.display, transformOrigin: "50% 50%", transform: `translate3d(${camX}px, ${camY}px, 0) scale(${camZ})` }}>
               {/* Dashboard shell */}
               <div style={{ fontFamily: fonts.display,
                 width: 1440, borderRadius: 16, overflow: "hidden" as const, position: "relative" as const,
                 background: "#FFFFFF",
                 boxShadow: "0 24px 80px rgba(8,16,40,0.11), 0 1px 0 rgba(8,16,40,0.06)",
-                opacity: dashOp, transform: `translateY(${dashY + b7Float}px) scale(${dashSc})`,
+                opacity: dashOp, transform: `translateY(${dashY}px) scale(${dashSc})`,
                 display: "flex", flexDirection: "column" as const,
               }}>
                 {/* Sweep overlay for transition */}
